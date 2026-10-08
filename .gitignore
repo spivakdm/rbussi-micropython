@@ -1,0 +1,33 @@
+# Local environments, board backups and session state
+.venv/
+.local-runtime/
+.thonny/
+.presentation-build/
+.playwright-mcp/
+backups/
+diagnostics/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+
+# Instructor-only drafts and third-party teaching archives
+blocks_round_en.zip
+start-thonny.sh
+output/
+docs/instructor-local-notes.md
+docs/instructor-distribution.md
+docs/day-01-plan.md
+docs/summer-school-plan.md
+
+# Publish only the current student bundle
+dist/*
+!dist/RBussi-student-kit-v0.4.zip
+
+# Earlier hardware probes; not part of the library examples
+examples/motor_a_pulse.py
+examples/motor_b_pulse.py
+examples/motors_ab_pulse.py
+examples/read_line.py
+tools/probe_serial.py

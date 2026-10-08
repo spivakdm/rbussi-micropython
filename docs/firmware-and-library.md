@@ -1,0 +1,94 @@
+# ESP32 Firmware and the RBussi Library
+
+For Wemos D1 R32, classic ESP32, 4 MB flash. Course versions: Thonny 5.0.0 and MicroPython 1.29.0.
+
+## Files from the instructor
+
+Extract the course ZIP. Two files have different jobs:
+
+| File | Purpose | Destination |
+|---|---|---|
+| `firmware/ESP32_GENERIC-20260824-v1.29.0.bin` | Installs the MicroPython interpreter | ESP32 flash, through the firmware installer |
+| `robot.py` | Defines the `RBussi` movement class | Root of the MicroPython device filesystem |
+
+You install firmware to make the board execute Python. You upload `robot.py` afterwards to give your programs robot commands. After a full erase, upload the library again. Editing an ordinary program does not require reflashing.
+
+## 1. Connect the board
+
+1. Switch **motor power off**. Connect the robot to the computer with a USB data cable.
+2. Open Thonny. Use **Run → Select interpreter** and select **MicroPython (ESP32)**.
+3. Select the port that appears when you connect this robot: `COM…` on Windows, `/dev/cu.…` on macOS, or usually `/dev/ttyUSB…` on Linux.
+4. Close any other program using that port.
+
+Firmware replacement can remove programs and settings already on the board. Before an erase, the instructor confirms that any existing work needing preservation has been backed up.
+
+## 2. Install MicroPython in Thonny
+
+These menu labels come from Thonny 5.0.0 in English. Keep the extracted firmware file on the **computer**.
+
+1. In the ESP32 interpreter settings, click **Install or update MicroPython (esptool)**.
+2. In the installation dialog, select your robot under **Target port**.
+3. Open the dialog's options menu, then **Select local MicroPython image ...**.
+4. Choose `ESP32_GENERIC-20260824-v1.29.0.bin` from the kit's `firmware` folder. If asked for the chip family, choose **ESP32**.
+5. Open the options menu and choose **Show install options**. Check **Target address = `0x1000`** for this full classic-ESP32 image.
+6. For a clean installation on the course board, enable **Erase all flash before installing**, after the instructor's backup check. Use **115200** if you need a conservative transfer rate.
+7. Click **Install**. Leave USB connected and wait for successful completion. This takes a few minutes depending on the transfer rate and computer.
+8. Close the dialog, reconnect to the selected interpreter, and use Thonny's **Stop/Restart backend** button if needed. A board reset may be needed after flashing.
+
+If Thonny reports that `esptool` is missing, open **Tools → Manage plug-ins**, install `esptool`, then restart Thonny. This is particularly relevant to Linux/pip installations. The course Linux command installs it in the same environment as Thonny.
+
+If connection fails, check the cable, serial-port access, and competing applications first. With instructor help, boards that have BOOT and RESET/EN buttons can be placed in download mode by holding BOOT, briefly pressing/releasing RESET/EN, then releasing BOOT when the installer connects. Do not assume every D1 R32 clone has the same buttons.
+
+## 3. Verify the interpreter
+
+In the Thonny shell:
+
+```python
+import sys
+print(sys.implementation)
+print("Hello from ESP32")
+```
+
+Expected: `micropython`, version `1.29.0`, an ESP32 build, and your printed message. A desktop Python result means that the wrong interpreter is selected.
+
+**If the instructor already flashed your board:** run this check and proceed to the library upload. Reinstall only if the instructor assigns the flashing exercise or the version needs replacement. Reflashing a prepared board erases its files when the erase option is enabled.
+
+## 4. Upload `robot.py`
+
+1. Open **View → Files** in Thonny.
+2. In the computer file pane, find the extracted kit's `robot.py`.
+3. Open the device root in the MicroPython pane. Upload the computer file there using its context menu, or open it and use **File → Save as → MicroPython device**, keeping the exact name `robot.py`.
+4. Check that `robot.py` appears in the **device** pane, at the root rather than inside another folder.
+5. Open `examples/00_check_setup.py` from the computer and press **F5**.
+
+Expected output includes:
+
+```text
+RBussi ready. No movement requested.
+```
+
+If you previously imported an older library version, restart the backend after uploading so Python imports the new copy. Save your own script under a different name, for example `day01_first_move.py`.
+
+## 5. First movement
+
+Lift the wheels and connect motor power. Open `examples/first_drive.py` and press **F5**:
+
+```python
+from robot import RBussi
+
+with RBussi() as robot:
+    robot.forward(speed=50, seconds=0.5)
+```
+
+Confirm that both wheels turn forward and stop. Keep the motor-power switch accessible. Save this student program on the computer. For Day 1, keep movement out of `main.py`, which executes on board startup.
+
+## Ready checkpoint
+
+- [ ] My firmware check identifies MicroPython on ESP32.
+- [ ] `robot.py` exists at the device root.
+- [ ] `00_check_setup.py` imports `RBussi` without movement.
+- [ ] I observed the first short movement and its stop.
+
+## Sources and verification basis
+
+The full firmware image and its `0x1000` installation address follow the [official ESP32_GENERIC instructions](https://micropython.org/download/ESP32_GENERIC/). The file-transfer and interpreter workflow follows [Thonny's MicroPython documentation](https://github.com/thonny/thonny/wiki/MicroPython). Local-image menu labels and the missing-esptool recovery path were checked against the installed Thonny 5.0.0 source. GUI flashing still requires rehearsal on the student operating systems; the preparation robot was flashed with esptool on Linux.
