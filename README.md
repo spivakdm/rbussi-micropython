@@ -6,7 +6,7 @@ All code comments and teaching instructions are in English. No Git installation 
 
 ## Downloads
 
-- [Student kit v0.5 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.5.zip): library, firmware, examples, wiring reference, and instructions.
+- [Student kit v0.6 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.6.zip): library, firmware, examples, wiring reference, and instructions.
 - [robot.py — download library](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/robot.py)
 - [MicroPython 1.29.0 — download firmware](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/firmware/ESP32_GENERIC-20260824-v1.29.0.bin)
 

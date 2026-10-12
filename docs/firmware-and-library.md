@@ -28,14 +28,14 @@ These menu labels come from Thonny 5.0.0 in English. Keep the extracted firmware
 
 1. In the ESP32 interpreter settings, click **Install or update MicroPython (esptool)**.
 2. In the installation dialog, select your robot under **Target port**.
-3. Open the dialog's options menu, then **Select local MicroPython image ...**.
-4. Choose `ESP32_GENERIC-20260824-v1.29.0.bin` from the kit's `firmware` folder. If asked for the chip family, choose **ESP32**.
+3. With **esptool 5.2.0**, choose **Family: ESP32**, **Variant: Espressif • ESP32 / WROOM**, **Version: 1.29.0**. This downloads a standard MicroPython image; our supplied binary is also an unmodified standard image.
+4. To use the supplied local file with esptool 5.2.0, use the terminal fallback below. The GUI option **Select local MicroPython image ...** requires esptool 4.12.0 with Thonny 5.0.0; see the compatibility section.
 5. Open the options menu and choose **Show install options**. Check **Target address = `0x1000`** for this full classic-ESP32 image.
 6. For a clean installation on the course board, enable **Erase all flash before installing**, after the instructor's backup check. Use **115200** if you need a conservative transfer rate.
 7. Click **Install**. Leave USB connected and wait for successful completion. This takes a few minutes depending on the transfer rate and computer.
 8. Close the dialog, reconnect to the selected interpreter, and use Thonny's **Stop/Restart backend** button if needed. A board reset may be needed after flashing.
 
-If Thonny reports that `esptool` is missing, open **Tools → Manage plug-ins**, install `esptool` version **4.12.0**, then restart Thonny. This is particularly relevant to Linux/pip installations. The course Linux command installs it in the same environment as Thonny.
+If Thonny reports that `esptool` is missing, open **Tools → Manage plug-ins**, install `esptool` version **5.2.0**, then restart Thonny. This is particularly relevant to Linux/pip installations. The course Linux command installs it in the same environment as Thonny.
 
 If connection fails, check the cable, serial-port access, and competing applications first. With instructor help, boards that have BOOT and RESET/EN buttons can be placed in download mode by holding BOOT, briefly pressing/releasing RESET/EN, then releasing BOOT when the installer connects. Do not assume every D1 R32 clone has the same buttons.
 
@@ -91,9 +91,9 @@ Confirm that both wheels turn forward and stop. Keep the motor-power switch acce
 
 ## Thonny 5.0.0 and esptool compatibility
 
-Use **esptool 4.12.0** for this course's Thonny local-image workflow. Thonny 5.0.0 calls `image_info --version 2` to recognize a selected file. esptool 5.2 rejects that option, so the file selection does not complete and Install may remain disabled. This is a host-tool compatibility issue, not a firmware problem. The supplied `.bin` needs no modification.
+The course now uses **esptool 5.2.0** with standard image selection or direct terminal flashing. Use **esptool 4.12.0** only if you need Thonny 5.0.0's local-image picker. Thonny 5.0.0 calls `image_info --version 2` to recognize a selected file. esptool 5.2 rejects that option, so the file selection does not complete and Install may remain disabled. This is a host-tool compatibility issue, not a firmware problem. The supplied `.bin` needs no modification.
 
-The official Linux installer checked on 12 October 2026 installed esptool 5.2.0. After installing Thonny, use **Tools → Manage plug-ins**, find `esptool`, select version **4.12.0** in the version/advanced installation options, install it, and restart Thonny. For an installation made with the official Linux script, the terminal equivalent is:
+The official Linux installer checked on 12 October 2026 installed esptool 5.2.0. Only if you need the local GUI picker, use **Tools → Manage plug-ins**, find `esptool`, select version **4.12.0** in the version/advanced installation options, install it, and restart Thonny. For an installation made with the official Linux script, the terminal equivalent is:
 
 ```bash
 "$HOME/apps/thonny/bin/python" -m pip install "esptool==4.12.0"
@@ -102,6 +102,36 @@ The official Linux installer checked on 12 October 2026 installed esptool 5.2.0.
 Recognition of the supplied image was reproduced with the exact Thonny command: esptool 5.2.0 rejected it; 4.12.0 identified ESP32 correctly. Actual GUI flashing on each student OS still needs rehearsal.
 
 The supplied image is an unmodified standard MicroPython image, not a custom robot firmware. As an alternative to selecting a local file, select **ESP32 → Espressif • ESP32 / WROOM → 1.29.0** in Thonny's online image list. Upload `robot.py` afterwards; erasing flash removes existing files.
+
+## Terminal fallback: flash the supplied binary with esptool 5.2.0
+
+Close Thonny to release the USB port and switch motor power off. Open a terminal in the extracted kit folder. This command uses the Python environment created by the official Linux Thonny installer:
+
+```bash
+"$HOME/apps/thonny/bin/python" -m esptool \
+  --chip esp32 --port /dev/ttyUSB0 --baud 115200 \
+  write-flash --erase-all 0x1000 \
+  firmware/ESP32_GENERIC-20260824-v1.29.0.bin
+```
+
+For the manual Linux installation in the setup guide, replace the Python path with `"$HOME/.venvs/rbussi-thonny/bin/python"`. Replace `/dev/ttyUSB0` with the actual port. The backslash line continuations above are Linux/macOS shell syntax.
+
+For other environments, use the Python executable where esptool 5.2.0 is installed. For example, this is the same command on one line (also suitable for PowerShell after replacing `python` and `COM5` with your actual interpreter and port):
+
+```text
+python -m esptool --chip esp32 --port COM5 --baud 115200 write-flash --erase-all 0x1000 firmware/ESP32_GENERIC-20260824-v1.29.0.bin
+```
+
+`--erase-all` deletes all board files. Preserve needed work first. After completion, reopen Thonny, connect to MicroPython (ESP32), and upload `robot.py` again.
+
+Read-only checks with the same environment:
+
+```bash
+"$HOME/apps/thonny/bin/python" -m esptool version
+"$HOME/apps/thonny/bin/python" -m esptool image-info firmware/ESP32_GENERIC-20260824-v1.29.0.bin
+```
+
+esptool 5.2.0 command help and local image recognition were checked on the instructor's machine. This fallback command was not used to erase or flash the robot during preparation of this slide.
 
 ## Sources and verification basis
 
