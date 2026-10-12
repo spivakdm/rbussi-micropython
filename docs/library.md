@@ -116,6 +116,7 @@ Run one example at a time from Thonny after uploading the library:
 |---|---|
 | [00_check_setup.py](../examples/00_check_setup.py) | Import and initialization with no movement |
 | [first_drive.py](../examples/first_drive.py) | Short forward movement |
+| [forward_pins.py](../examples/forward_pins.py) | Direct GPIO and PWM control without RBussi |
 | [01_variables.py](../examples/01_variables.py) | Change speed and duration variables |
 | [02_sequence.py](../examples/02_sequence.py) | Movement sequence with a pause |
 | [03_wheel_balance.py](../examples/03_wheel_balance.py) | Per-robot scale settings |
