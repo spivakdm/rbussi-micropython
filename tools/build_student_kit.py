@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.7'
+VERSION = '0.8'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -18,18 +18,32 @@ FILES = [
     'Connections.png',
     'examples/00_check_setup.py',
     'examples/first_drive.py',
+    'examples/forward_pins.py',
     'examples/01_variables.py',
     'examples/02_sequence.py',
     'examples/03_wheel_balance.py',
     'examples/04_wheel_control.py',
     'examples/05_continuous_control.py',
     'examples/stop.py',
+    'docs/day-02-plan.md',
+    'docs/day-02-slides.md',
+    'examples/day02/README.md',
+    'examples/day02/day02_settings.py',
+    'examples/day02/01_read_sensors.py',
+    'examples/day02/02_builtin_led.py',
+    'examples/day02/03_sensor_builtin_led.py',
+    'examples/day02/04_external_led.py',
+    'examples/day02/05_sensor_external_led.py',
+    'examples/day02/06_black_forward_white_backward.py',
+    'examples/day02/07_two_sensor_states.py',
+    'examples/day02/08_relay_line_follower.py',
     'worksheets/day01-observations.md',
+    'worksheets/day02-observations.md',
     'firmware/ESP32_GENERIC-20260824-v1.29.0.bin',
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.7
+START = '''# RBussi Student Kit — v0.8
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
@@ -42,7 +56,10 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 - [Library guide and examples](docs/library.md)
 - [Wheel balance and calibration](docs/wheel-calibration.md)
 - [Wiring reference and voltage check](docs/wiring-reference.md)
-- [Observation worksheet](worksheets/day01-observations.md)
+- [Day 1 observation worksheet](worksheets/day01-observations.md)
+- [Day 2 plan and sensor exercises](docs/day-02-plan.md)
+- [Day 2 examples and settings upload](examples/day02/README.md)
+- [Day 2 observation worksheet](worksheets/day02-observations.md)
 - [Firmware source and license information](firmware/SOURCE.md)
 
 Baseline: Thonny 5.0.0, MicroPython 1.29.0, classic ESP32 Wemos D1 R32, class `RBussi`.

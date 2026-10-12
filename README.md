@@ -6,7 +6,7 @@ All code comments and teaching instructions are in English. No Git installation 
 
 ## Downloads
 
-- [Student kit v0.7 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.7.zip): library, firmware, examples, wiring reference, and instructions.
+- [Student kit v0.8 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.8.zip): library, firmware, examples, wiring reference, and instructions.
 - [robot.py — download library](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/robot.py)
 - [MicroPython 1.29.0 — download firmware](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/firmware/ESP32_GENERIC-20260824-v1.29.0.bin)
 
@@ -114,3 +114,7 @@ The nine checks cover stopping, interruption, invalid input, direction changes, 
 ## Firmware provenance
 
 See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPython license notice](firmware/MicroPython-LICENSE.txt). Those notices apply to the upstream firmware and its dependencies; they do not assign a license to the other course materials.
+
+## Day 2: Sensors and LEDs
+
+[Lesson plan](docs/day-02-plan.md), [presentation outline](docs/day-02-slides.md), [eight exercises](examples/day02/README.md), and [worksheet](worksheets/day02-observations.md). Upload `day02_settings.py` as well as `robot.py`; measure the black/white levels before sensor-driven exercises. The relay example assumes a narrow black line between two sensors on white. Physical sensor validation is still pending.
