@@ -7,11 +7,14 @@
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
-The `with` block calls `close()` when it ends, including after an exception or Ctrl+C. This stops the motors and releases PWM resources. Keep only one active controller. After closing it, create a new object for further movement.
+Create the object with `robot = RBussi()`, then call its methods. The `finally` block calls `close()` when execution ends, including after an exception or Ctrl+C. This stops the motors and releases PWM resources. Keep only one active controller. After closing it, create a new object for further movement.
 
 First run with wheels lifted and the motor battery connected. Keep the power switch accessible. Thonny sends a local example to the selected MicroPython board when you press F5.
 
@@ -45,8 +48,11 @@ Both scales are validated before GPIO/PWM initialization. Zero disables and brak
 ## Independent wheel commands
 
 ```python
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.move(left=40, right=55, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 `move(left, right, seconds=1)` accepts independent commands from −100 to 100. Positive means forward, negative means backward, and zero brakes that wheel. It waits for the duration and stops both motors in `finally`.
@@ -73,12 +79,15 @@ Actual movement depends on motor starting duty, battery, traction, and wheel bal
 from robot import RBussi
 from time import sleep_ms
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.motors(left=40, right=55)
     sleep_ms(300)
     robot.motors(left=55, right=40)
     sleep_ms(300)
     robot.stop()
+finally:
+    robot.close()
 ```
 
 Use this method later in a line-following loop: read sensors, calculate wheel commands, and update `motors()` repeatedly. The present library provides motor control only; a calibrated line-sensor API is not included yet.

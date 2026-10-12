@@ -76,8 +76,11 @@ Lift the wheels and connect motor power. Open `examples/first_drive.py` and pres
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 Confirm that both wheels turn forward and stop. Keep the motor-power switch accessible. Save this student program on the computer. For Day 1, keep movement out of `main.py`, which executes on board startup.

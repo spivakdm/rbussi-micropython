@@ -5,8 +5,11 @@ Copy `robot.py` to the MicroPython board. Run your own program from Thonny with 
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 | Command | Action |
@@ -18,11 +21,11 @@ with RBussi() as robot:
 | `move(left=40, right=60, seconds=1)` | Independent wheel speeds for a fixed duration |
 | `motors(left=40, right=60)` | Continuous motion until another command or stop |
 | `stop()` | Stop both motors |
-| `close()` | Stop and release PWM; called when leaving `with` |
+| `close()` | Stop and release PWM; call at the end |
 
 Directional speed: 0–100%. Independent wheel speeds: −100 to 100%, positive means forward. Duration: 0–60 seconds. Zero duration does not start the motors. Speed is PWM duty, not measured velocity; turn duration is not an angle.
 
-Keep a single active `RBussi` object. Use the `with` pattern, especially for continuous motion. Timed commands stop in `finally`, including on interruption. Keep the motor-power switch accessible for unexpected behavior.
+Keep a single active `RBussi` object. Use `try/finally` with `robot.close()`, especially for continuous motion. Timed commands stop in `finally`, including on interruption. Keep the motor-power switch accessible for unexpected behavior.
 
 Right wheel: A. Left wheel: B. If a particular robot's motor wiring differs, ask the instructor about `RBussi(left_reversed=True)` or `RBussi(right_reversed=True)`.
 

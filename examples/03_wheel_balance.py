@@ -8,5 +8,8 @@ from robot import RBussi
 LEFT_SCALE = 1.0
 RIGHT_SCALE = 1.0
 
-with RBussi(left_scale=LEFT_SCALE, right_scale=RIGHT_SCALE) as robot:
+robot = RBussi(left_scale=LEFT_SCALE, right_scale=RIGHT_SCALE)
+try:
     robot.move(left=50, right=50, seconds=0.5)
+finally:
+    robot.close()

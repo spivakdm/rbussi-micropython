@@ -6,7 +6,7 @@ All code comments and teaching instructions are in English. No Git installation 
 
 ## Downloads
 
-- [Student kit v0.6 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.6.zip): library, firmware, examples, wiring reference, and instructions.
+- [Student kit v0.7 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.7.zip): library, firmware, examples, wiring reference, and instructions.
 - [robot.py — download library](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/robot.py)
 - [MicroPython 1.29.0 — download firmware](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/firmware/ESP32_GENERIC-20260824-v1.29.0.bin)
 
@@ -28,8 +28,11 @@ See the [Windows, macOS, and Linux setup guide](docs/student-setup.md). The stud
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 Save personal programs under a new filename on the computer. `robot.py` is reserved for the library. Do not save a Day 1 movement program as `main.py`, which would run at boot.
@@ -47,19 +50,22 @@ See the [full library guide and examples](docs/library.md) for constructor optio
 | `move(left=40, right=60, seconds=1)` | Independent timed wheel commands |
 | `motors(left=40, right=60)` | Continuous commands until changed or stopped |
 | `stop()` | Stop both motors |
-| `close()` | Stop and release PWM resources; automatic on leaving `with` |
+| `close()` | Stop and release PWM resources; call at the end |
 
 Directional speed accepts 0–100. Independent wheel commands accept −100 to 100, with positive values meaning forward. Duration accepts 0–60 seconds; zero duration never starts the motors. Speed is PWM duty rather than measured velocity: this robot has no wheel encoders. Timed turns do not specify exact angles.
 
-Keep one active `RBussi` object. Use the `with` pattern, especially for continuous commands. Timed movement also stops in `finally`, including on interruption. Before reversing a moving wheel, the library stops both motors for 20 ms. Software stopping depends on a functioning board and program; keep physical motor power accessible.
+Keep one active `RBussi` object. Use `try/finally` with `robot.close()`, especially for continuous commands. Timed movement also stops in `finally`, including on interruption. Before reversing a moving wheel, the library stops both motors for 20 ms. Software stopping depends on a functioning board and program; keep physical motor power accessible.
 
 ## Wheel balance
 
 ```python
 from robot import RBussi
 
-with RBussi(left_scale=0.95, right_scale=1.0) as robot:
+robot = RBussi(left_scale=0.95, right_scale=1.0)
+try:
     robot.move(left=50, right=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 Both scales default to 1.0 and accept 0–1. Reduce the faster wheel's scale, using repeated trials on the same surface. The value 0.95 above is only an example. Corrections affect all movement methods and do not provide measured-speed feedback. Wiring differences can be handled separately with `left_reversed=True` or `right_reversed=True`.

@@ -3,7 +3,10 @@ from robot import RBussi
 from time import sleep
 
 speed = 50
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=speed, seconds=0.5)
     sleep(0.5)
     robot.backward(speed=speed, seconds=0.5)
+finally:
+    robot.close()

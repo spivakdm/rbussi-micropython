@@ -3,6 +3,9 @@ import sys
 from robot import RBussi
 
 print(sys.implementation)
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.stop()
+finally:
+    robot.close()
 print('RBussi ready. No movement requested.')

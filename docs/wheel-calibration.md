@@ -7,11 +7,14 @@ The local robot has no wheel encoders. Speed arguments specify PWM duty, not mea
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.move(left=45, right=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
-`move()` stops after the specified duration. For line following, `motors(left, right)` updates the two commands continuously; use a `with` block or `try/finally` to stop on exit.
+`move()` stops after the specified duration. For line following, `motors(left, right)` updates the two commands continuously; use `try/finally` with `robot.close()` to stop on exit.
 
 ## Per-robot correction
 
@@ -22,8 +25,11 @@ Example only: if the left wheel is faster, try reducing its command:
 ```python
 from robot import RBussi
 
-with RBussi(left_scale=0.95, right_scale=1.0) as robot:
+robot = RBussi(left_scale=0.95, right_scale=1.0)
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 Here the left PWM duty is 47.5% and the right duty is 50%. Neither value is a measured velocity. The value 0.95 is illustrative, not a calibration measured on your robot.

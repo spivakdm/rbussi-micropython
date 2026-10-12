@@ -103,8 +103,11 @@ For a board already prepared by the instructor, verify the version and proceed t
 ```python
 from robot import RBussi
 
-with RBussi() as robot:
+robot = RBussi()
+try:
     robot.forward(speed=50, seconds=0.5)
+finally:
+    robot.close()
 ```
 
 Save your own program on the computer as `day01_first_move.py`. Keep `robot.py` for the library. Do not call your script `robot.py` or save movement code as `main.py` on the board: `main.py` runs on boot.
@@ -124,7 +127,7 @@ F5 sends the program to the board; ordinary laptop Python cannot run the MicroPy
 | Program runs but no movement | Check the separate motor battery and switch |
 | Motion is unexpected | Turn off motor power; keep wheels lifted for diagnosis |
 
-The provided timed commands stop in `finally`, and the `with` block closes the motor controller on exit. Use Stop/Restart or Ctrl+C to interrupt code, but keep the physical motor-power switch accessible: software stopping is not an independent hardware emergency stop.
+The provided timed commands stop in `finally`, and the examples call `robot.close()` in `finally` on exit. Use Stop/Restart or Ctrl+C to interrupt code, but keep the physical motor-power switch accessible: software stopping is not an independent hardware emergency stop.
 
 ## Ready checklist
 
