@@ -31,3 +31,6 @@ examples/motor_b_pulse.py
 examples/motors_ab_pulse.py
 examples/read_line.py
 tools/probe_serial.py
+
+# PDF render previews
+tmp/pdfs/

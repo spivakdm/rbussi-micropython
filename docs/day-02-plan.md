@@ -30,6 +30,10 @@ Students can connect a digital line sensor, print its readings, record black/whi
 
 Explain each new Python construct immediately before using it: `Pin.IN`, `value()`, `print`, comparisons, `if/elif/else`, `for`/`while`, `break`, and `try/finally`. Introduce only the constructs needed for the current experiment.
 
+## Printable material
+
+Use the [A4 sensor and line template](../printables/README.md): one selected page per student, printed at 100%. Choose a stripe narrower than the clear gap between sensing spots. The sheet supports calibration, bench steering and a stop-marker experiment; a full five-second floor trial needs more room. Optional activities: [additional sensor exercises](day-02-extra-exercises.md).
+
 ## Hardware preparation
 
 - Existing robot, charged motor battery, USB data cable and wheel stand.
