@@ -45,7 +45,7 @@ For the pinned Thonny version, use a dedicated virtual environment:
 sudo apt update
 sudo apt install python3-venv python3-tk
 python3 -m venv "$HOME/.venvs/rbussi-thonny"
-"$HOME/.venvs/rbussi-thonny/bin/python" -m pip install "thonny==5.0.0" "esptool==5.4.0"
+"$HOME/.venvs/rbussi-thonny/bin/python" -m pip install "thonny==5.0.0" "esptool==4.12.0"
 "$HOME/.venvs/rbussi-thonny/bin/thonny"
 ```
 
