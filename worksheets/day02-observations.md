@@ -27,6 +27,14 @@ Black command: __________ White command: __________
 
 Which line reads the sensor? __________ Which line makes the decision? __________
 
+## Stop at the bar
+
+Left black only: __________ Both black: __________
+
+Did the robot stop because of the bar or the timeout? __________
+
+What would change if `and` became `or`? __________
+
 ## Two-sensor controller
 
 Track: narrow black stripe on white, between sensor spots when centred.

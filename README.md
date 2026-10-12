@@ -6,7 +6,7 @@ All code comments and teaching instructions are in English. No Git installation 
 
 ## Downloads
 
-- [Student kit v0.8 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.8.zip): library, firmware, examples, wiring reference, and instructions.
+- [Student kit v0.9 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.9.zip): library, firmware, examples, wiring reference, and instructions.
 - [robot.py — download library](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/robot.py)
 - [MicroPython 1.29.0 — download firmware](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/firmware/ESP32_GENERIC-20260824-v1.29.0.bin)
 
@@ -117,8 +117,8 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 
 ## Day 2: Sensors and LEDs
 
-[Lesson plan](docs/day-02-plan.md), [presentation outline](docs/day-02-slides.md), [eight exercises](examples/day02/README.md), and [worksheet](worksheets/day02-observations.md). Upload `day02_settings.py` as well as `robot.py`; measure the black/white levels before sensor-driven exercises. The relay example assumes a narrow black line between two sensors on white. Physical sensor validation is still pending.
+[Lesson plan](docs/day-02-plan.md), [presentation outline](docs/day-02-slides.md), [nine exercises](examples/day02/README.md), and [worksheet](worksheets/day02-observations.md). Upload `day02_settings.py` as well as `robot.py`; measure the black/white levels before sensor-driven exercises. The relay example assumes a narrow black line between two sensors on white. Physical sensor validation is still pending.
 
 ## Printable practice sheet
 
-[A4 sensor and line template](printables/day02-line-templates.pdf): print one selected page per student at 100%. Stripe widths: 10, 6 and 14 mm. Includes calibration patches and a stop bar. See [printing instructions](printables/README.md) and [additional sensor exercises](docs/day-02-extra-exercises.md). This printable is available separately from student kit v0.8.
+[A4 sensor and line template](printables/day02-line-templates.pdf): print one selected page per student at 100%. Stripe widths: 10, 6 and 14 mm. Includes calibration patches and a stop bar. See [printing instructions](printables/README.md) and [additional sensor exercises](docs/day-02-extra-exercises.md). The printable and the stop-at-bar example are included in student kit v0.9.

@@ -108,7 +108,21 @@ Exercise: `06_black_forward_white_backward.py`.
 
 Instructor note: full example handles timeout and cleanup. This is reactive movement, not a line follower. Use paper rather than hands near wheels.
 
-## 10. Two Sensors See Four States
+## 10. Stop at the Black Bar
+
+```python
+if left_black and right_black:
+    robot.stop()
+    break
+```
+
+Both sensors black: stop and end the run.
+
+Exercise: `09_stop_at_bar.py`.
+
+Instructor note: use the full program, which reads both sensors before starting forward motion. It drives straight, does not steer, and stops after at most one second even if no bar is detected. First move the paper under the lifted robot. Ask students to predict the difference between `and` and `or`. For a floor test, start close to the broad printed bar.
+
+## 11. Two Sensors See Four States
 
 Read left and right together.
 Predict a command before running motors.
@@ -117,7 +131,7 @@ Exercise: `07_two_sensor_states.py`.
 
 Instructor note: use black/white cards to demonstrate all four combinations with motor power off. Use colour names after calibration, rather than attaching universal meanings to 0 and 1.
 
-## 11. Relay Steering
+## 12. Relay Steering
 
 Narrow black line on white, between the sensors.
 
@@ -130,7 +144,7 @@ Narrow black line on white, between the sensors.
 
 Instructor note: show the actual track and sensor spacing. This table is not for a white stripe. Stopping on both-black is the chosen exercise behavior.
 
-## 12. Read, Decide, Act Again
+## 13. Read, Decide, Act Again
 
 Read both sensors.
 Choose one of the four actions.
@@ -142,7 +156,7 @@ Two white readings can also mean the line is missing.
 
 Instructor note: first test wheel responses with the robot lifted, then a five-second floor trial centred on the stripe. Compare `INNER_SPEED = 0` with a higher value. Mention that the loop has a time limit, but no reliable line-loss detector.
 
-## 13. The Remote Laboratory
+## 14. The Remote Laboratory
 
 Task 10: read the Octoliner.
 Task 11: stop at a detected line.
@@ -152,7 +166,7 @@ Compare two binary sensors with an eight-channel array.
 
 Instructor note: use the course's actual API, Moodle/LTI links and templates. Simulate supported tasks while waiting. Check unlock rules. Leave task 13 and remote line following for Day 3 unless progress allows more.
 
-## 14. Today's Checkpoint
+## 15. Today's Checkpoint
 
 I can read and explain sensor values.
 My sensor controls an LED or the motors.

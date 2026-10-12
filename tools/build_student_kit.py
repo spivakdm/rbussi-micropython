@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.8'
+VERSION = '0.9'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -37,13 +37,17 @@ FILES = [
     'examples/day02/06_black_forward_white_backward.py',
     'examples/day02/07_two_sensor_states.py',
     'examples/day02/08_relay_line_follower.py',
+    'examples/day02/09_stop_at_bar.py',
+    'printables/day02-line-templates.pdf',
+    'printables/README.md',
+    'docs/day-02-extra-exercises.md',
     'worksheets/day01-observations.md',
     'worksheets/day02-observations.md',
     'firmware/ESP32_GENERIC-20260824-v1.29.0.bin',
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.8
+START = '''# RBussi Student Kit — v0.9
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
@@ -59,6 +63,7 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 - [Day 1 observation worksheet](worksheets/day01-observations.md)
 - [Day 2 plan and sensor exercises](docs/day-02-plan.md)
 - [Day 2 examples and settings upload](examples/day02/README.md)
+- [A4 printable line templates](printables/README.md)
 - [Day 2 observation worksheet](worksheets/day02-observations.md)
 - [Firmware source and license information](firmware/SOURCE.md)
 

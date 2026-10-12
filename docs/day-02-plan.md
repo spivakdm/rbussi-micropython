@@ -22,7 +22,7 @@ Students can connect a digital line sensor, print its readings, record black/whi
 | 14:00–14:15 | Built-in LED, then sensor-driven indication | `02_builtin_led.py`, `03_sensor_builtin_led.py` |
 | 14:15–14:30 | Break | |
 | 14:30–14:55 | Breadboard LED, resistor and sensor-driven indication | `04_external_led.py`, `05_sensor_external_led.py` |
-| 14:55–15:20 | Black = forward, white = backward | `06_black_forward_white_backward.py`, wheels lifted |
+| 14:55–15:20 | Black/white movement, then stop at a broad bar | `06_black_forward_white_backward.py`, `09_stop_at_bar.py`, wheels lifted first |
 | 15:20–15:35 | Break | |
 | 15:35–16:15 | Two-sensor state table and optional relay follower | `07_two_sensor_states.py`, `08_relay_line_follower.py` |
 | 16:15–16:50 | Simulator/remote-lab rotation | Tasks 10 and 11, task 12 or 14 if ready |
@@ -101,7 +101,13 @@ Run `06_black_forward_white_backward.py` with wheels lifted and motor battery co
 
 If readings flicker near an edge, first investigate height, threshold, lighting and wiring. As an optional exercise, require three consecutive matching samples before reversing. Do not hide unstable sensing by increasing motor power.
 
-### 5. Two sensors and a relay controller
+### 5. Stop at a transverse bar
+
+Use `09_stop_at_bar.py`: the robot drives straight until `left_black and right_black`, then stops and exits. Allocate approximately the final 10 minutes of the reactive-movement block. Use the printed broad bar and test with wheels lifted first. One black sensor alone does not stop this program; both-black at launch prevents a forward command. The local `MAX_RUN_MS = 1000` limits the trial to at most one second, and a shorter `settings.RUN_MS` is respected. No automatic restart or line steering is included. A single A4 sheet requires a short starting distance and an appropriate speed; a timeout is not a distance measurement.
+
+Ask students to predict what replacing `and` with `or` would change. Compare the marker rule with the remote stop-at-line task.
+
+### 6. Two sensors and a relay controller
 
 Run `07_two_sensor_states.py` with motor power off. It prints the intended action without moving. Test all four states, then test the same cases with wheels lifted using `08_relay_line_follower.py`.
 

@@ -19,7 +19,7 @@ Use the [A4 print template](../printables/README.md) for calibration and short s
 
 For students new to Python, choose **count line crossings**: the visible difference between a level and a transition makes state variables useful. Start with a single sensor and move paper manually.
 
-For the robotics goal, choose **stop at the bar**, then **tune relay steering**. The existing `08_relay_line_follower.py` already stops and ends the trial on both-black; no new marker-handling code is needed for the first version.
+For the robotics goal, choose **stop at the bar**, then **tune relay steering**. Use `09_stop_at_bar.py` for a separate straight-driving marker exercise. The existing `08_relay_line_follower.py` also stops on both-black while steering along the stripe.
 
 For faster students, combine **detect changes only** with **debouncing**. Require them to explain the trade-off: accepted readings become more stable, but a new state takes longer to affect the robot.
 

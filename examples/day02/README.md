@@ -8,7 +8,7 @@ Complete programs for the instructor and students. Run one at a time in Thonny w
 2. Keep motor power off for exercises 01–05 and 07. Check sensor supply and D0 voltage before connecting to ESP32.
 3. Open an exercise on your computer and press F5. The exercise itself need not be saved on the board.
 4. Calibrate with 01, fill the four WHITE/BLACK levels in settings, upload settings again, and stop/restart the backend before exercises using calibration.
-5. Run 06 and 08 with wheels lifted first and the motor battery connected. Preserve per-robot wheel scales. The default movement limit is five seconds; Ctrl+C requests software cleanup.
+5. Run 06, 08 and 09 with wheels lifted first and the motor battery connected. Preserve per-robot wheel scales. The movement limit is five seconds for 06/08 and at most one second for 09; Ctrl+C requests software cleanup.
 
 The `None` calibration defaults are deliberate: sensor-driven examples reject them instead of silently guessing polarity. GPIO assignments initially follow the supplied drawing, left A3/GPIO34 and right A2/GPIO35. Verify the sides physically.
 
@@ -22,6 +22,11 @@ The `None` calibration defaults are deliberate: sensor-driven examples reject th
 | `06_black_forward_white_backward.py` | `if` and continuous motor commands | Right sensor black: forward; white: backward, for at most 5 s |
 | `07_two_sensor_states.py` | Four combinations and `if/elif/else` | Prints colour names and intended actions, without movement |
 | `08_relay_line_follower.py` | Repeated read–decide–act | Follows a narrow black stripe between the sensors; bounded 5 s trial |
+| `09_stop_at_bar.py` | Logical `and` and `break` | Drives straight until both sensors see black, or at most 1 s |
+
+## Stop at the bar
+
+Calibrate both sensors in `day02_settings.py` first. Run `09_stop_at_bar.py` with wheels lifted; move the [printed stop bar](../../printables/README.md) beneath both sensors. Both-black stops and ends the run; a single black sensor does not stop it. If both are already black at launch, no forward command is issued. Without detection it stops after at most one second, or sooner if `RUN_MS` is shorter. The script does not restart automatically and does not steer. For a floor trial, point it towards the bar from a short distance and check the actual available space.
 
 ## Wiring
 

@@ -23,7 +23,7 @@ def load_settings():
 class Day02Tests(unittest.TestCase):
     def run_example(self, filename, left_black=False, right_black=False,
                     inverted=False, fail_motors=False, fail_pin=False,
-                    calibrated=True):
+                    calibrated=True, frames=None):
         settings = load_settings()
         if calibrated:
             settings.LEFT_WHITE = int(inverted)
@@ -34,6 +34,15 @@ class Day02Tests(unittest.TestCase):
         levels = {settings.LEFT_GPIO: settings.LEFT_BLACK if left_black else settings.LEFT_WHITE,
                   settings.RIGHT_GPIO: settings.RIGHT_BLACK if right_black else settings.RIGHT_WHITE}
         events = []
+        frames = frames or [(left_black, right_black)]
+        frame_index = 0
+
+        def sleep_ms(duration):
+            nonlocal frame_index
+            frame_index = min(frame_index + 1, len(frames) - 1)
+            left, right = frames[frame_index]
+            levels[settings.LEFT_GPIO] = settings.LEFT_BLACK if left else settings.LEFT_WHITE
+            levels[settings.RIGHT_GPIO] = settings.RIGHT_BLACK if right else settings.RIGHT_WHITE
 
         class Pin:
             IN, OUT = 0, 1
@@ -62,13 +71,14 @@ class Day02Tests(unittest.TestCase):
             def close(self):
                 events.append(('close',))
 
-        clock = iter((0, 0, settings.RUN_MS))
+        clock = iter([0] + [i * settings.SAMPLE_MS for i in range(len(frames))]
+                     + [settings.RUN_MS])
         modules = {'machine': types.SimpleNamespace(Pin=Pin),
                    'robot': types.SimpleNamespace(RBussi=Robot),
                    'day02_settings': settings,
                    'time': types.SimpleNamespace(ticks_ms=lambda: next(clock),
                                                  ticks_diff=lambda now, start: now - start,
-                                                 sleep_ms=lambda duration: None)}
+                                                 sleep_ms=sleep_ms)}
         try:
             with patch.dict(sys.modules, modules), contextlib.redirect_stdout(io.StringIO()):
                 runpy.run_path(str(EXAMPLES / filename))
@@ -102,13 +112,15 @@ class Day02Tests(unittest.TestCase):
                 self.assertEqual(events[-1], ('close',))
 
     def test_missing_calibration_never_initializes_motors(self):
-        for name in ('06_black_forward_white_backward.py', '08_relay_line_follower.py'):
+        for name in ('06_black_forward_white_backward.py', '08_relay_line_follower.py',
+                     '09_stop_at_bar.py'):
             events, error = self.run_example(name, calibrated=False)
             self.assertIsInstance(error, ValueError)
             self.assertEqual(events, [])
 
     def test_interrupt_and_sensor_initialization_error_close_controller(self):
-        for name in ('06_black_forward_white_backward.py', '08_relay_line_follower.py'):
+        for name in ('06_black_forward_white_backward.py', '08_relay_line_follower.py',
+                     '09_stop_at_bar.py'):
             for failure in ('fail_motors', 'fail_pin'):
                 events, error = self.run_example(name, **{failure: True})
                 self.assertIsNotNone(error)
@@ -120,6 +132,22 @@ class Day02Tests(unittest.TestCase):
         settings.RIGHT_WHITE, settings.RIGHT_BLACK = 0, 1
         with self.assertRaises(ValueError):
             settings.require_calibration()
+
+    def test_stop_bar_requires_both_black(self):
+        for inverted in (False, True):
+            for left, right in ((False, False), (True, False), (False, True), (True, True)):
+                events, error = self.run_example('09_stop_at_bar.py', left, right, inverted)
+                self.assertIsNone(error)
+                self.assertEqual(events[-2:], [('stop',), ('close',)])
+                self.assertEqual(('motors', 50, 50) in events, not (left and right))
+
+    def test_stop_bar_ends_run_without_restarting(self):
+        events, error = self.run_example('09_stop_at_bar.py',
+                                        frames=[(False, False), (True, False),
+                                                (True, True), (False, False)])
+        self.assertIsNone(error)
+        self.assertEqual(events, [('created',), ('motors', 50, 50),
+                                  ('motors', 50, 50), ('stop',), ('close',)])
 
     def test_nonmoving_examples_do_not_command_motors(self):
         for name in sorted(EXAMPLES.glob('0[1-5]_*.py')) + list(EXAMPLES.glob('07_*.py')):
