@@ -24,7 +24,7 @@ docs/summer-school-plan.md
 
 # Publish only the current student bundle
 dist/*
-!dist/RBussi-student-kit-v0.14.zip
+!dist/RBussi-student-kit-v0.15.zip
 
 # Earlier hardware probes; not part of the library examples
 examples/motor_a_pulse.py

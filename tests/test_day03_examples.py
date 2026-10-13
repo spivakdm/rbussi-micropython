@@ -131,7 +131,8 @@ class Day03Tests(unittest.TestCase):
         self.assertEqual([e[2] for e in events if e[:2] == ('pin', 26)][-1], 0)
 
     def test_finite_sound_programs_and_interruption(self):
-        for name in ['01_one_sound.py', '02_frequency_and_duty.py', '03_beep_function.py']:
+        for name in ['01_one_sound.py', '02_frequency_and_duty.py', '03_beep_function.py',
+                     '11_ode_to_joy.py', '12_twinkle_twinkle.py', '13_robot_sound_signals.py']:
             with self.subTest(name=name):
                 events, _, error = self.run_example(name)
                 self.assertIsNone(error)
@@ -139,6 +140,14 @@ class Day03Tests(unittest.TestCase):
                 events, _, error = self.run_example(name, interrupt_sound=True)
                 self.assertIsInstance(error, KeyboardInterrupt)
                 self.assert_sound_closed(events)
+
+    def test_sound_signal_rests_disable_pwm_without_zero_frequency(self):
+        events, _, error = self.run_example('13_robot_sound_signals.py')
+        self.assertIsNone(error)
+        self.assertNotIn(0, [e[1] for e in events if e[0] == 'frequency'])
+        # The success signal's rest starts at 1360 ms and leaves PWM silent.
+        self.assertIn(('duty', 0, 1360), events)
+        self.assert_sound_closed(events)
 
     def test_wifi_timeout_does_not_loop_forever(self):
         events, _, error = self.run_example('04_connect_wifi.py', wifi=False)

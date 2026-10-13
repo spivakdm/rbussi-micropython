@@ -86,7 +86,7 @@ The end-of-day demonstration is: a student sees their own robot's sensor reading
 - Verify the passive piezo model and its connection circuit. Reserve a free output; use GPIO2 for the built-in LED and, if electrically suitable and free, GPIO26 for the piezo.
 - Keep passwords out of public code, screenshots, slides and class-wide files. Student credentials belong in local private configuration; pins remain directly in the exercises.
 
-The ten programs are available in [Day 3 examples](../examples/day03/README.md), with upload instructions, a private settings template, pinned MQTT/time dependencies and a computer-side terminal client. Host checks do not replace the required ESP32/classroom-network rehearsal.
+The ten core programs and three optional melody/sound programs are available in [Day 3 examples](../examples/day03/README.md), with upload instructions, a private settings template, pinned MQTT/time dependencies and a computer-side terminal client. Host checks do not replace the required ESP32/classroom-network rehearsal.
 
 ### 13:00–13:15 — Goal and demonstration
 

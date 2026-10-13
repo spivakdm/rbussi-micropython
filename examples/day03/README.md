@@ -18,8 +18,19 @@ Keep motor power off throughout these exercises. These programs do not call the 
 | [08_mqtt_led.py](08_mqtt_led.py) | Subscribe; explicit `if/elif/else` for ON/OFF | Built-in LED responds |
 | [09_mqtt_beep.py](09_mqtt_beep.py) | Parse and validate a JSON command; blocking `beep()` | Short sound; bad commands ignored |
 | [10_connected_robot.py](10_connected_robot.py) | Timed telemetry, LED and nonblocking sound together | Telemetry continues during a tone |
+| [11_ode_to_joy.py](11_ode_to_joy.py) | Beethoven melody: named notes and durations | Recognizable tune |
+| [12_twinkle_twinkle.py](12_twinkle_twinkle.py) | Opening of Twinkle, Twinkle, Little Star | Compare repeated notes and long notes |
+| [13_robot_sound_signals.py](13_robot_sound_signals.py) | Startup, success and alert sequences | Reuse one function with different lists and rests |
 
 Core networking target: complete 05, 06 and 08. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
+
+## Optional melody exercises
+
+Examples 11–13 need only the verified passive piezo circuit; they do not need Wi-Fi, MQTT, credentials or certificates. They are optional local exercises, not extra required blocks in the Day 3 timetable. Comments inside all course examples explain the steps in English; the upstream dependency files remain unmodified.
+
+Each melody is a list of `(frequency, duration_ms)` pairs. Named notes such as `C4 = 262` make the tune easier to edit. The player uses `for` to unpack each pair. A zero frequency represents a rest: the program disables PWM and waits; it does not pass 0 to `PWM.freq()`.
+
+Try changing one note, halving all durations to increase the tempo, or multiplying each nonzero frequency by 2 to raise the melody by an octave. The small silent gap separates repeated notes. These players use blocking delays for clarity; they are not intended to run inside the combined MQTT callback. To add a melody there, advance one note at a time using deadlines, as exercise 10 does for a single tone.
 
 ## Wiring
 
@@ -99,6 +110,22 @@ Equivalent manual messages for robot01:
 | `edu-2026-10/robot01/cmd/beep` | `{"frequency":2000,"duration_ms":200}` |
 
 Use your own prefix. Publish to concrete topics; `#` is only for subscriptions. Do not retain commands. Clear any previously retained command on the broker before rehearsal; these simple programs do not inspect the MQTT retained-message flag. The examples do not publish device status yet.
+
+## Do we need a certificate?
+
+**Yes: our examples need the public root CA certificate to verify the MQTT server over TLS on port 8883.** Upload the supplied `certs/isrg-root-x1.pem` to the ESP32, keeping the `certs` directory. This same public file is used by all students. It contains no passwords or private keys and is already included in the student kit; students do not generate or request their own certificate.
+
+The broker sends its server certificate and intermediate chain during the TLS handshake. Our root CA lets the ESP32 check that chain; the client also checks the hostname `mqtt.ondroid.org`. The account then authenticates with its assigned username and password. This setup does not load a client certificate or client private key.
+
+The connection code inside examples 05–10 does this:
+
+```python
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+context.verify_mode = ssl.CERT_REQUIRED
+context.load_verify_locations(cafile=settings.CA_FILE)
+```
+
+`CA_FILE` is `"certs/isrg-root-x1.pem"` in the private settings template. `make_client()` supplies this context to the MQTT client, which supplies the hostname to TLS. The board also needs the actual current UTC date/time to check the certificate validity period; that is why the template uses NTP before MQTT. A root CA is different from the broker's short-lived leaf certificate: do not replace the bundled root with a random exported server certificate.
 
 ## Clock, TLS and troubleshooting
 

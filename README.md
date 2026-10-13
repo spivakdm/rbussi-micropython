@@ -6,7 +6,7 @@ All code comments and teaching instructions are in English. No Git installation 
 
 ## Downloads
 
-- [Student kit v0.14 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.14.zip): library, firmware, examples, wiring reference, and instructions.
+- [Student kit v0.15 — download ZIP](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/dist/RBussi-student-kit-v0.15.zip): library, firmware, examples, wiring reference, and instructions.
 - [robot.py — download library](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/robot.py)
 - [MicroPython 1.29.0 — download firmware](https://github.com/spivakdm/rbussi-micropython/raw/refs/heads/main/firmware/ESP32_GENERIC-20260824-v1.29.0.bin)
 
@@ -121,7 +121,7 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 
 ## Printable practice sheet
 
-[A4 sensor and line template](printables/day02-line-templates.pdf): print one selected page per student at 100%. Stripe widths: 10, 6 and 14 mm. Includes calibration patches and a stop bar. See [printing instructions](printables/README.md) and [additional sensor exercises](docs/day-02-extra-exercises.md). The printable and the stop-at-bar example are included in student kit v0.14.
+[A4 sensor and line template](printables/day02-line-templates.pdf): print one selected page per student at 100%. Stripe widths: 10, 6 and 14 mm. Includes calibration patches and a stop bar. See [printing instructions](printables/README.md) and [additional sensor exercises](docs/day-02-extra-exercises.md). The printable and the stop-at-bar example are included in student kit v0.15.
 
 ## Optional controllers with more sensors
 
@@ -131,4 +131,4 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 
 [Sound, Wi-Fi and MQTT lesson draft](docs/day-03-network-plan.md), based on the supplied class broker and per-robot topic namespaces. After reported activation, the first account passed verified TLS login and a two-client telemetry round trip from the instructor computer. Actual ESP32 connectivity, classroom Wi-Fi access, other accounts and command-topic permissions remain to be checked. Account passwords are not included in the repository or student bundle.
 
-[Ten progressive examples and upload instructions](examples/day03/README.md): passive piezo PWM, Wi-Fi, MQTT hello, sensor JSON, change-only publishing, LED/sound commands and a combined application. Includes a private settings template, pinned upstream MQTT/time modules, CA certificate and an optional computer terminal client. New examples have passed host checks; actual ESP32/classroom-network and piezo rehearsal remains required.
+[Ten progressive examples, three optional sound programs and upload instructions](examples/day03/README.md): passive piezo PWM, Wi-Fi, MQTT hello, sensor JSON, change-only publishing, LED/sound commands and a combined application. Includes a private settings template, pinned upstream MQTT/time modules, CA certificate and an optional computer terminal client. New examples have passed host checks; actual ESP32/classroom-network and piezo rehearsal remains required.

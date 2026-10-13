@@ -1,83 +1,132 @@
 """Send only changed readings. Keepalive pings are not sensor messages."""
 from machine import Pin
+# JSON converts a Python dictionary to message text and back.
 import json
 
+# network controls the ESP32 Wi-Fi interface.
 import network
+# ssl provides TLS encryption and verification of the broker certificate.
 import ssl
+# ntptime sets the board clock from an Internet/local time server.
 import ntptime
+# Read your private settings file; do not put passwords in this example.
 import network_secrets as settings
 from time import sleep_ms, ticks_ms, ticks_diff, gmtime
+# Use the supplied upstream MQTT client uploaded as umqtt/simple.py.
 from umqtt.simple import MQTTClient
 
 def connect_wifi():
+    # Create the station interface: the ESP32 joins an existing access point.
     wlan = network.WLAN()
+    # Enable the Wi-Fi radio before attempting a connection.
     wlan.active(True)
+    # Reuse an existing connection when this program is run again.
     if not wlan.isconnected():
+        # Start joining the network; receiving an IP address takes time.
         wlan.connect(settings.WIFI_SSID, settings.WIFI_PASSWORD)
+    # Remember when the attempt began. ticks_ms() counts elapsed milliseconds.
     started = ticks_ms()
+    # Wait for the network connection, but do not wait forever.
     while not wlan.isconnected():
+        # ticks_diff handles the timer wrapping around; 15000 ms = 15 seconds.
         if ticks_diff(ticks_ms(), started) >= 15000:
+            # Cancel the unsuccessful attempt before reporting the error.
             wlan.disconnect()
             raise OSError("Wi-Fi timeout: check 2.4 GHz, password and network access")
+        # Pause briefly between checks instead of checking continuously.
         sleep_ms(250)
+    # Print to Thonny Shell. The first ifconfig item is our local IP address.
     print("Wi-Fi connected; IP:", wlan.ifconfig()[0])
+    # Return the connected interface if the caller wants to inspect it.
     return wlan
 
 
 def make_client():
     # Supplied connection template: Wi-Fi, clock, CA verification, credentials.
+    # First establish Wi-Fi; MQTT and NTP need network access.
     connect_wifi()
+    # TLS checks certificate dates, so the board needs the actual UTC time.
     if settings.SYNC_NTP:
+        # Choose the time server from the private configuration.
         ntptime.host = settings.NTP_HOST
+        # Limit each NTP socket wait to three seconds (DNS may take longer).
         ntptime.timeout = 3
+        # Try at most three times; attempt takes the values 0, 1 and 2.
         for attempt in range(3):
             try:
+                # Request UTC time and update the ESP32 real-time clock (RTC).
                 ntptime.settime()
+                # A successful time update ends the retry loop.
                 break
             except OSError:
+                # After the third failed attempt, report the problem instead of disabling TLS.
                 if attempt == 2:
                     raise OSError("NTP failed: set current UTC RTC; see README")
                 sleep_ms(500)
+    # Catch an obviously unset clock; this is not a full date-accuracy check.
     if gmtime()[0] < 2026:
         raise OSError("Set the board RTC to current UTC before TLS")
+    # Create the TLS configuration for a client connecting to a server.
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    # Require a certificate chain trusted by our CA; reject unverified servers.
     context.verify_mode = ssl.CERT_REQUIRED
+    # Load the public root CA file from the ESP32 filesystem, not a client key.
     context.load_verify_locations(cafile=settings.CA_FILE)
+    # Create the client object; the actual connection happens at client.connect().
+    # The supplied MQTT client passes the broker hostname to TLS for verification.
+    # Credentials/client ID use bytes (.encode()); keepalive is in seconds.
     return MQTTClient(
         settings.ESP32_CLIENT_ID.encode(), settings.MQTT_HOST,
         port=settings.MQTT_PORT, user=settings.MQTT_USER.encode(),
         password=settings.MQTT_PASSWORD.encode(), keepalive=60, ssl=context,
     )
 
+# Use ESP32 GPIO numbers, not the Arduino-style A3/A2 labels.
 LEFT_GPIO = 34   # A3; white=0, black=1.
 RIGHT_GPIO = 35  # A2; confirm sides by covering one sensor at a time.
+# Digital inputs read D0 as 0 or 1; these examples do not use ADC.
 left = Pin(LEFT_GPIO, Pin.IN)
 right = Pin(RIGHT_GPIO, Pin.IN)
 
+# Prepare Wi-Fi, UTC time, verified TLS and our assigned MQTT identity.
 client = make_client()
 topic = (settings.TOPIC_PREFIX + "/telemetry/line").encode()
+# No previous reading yet: the first sample must be sent.
 previous = None
 try:
+    # Connect to the broker and authenticate; initial socket timeout is 10 s.
     client.connect(timeout=10)
+    # Remember when we last requested a keepalive response from the broker.
     last_ping = ticks_ms()
     while True:
+        # A tuple keeps the two digital readings together for comparison.
         current = (left.value(), right.value())
+        # Send only if either sensor changed since the last published sample.
         if current != previous:
             payload = json.dumps({"left": current[0], "right": current[1]})
             client.publish(topic, payload.encode(), retain=False)
             print(payload)
+            # Remember the successfully sent state for the next comparison.
             previous = current
+        # Poll MQTT and call on_message if a command arrives. Transport may still block.
         client.check_msg()
+        # Even when no data changes, ping every 20 s (keepalive is 60 s).
         if ticks_diff(ticks_ms(), last_ping) >= 20000:
+            # Send an MQTT PINGREQ; check_msg() handles the PINGRESP later.
             client.ping()
+            # Restart the keepalive interval after sending the ping.
             last_ping = ticks_ms()
         sleep_ms(20)
 finally:
-
+    # Cleanup runs after completion, an error or Ctrl+C.
+    # A failed connection may still have opened a socket that needs closing.
     if client.sock is not None:
         try:
+            # Attempt a clean MQTT disconnect before closing the network socket.
             client.disconnect()
+        # The network may already be unavailable; still perform local cleanup.
         except OSError:
             pass
         finally:
+            # Release the socket even if sending DISCONNECT failed.
             client.sock.close()
