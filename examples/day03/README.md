@@ -26,7 +26,7 @@ Core networking target: complete 05, 06 and 08. The combined program and sound c
 
 ## Optional melody exercises
 
-Examples 11–13 need only the verified passive piezo circuit; they do not need Wi-Fi, MQTT, credentials or certificates. They are optional local exercises, not extra required blocks in the Day 3 timetable. Comments inside all course examples explain the steps in English; the upstream dependency files remain unmodified.
+Examples 11–13 need only the verified passive piezo circuit; they do not need Wi-Fi, MQTT, credentials or certificates. They are optional local exercises, not extra required blocks in the Day 3 timetable. Examples use brief English comments for wiring and less obvious steps; the upstream dependency files remain unmodified.
 
 Each melody is a list of `(frequency, duration_ms)` pairs. Named notes such as `C4 = 262` make the tune easier to edit. The player uses `for` to unpack each pair. A zero frequency represents a rest: the program disables PWM and waits; it does not pass 0 to `PWM.freq()`.
 

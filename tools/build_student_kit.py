@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.15'
+VERSION = '0.16'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -73,7 +73,7 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.15
+START = '''# RBussi Student Kit — v0.16
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
