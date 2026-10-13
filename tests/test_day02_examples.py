@@ -44,11 +44,12 @@ class Day02Tests(unittest.TestCase):
             def value(self, value=None):
                 if value is not None:
                     self.level = value
+                    events.append(('pin', self.gpio, int(value)))
                 return levels[self.gpio] if self.mode == self.IN else self.level
             def on(self):
-                self.level = 1
+                self.value(1)
             def off(self):
-                self.level = 0
+                self.value(0)
 
         class Robot:
             def __init__(self, **kwargs):
@@ -124,6 +125,15 @@ class Day02Tests(unittest.TestCase):
         self.assertIsNone(error)
         self.assertEqual(events, [('created',), ('motors', 50, 50),
                                   ('motors', 50, 50), ('stop',), ('close',)])
+
+    def test_sensor_led_if_else_and_final_off(self):
+        for name, gpio in (('03_sensor_builtin_led.py', 2), ('05_sensor_external_led.py', 26)):
+            for black in (False, True):
+                events, error = self.run_example(name, right_black=black)
+                self.assertIsNone(error)
+                outputs = [event[2] for event in events if event[:2] == ('pin', gpio)]
+                self.assertEqual(outputs[:-1], [int(black)] * 150)
+                self.assertEqual(outputs[-1], 0)
 
     def test_nonmoving_examples_do_not_command_motors(self):
         for name in sorted(EXAMPLES.glob('0[1-5]_*.py')) + list(EXAMPLES.glob('07_*.py')):

@@ -12,10 +12,10 @@ try:
     for _ in range(150):
         raw = sensor.value()
         if raw == RIGHT_BLACK:
-            led.on()
+            led.value(1)
         else:
-            led.off()
+            led.value(0)
         print(raw, led.value())
         sleep_ms(100)
 finally:
-    led.off()
+    led.value(0)

@@ -89,7 +89,7 @@ Use each sensor's trimmer to obtain a stable change between the white and black 
 
 ### 2. Built-in LED
 
-Run `02_builtin_led.py`: five half-second flashes. Then run `03_sensor_builtin_led.py`: right sensor on black turns the LED on; white turns it off. Ask students to predict the effect of changing `==` to `!=`. Motor power stays off.
+Run `02_builtin_led.py`: five half-second flashes. Then run `03_sensor_builtin_led.py`: right sensor on black turns the LED on; white turns it off. Both sensor-driven LED examples use explicit `if/else`: `led.value(1)` on black and `led.value(0)` on white. Ask students to predict the effect of changing `==` to `!=`. Motor power stays off.
 
 ### 3. External LED
 

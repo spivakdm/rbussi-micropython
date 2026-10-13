@@ -11,9 +11,11 @@ led = Pin(BUILTIN_LED_GPIO, Pin.OUT, value=0)
 try:
     for _ in range(150):
         raw = sensor.value()
-        black = raw == RIGHT_BLACK
-        led.value(black)
-        print(raw, int(black))
+        if raw == RIGHT_BLACK:
+            led.value(1)
+        else:
+            led.value(0)
+        print(raw, led.value())
         sleep_ms(100)
 finally:
     led.value(0)

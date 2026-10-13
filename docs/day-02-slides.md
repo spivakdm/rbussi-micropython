@@ -70,8 +70,11 @@ Instructor note: run `02_builtin_led.py`. GPIO2 is the programmable LED, separat
 ## 7. Show What the Sensor Sees
 
 ```python
-black = sensor.value() == RIGHT_BLACK
-led.value(black)
+raw = sensor.value()
+if raw == RIGHT_BLACK:
+    led.value(1)
+else:
+    led.value(0)
 ```
 
 Black: LED on. White: LED off.
