@@ -5,10 +5,31 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.13'
+VERSION = '0.14'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
+    'examples/day03/01_one_sound.py',
+    'examples/day03/02_frequency_and_duty.py',
+    'examples/day03/03_beep_function.py',
+    'examples/day03/04_connect_wifi.py',
+    'examples/day03/05_mqtt_hello.py',
+    'examples/day03/06_sensor_telemetry.py',
+    'examples/day03/07_publish_on_change.py',
+    'examples/day03/08_mqtt_led.py',
+    'examples/day03/09_mqtt_beep.py',
+    'examples/day03/10_connected_robot.py',
+    'examples/day03/MicroPython-lib-LICENSE.txt',
+    'examples/day03/README.md',
+    'examples/day03/SOURCES.md',
+    'examples/day03/certs/isrg-root-x1.pem',
+    'examples/day03/network_secrets.example.py',
+    'examples/day03/ntptime.py',
+    'examples/day03/umqtt/__init__.py',
+    'examples/day03/umqtt/simple.py',
+    'docs/day-03-network-plan.md',
+    'tools/mqtt_classroom_client.py',
+
     'docs/student-setup.md',
     'docs/quick-reference.md',
     'docs/library.md',
@@ -49,7 +70,7 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.13
+START = '''# RBussi Student Kit — v0.14
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
@@ -67,12 +88,15 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 - [Day 1 observation worksheet](worksheets/day01-observations.md)
 - [Day 2 plan and sensor exercises](docs/day-02-plan.md)
 - [Day 2 standalone examples](examples/day02/README.md)
+- [Day 3 sound, Wi-Fi and MQTT examples](examples/day03/README.md)
 - [Extra tasks: five-sensor P and three-sensor relay](docs/extra-line-control-tasks.md)
 - [A4 printable line templates](printables/README.md)
 - [Day 2 observation worksheet](worksheets/day02-observations.md)
 - [Firmware source and license information](firmware/SOURCE.md)
 
 Baseline: Thonny 5.0.0, MicroPython 1.29.0, classic ESP32 Wemos D1 R32, class `RBussi`.
+
+Day 3 includes MQTT/time dependencies and a public CA certificate. Copy the private settings template and fill in only your own credentials; passwords are not included. The computer terminal client requires a separate paho-mqtt installation. ESP32 network and piezo rehearsal is still required.
 
 The ZIP includes firmware and course files, not Thonny installers, USB drivers, simulator software, or Moodle credentials. Get the actual course and simulator links from the instructor. Windows/macOS and student Linux installation routes still require instructor rehearsal.
 

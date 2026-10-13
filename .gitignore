@@ -24,7 +24,7 @@ docs/summer-school-plan.md
 
 # Publish only the current student bundle
 dist/*
-!dist/RBussi-student-kit-v0.13.zip
+!dist/RBussi-student-kit-v0.14.zip
 
 # Earlier hardware probes; not part of the library examples
 examples/motor_a_pulse.py
@@ -35,3 +35,7 @@ tools/probe_serial.py
 
 # PDF render previews
 tmp/pdfs/
+
+# Each student keeps Wi-Fi and MQTT credentials private
+network_secrets.py
+.mqtt-venv/

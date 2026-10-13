@@ -33,6 +33,8 @@ After the instructor reported activation, the first account (`robot01`) was chec
 - The ESP32-identity test client published a unique, non-retained QoS 0 test message to that topic; the computer client received the matching topic and payload.
 - Both clients disconnected cleanly. No messages were published to command or status topics.
 
+The new computer terminal client also passed a telemetry receive check with the supplied CA on 13 October; its desktop test publisher connected using TLS 1.2. No commands/status messages were published in that check.
+
 Both test clients actually ran on the instructor computer. This confirms the first account's two-client login and telemetry exchange from the tested Wi-Fi; it does not establish actual ESP32 connectivity, classroom Wi-Fi access, command-topic permissions or activation of the remaining 19 accounts. The original CSV activation column is now stale relative to the instructor's update.
 
 Keep TLS verification enabled. A successful desktop TLS check is not proof that the ESP32 has the required CA certificate, clock setup and MQTT client configuration; those need their own test.
@@ -84,7 +86,7 @@ The end-of-day demonstration is: a student sees their own robot's sensor reading
 - Verify the passive piezo model and its connection circuit. Reserve a free output; use GPIO2 for the built-in LED and, if electrically suitable and free, GPIO26 for the piezo.
 - Keep passwords out of public code, screenshots, slides and class-wide files. Student credentials belong in local private configuration; pins remain directly in the exercises.
 
-The exercise labels below describe programs to prepare; they are not links to already implemented or tested Day 3 code.
+The ten programs are available in [Day 3 examples](../examples/day03/README.md), with upload instructions, a private settings template, pinned MQTT/time dependencies and a computer-side terminal client. Host checks do not replace the required ESP32/classroom-network rehearsal.
 
 ### 13:00–13:15 — Goal and demonstration
 
