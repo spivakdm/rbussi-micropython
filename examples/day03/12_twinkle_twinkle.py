@@ -30,10 +30,8 @@ def play_note(frequency, duration_ms):
     else:
         sound.freq(frequency)
         sound.duty_u16(32768)
-    try:
-        sleep_ms(duration_ms)
-    finally:
-        sound.duty_u16(0)
+    sleep_ms(duration_ms)
+    sound.duty_u16(0)
 
 
 try:

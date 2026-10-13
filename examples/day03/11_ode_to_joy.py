@@ -8,7 +8,6 @@ D4 = 294
 E4 = 330
 F4 = 349
 G4 = 392
-A4 = 440
 
 # Each pair is (frequency in Hz, duration in ms).
 # Frequency 0 represents a silent rest.
@@ -30,10 +29,8 @@ def play_note(frequency, duration_ms):
     else:
         sound.freq(frequency)
         sound.duty_u16(32768)
-    try:
-        sleep_ms(duration_ms)
-    finally:
-        sound.duty_u16(0)
+    sleep_ms(duration_ms)
+    sound.duty_u16(0)
 
 
 try:

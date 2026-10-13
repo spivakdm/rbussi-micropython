@@ -6,70 +6,56 @@ import network
 import ssl
 import ntptime
 import network_secrets as settings
-from time import sleep_ms, ticks_ms, ticks_diff, gmtime
+from time import sleep_ms, ticks_ms, ticks_diff
 from umqtt.simple import MQTTClient
 
-def connect_wifi():
-    wlan = network.WLAN()
-    wlan.active(True)
-    if not wlan.isconnected():
-        wlan.connect(settings.WIFI_SSID, settings.WIFI_PASSWORD)
-    started = ticks_ms()
-    while not wlan.isconnected():
-        if ticks_diff(ticks_ms(), started) >= 15000:
-            wlan.disconnect()
-            raise OSError("Wi-Fi timeout: check 2.4 GHz, password and network access")
-        sleep_ms(250)
-    print("Wi-Fi connected; IP:", wlan.ifconfig()[0])
-    return wlan
+wlan = network.WLAN()
+wlan.active(True)
+if not wlan.isconnected():
+    wlan.connect(settings.WIFI_SSID, settings.WIFI_PASSWORD)
 
+started = ticks_ms()
+while not wlan.isconnected():
+    if ticks_diff(ticks_ms(), started) >= 15000:
+        wlan.disconnect()
+        raise OSError("Wi-Fi timeout: check 2.4 GHz, password and network access")
+    sleep_ms(250)
+print("Wi-Fi connected; IP:", wlan.ifconfig()[0])
 
-def make_client():
-    connect_wifi()
-    # TLS certificate verification needs the current UTC time.
-    if settings.SYNC_NTP:
-        ntptime.host = settings.NTP_HOST
-        ntptime.timeout = 3
-        for attempt in range(3):
-            try:
-                ntptime.settime()
-                break
-            except OSError:
-                if attempt == 2:
-                    raise OSError("NTP failed: set current UTC RTC; see README")
-                sleep_ms(500)
-    if gmtime()[0] < 2026:
-        raise OSError("Set the board RTC to current UTC before TLS")
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    # Verify the server using the uploaded root CA.
-    context.verify_mode = ssl.CERT_REQUIRED
-    context.load_verify_locations(cafile=settings.CA_FILE)
-    # MQTT uses bytes; keepalive is in seconds.
-    return MQTTClient(
-        settings.ESP32_CLIENT_ID.encode(), settings.MQTT_HOST,
-        port=settings.MQTT_PORT, user=settings.MQTT_USER.encode(),
-        password=settings.MQTT_PASSWORD.encode(), keepalive=60, ssl=context,
-    )
+# TLS needs the current UTC time and the uploaded root CA.
+if settings.SYNC_NTP:
+    ntptime.host = settings.NTP_HOST
+    ntptime.timeout = 3
+    ntptime.settime()
+
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+context.verify_mode = ssl.CERT_REQUIRED
+context.load_verify_locations(cafile=settings.CA_FILE)
+
+client = MQTTClient(
+    settings.ESP32_CLIENT_ID.encode(), settings.MQTT_HOST,
+    port=settings.MQTT_PORT, user=settings.MQTT_USER.encode(),
+    password=settings.MQTT_PASSWORD.encode(), keepalive=60, ssl=context,
+)
 
 LEFT_GPIO = 34   # A3; white=0, black=1.
 RIGHT_GPIO = 35  # A2; confirm sides by covering one sensor at a time.
 left = Pin(LEFT_GPIO, Pin.IN)
 right = Pin(RIGHT_GPIO, Pin.IN)
 
-client = make_client()
 topic = (settings.TOPIC_PREFIX + "/telemetry/line").encode()
 previous = None
 try:
     client.connect(timeout=10)
     last_ping = ticks_ms()
     while True:
-        current = (left.value(), right.value())
+        readings = {"left": left.value(), "right": right.value()}
         # Publish only when a sensor changes.
-        if current != previous:
-            payload = json.dumps({"left": current[0], "right": current[1]})
+        if readings != previous:
+            payload = json.dumps(readings)
             client.publish(topic, payload.encode(), retain=False)
             print(payload)
-            previous = current
+            previous = readings
         client.check_msg()
         # Keep the connection alive when readings do not change.
         if ticks_diff(ticks_ms(), last_ping) >= 20000:
@@ -81,6 +67,4 @@ finally:
         try:
             client.disconnect()
         except OSError:
-            pass
-        finally:
             client.sock.close()

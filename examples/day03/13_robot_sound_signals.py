@@ -20,10 +20,8 @@ def play_signal(sequence):
         else:
             sound.freq(frequency)
             sound.duty_u16(32768)  # Approximately 50% fill ratio.
-        try:
-            sleep_ms(duration_ms)  # Blocking, suitable for this local demo.
-        finally:
-            sound.duty_u16(0)  # Stop this note even if it is interrupted.
+        sleep_ms(duration_ms)
+        sound.duty_u16(0)
         sleep_ms(30)  # Separate adjacent notes slightly.
 
 

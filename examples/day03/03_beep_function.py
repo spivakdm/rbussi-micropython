@@ -10,10 +10,8 @@ sound = PWM(pin, freq=2000, duty_u16=0)
 def beep(frequency, duration_ms):
     sound.freq(frequency)
     sound.duty_u16(32768)
-    try:
-        sleep_ms(duration_ms)
-    finally:
-        sound.duty_u16(0)
+    sleep_ms(duration_ms)
+    sound.duty_u16(0)
 
 
 try:

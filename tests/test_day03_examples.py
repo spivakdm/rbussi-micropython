@@ -80,7 +80,9 @@ class Day03Tests(unittest.TestCase):
                 self.sock = Socket()
                 if connect_fail:
                     raise OSError('simulated connection failure')
-            def disconnect(self): events.append(('disconnect',))
+            def disconnect(self):
+                events.append(('disconnect',))
+                self.sock.close()
             def set_callback(self, cb): self.cb = cb
             def subscribe(self, topic): events.append(('subscribe', topic))
             def publish(self, topic, payload, retain):
@@ -203,10 +205,12 @@ class Day03Tests(unittest.TestCase):
                    b'{"frequency":2000.5,"duration_ms":200}']
         messages = [(i*10, '/cmd/beep', value) for i, value in enumerate(invalid)]
         messages.append((80, '/cmd/beep', b'{"frequency":2000,"duration_ms":200}'))
-        events, _, error = self.run_example('09_mqtt_beep.py', messages=messages)
-        self.assertIsInstance(error, KeyboardInterrupt)
-        self.assertEqual(len([e for e in events if e[:2] == ('duty', 32768)]), 1)
-        self.assert_sound_closed(events)
+        for filename in ['09_mqtt_beep.py', '10_connected_robot.py']:
+            with self.subTest(filename=filename):
+                events, _, error = self.run_example(filename, messages=messages)
+                self.assertIsInstance(error, KeyboardInterrupt)
+                self.assertEqual(len([e for e in events if e[:2] == ('duty', 32768)]), 1)
+                self.assert_sound_closed(events)
 
     def test_combined_sound_does_not_delay_telemetry_or_led(self):
         events, _, error = self.run_example('10_connected_robot.py', stop=1300,

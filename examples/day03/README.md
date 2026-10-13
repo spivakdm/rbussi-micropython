@@ -1,6 +1,6 @@
 # Day 3 — Sound, Wi-Fi and MQTT
 
-Use the existing MicroPython 1.29.0 firmware on the Wemos D1 R32. No new firmware and no extra robot wrapper library are required. Pins are declared in each program; MQTT connection functions are supplied inside each network example.
+Use the existing MicroPython 1.29.0 firmware on the Wemos D1 R32. No new firmware and no extra robot wrapper library are required. Pins are declared in each program; Each network example starts with the same supplied Wi-Fi/TLS setup, followed by the exercise itself.
 
 Keep motor power off throughout these exercises. These programs do not call the motor library. Stop a continuous program with Ctrl+C in Thonny; LED and PWM examples release their outputs in `finally`. Run one example at a time with F5; do not save it as `boot.py` or `main.py` during the lesson.
 
@@ -22,7 +22,7 @@ Keep motor power off throughout these exercises. These programs do not call the 
 | [12_twinkle_twinkle.py](12_twinkle_twinkle.py) | Opening of Twinkle, Twinkle, Little Star | Compare repeated notes and long notes |
 | [13_robot_sound_signals.py](13_robot_sound_signals.py) | Startup, success and alert sequences | Reuse one function with different lists and rests |
 
-Core networking target: complete 05, 06 and 08. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
+Core networking target: complete 05, 06 and 08. Read programs from top to bottom: imports, connection setup, then the task. Functions are used for reusable sounds and MQTT callbacks; callbacks are introduced in 08. The Wi-Fi/TLS setup is supplied by the instructor. Students focus first on `publish()`, sensor readings and the LED `if/elif/else`. Exercise 10 adds elapsed-time scheduling and is an advanced extension. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
 
 ## Optional melody exercises
 
@@ -125,7 +125,7 @@ context.verify_mode = ssl.CERT_REQUIRED
 context.load_verify_locations(cafile=settings.CA_FILE)
 ```
 
-`CA_FILE` is `"certs/isrg-root-x1.pem"` in the private settings template. `make_client()` supplies this context to the MQTT client, which supplies the hostname to TLS. The board also needs the actual current UTC date/time to check the certificate validity period; that is why the template uses NTP before MQTT. A root CA is different from the broker's short-lived leaf certificate: do not replace the bundled root with a random exported server certificate.
+`CA_FILE` is `"certs/isrg-root-x1.pem"` in the private settings template. The `MQTTClient(..., ssl=context)` call supplies this context to the MQTT library, which supplies the hostname to TLS. The board also needs the actual current UTC date/time to check the certificate validity period; that is why the template uses NTP before MQTT. A root CA is different from the broker's short-lived leaf certificate: do not replace the bundled root with a random exported server certificate.
 
 ## Clock, TLS and troubleshooting
 
@@ -139,7 +139,7 @@ The template synchronizes the ESP32 clock using NTP before connecting over TLS. 
 - **Repeated disconnects:** check duplicate client IDs and Wi-Fi. Stop the old example before starting another.
 - **No message:** start the subscriber first; check prefix, topic direction and broker permissions. QoS 0 is a simple demonstration and does not guarantee delivery.
 
-The examples stop on network errors rather than reconnect automatically. Fix the cause and press F5 again. `check_msg()` polls for messages, but the small synchronous MQTT client may block while reading a partial packet; this is not a hard real-time controller. Exercise 09 also blocks intentionally for each short tone. Exercise 10 removes that application delay with `ticks_ms()`/`ticks_diff()`; it does not make the transport asynchronous.
+The examples make one NTP request and stop on network errors rather than retrying or reconnecting automatically. Fix the cause and press F5 again. Sound helpers rely on the program's outer `try/finally` for interruption cleanup; keep their calls inside that block. `check_msg()` polls for messages, but the small synchronous MQTT client may block while reading a partial packet; this is not a hard real-time controller. Exercise 09 also blocks intentionally for each short tone. Exercise 10 removes that application delay with `ticks_ms()`/`ticks_diff()`; it does not make the transport asynchronous.
 
 ## Verification status
 
