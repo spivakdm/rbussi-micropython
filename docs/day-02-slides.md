@@ -45,13 +45,15 @@ Exercise: `01_read_sensors.py`.
 
 Instructor note: ESP32 sends `print()` through the USB serial connection to Thonny. Introduce imports and a short delayed loop with the full example. No separate serial monitor. D0 is a comparator output, so no ADC is needed.
 
-## 5. Measure Before Deciding
+## 5. Sensor Trimmer Adjustment
 
-Test white and black under each sensor.
-Record the four levels in `day02_settings.py`.
-Upload the settings file again.
+Place white and black paper beneath each sensor.
+Adjust the trimmer until the readings change reliably.
 
-Instructor note: white is not universally 0 and black is not universally 1. Check sensor height and threshold adjustment. Show the calibration table from the worksheet. Explain `raw == RIGHT_BLACK` only after measuring polarity.
+White = 0. Black = 1.
+Pins and parameters are defined in each example.
+
+Instructor note: each exercise defines its own pins and parameters. No extra settings file or software calibration is needed. The instructor confirmed white = 0 and black = 1. Use example 01 to check the response; the trimmer adjusts the switching threshold. Use the printed black and white patches at the normal sensing height.
 
 ## 6. The Built-in LED
 
@@ -76,7 +78,7 @@ Black: LED on. White: LED off.
 
 Exercise: `03_sensor_builtin_led.py`.
 
-Instructor note: the snippet is conceptual; use the complete file with calibrated settings. Ask students to predict the result before changing the comparison.
+Instructor note: the snippet is conceptual; use the complete file with pins and the BLACK constant defined in the program. Ask students to predict the result before changing the comparison.
 
 ## 8. An External LED
 
@@ -129,7 +131,7 @@ Predict a command before running motors.
 
 Exercise: `07_two_sensor_states.py`.
 
-Instructor note: use black/white cards to demonstrate all four combinations with motor power off. Use colour names after calibration, rather than attaching universal meanings to 0 and 1.
+Instructor note: use black/white cards to demonstrate all four combinations with motor power off. Use colour names after checking black/white response, rather than attaching universal meanings to 0 and 1.
 
 ## 12. Relay Steering
 
@@ -170,7 +172,7 @@ Instructor note: use the course's actual API, Moodle/LTI links and templates. Si
 
 I can read and explain sensor values.
 My sensor controls an LED or the motors.
-I saved my code and calibration.
+I saved my code and pin settings.
 I can explain one limitation of two sensors.
 
 Instructor note: collect the worksheet and ask each student to point to the read, decision and output parts of their program. Relay following is a stretch outcome. Next: improve tracking and compare with the remote robot.

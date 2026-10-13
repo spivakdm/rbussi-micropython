@@ -2,16 +2,19 @@
 from machine import Pin
 from time import sleep_ms
 from robot import RBussi
-import day02_settings as settings
 
-settings.require_calibration()
+LEFT_GPIO = 34   # A3; verify by covering only the left sensor.
+RIGHT_GPIO = 35  # A2; verify by covering only the right sensor.
+LEFT_BLACK = 1   # Black = 1, white = 0 on this robot.
+RIGHT_BLACK = 1  # Black = 1, white = 0 on this robot.
+
 robot = RBussi()
 try:
-    left = Pin(settings.LEFT_GPIO, Pin.IN)
-    right = Pin(settings.RIGHT_GPIO, Pin.IN)
+    left = Pin(LEFT_GPIO, Pin.IN)
+    right = Pin(RIGHT_GPIO, Pin.IN)
     for _ in range(100):
-        left_black = left.value() == settings.LEFT_BLACK
-        right_black = right.value() == settings.RIGHT_BLACK
+        left_black = left.value() == LEFT_BLACK
+        right_black = right.value() == RIGHT_BLACK
         if not left_black and not right_black:
             action = 'forward (or line missing: same readings)'
         elif left_black and not right_black:

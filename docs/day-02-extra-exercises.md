@@ -2,12 +2,12 @@
 
 Choose one or two extensions for Day 2; keep the main [lesson plan](day-02-plan.md) within 13:00–17:00. The existing sensor outputs are digital D0, so the experiments observe 0/1 transitions, not continuous reflectance.
 
-Use the [A4 print template](../printables/README.md) for calibration and short sections. Most initial experiments work with motor power off or the robot lifted while paper moves beneath the sensors.
+Use the [A4 print template](../printables/README.md) for trimmer checks and short sections. Most initial experiments work with motor power off or the robot lifted while paper moves beneath the sensors.
 
 | Exercise | Student task | Python / robotics concept | Completion evidence |
 |---|---|---|---|
-| Guess the readings | Predict both sensor colours for four paper positions, then check Shell | Booleans, independent channels, interpreting measurements | Four correct predictions after polarity calibration |
-| Sensor-height experiment | Repeat white/black measurements at several recorded heights around the working position | Controlled experiments and calibration | A table of reliable and unreliable responses |
+| Guess the readings | Predict both sensor colours for four paper positions, then check Shell | Booleans, independent channels, interpreting measurements | Four correct predictions after checking polarity |
+| Sensor-height experiment | Repeat white/black measurements at several recorded heights around the working position | Controlled experiments and trimmer adjustment | A table of reliable and unreliable responses |
 | Count line crossings | Move the narrow stripe across one stationary sensor several times; count only white-to-black transitions | Previous state, `if`, counters, edge detection | Holding black under the sensor increments only once |
 | Stop at the bar | Move the broad stop bar under both sensors, then try a brief forward trial towards it | `and`, `break`, a chosen marker rule | Both-black stops and ends the run |
 | Detect changes only | Print a message only when either sensor changes | Tuples, previous state, reducing telemetry | No repeated messages while the surface stays unchanged |

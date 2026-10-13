@@ -5,7 +5,8 @@ LED cathode (-) -> GND. Confirm GPIO26 is free on the actual shield.
 """
 from machine import Pin
 from time import sleep_ms
-from day02_settings import EXTERNAL_LED_GPIO
+
+EXTERNAL_LED_GPIO = 26  # D2; confirm this contact is free on the shield.
 
 led = Pin(EXTERNAL_LED_GPIO, Pin.OUT, value=0)
 try:

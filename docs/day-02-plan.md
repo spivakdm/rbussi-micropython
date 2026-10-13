@@ -10,7 +10,7 @@ Status: teaching draft with runnable examples, not yet physically validated with
 
 ## Outcomes
 
-Students can connect a digital line sensor, print its readings, record black/white polarity, drive an LED, use a sensor in an `if` statement, and explain a simple feedback controller. The relay follower is a stretch outcome if wiring or calibration takes longer.
+Students can connect a digital line sensor, print its readings, record black/white polarity, drive an LED, use a sensor in an `if` statement, and explain a simple feedback controller. The relay follower is a stretch outcome if wiring or sensor checks take longer.
 
 ## Schedule
 
@@ -18,7 +18,7 @@ Students can connect a digital line sensor, print its readings, record black/whi
 |---|---|---|
 | 13:00–13:10 | Recap: a command versus a decision based on measurement | Explain today's read–decide–act loop |
 | 13:10–13:35 | Sensor connections, voltage check, A2/A3 and GPIO mapping | Identify VCC, GND, D0 and both sensor sides |
-| 13:35–14:00 | Read, display and calibrate both sensors | `01_read_sensors.py`, Shell, optional Plotter, calibration table |
+| 13:35–14:00 | Read, display and adjust both sensor trimmers | `01_read_sensors.py`, Shell, optional Plotter, sensor check table |
 | 14:00–14:15 | Built-in LED, then sensor-driven indication | `02_builtin_led.py`, `03_sensor_builtin_led.py` |
 | 14:15–14:30 | Break | |
 | 14:30–14:55 | Breadboard LED, resistor and sensor-driven indication | `04_external_led.py`, `05_sensor_external_led.py` |
@@ -26,13 +26,13 @@ Students can connect a digital line sensor, print its readings, record black/whi
 | 15:20–15:35 | Break | |
 | 15:35–16:15 | Two-sensor state table and optional relay follower | `07_two_sensor_states.py`, `08_relay_line_follower.py` |
 | 16:15–16:50 | Simulator/remote-lab rotation | Tasks 10 and 11, task 12 or 14 if ready |
-| 16:50–17:00 | Checkpoint and save work | Code, calibration, one limitation |
+| 16:50–17:00 | Checkpoint and save work | Code, sensor checks, one limitation |
 
 Explain each new Python construct immediately before using it: `Pin.IN`, `value()`, `print`, comparisons, `if/elif/else`, `for`/`while`, `break`, and `try/finally`. Introduce only the constructs needed for the current experiment.
 
 ## Printable material
 
-Use the [A4 sensor and line template](../printables/README.md): one selected page per student, printed at 100%. Choose a stripe narrower than the clear gap between sensing spots. The sheet supports calibration, bench steering and a stop-marker experiment; a full five-second floor trial needs more room. Optional activities: [additional sensor exercises](day-02-extra-exercises.md).
+Use the [A4 sensor and line template](../printables/README.md): one selected page per student, printed at 100%. Choose a stripe narrower than the clear gap between sensing spots. The sheet supports sensor checks, bench steering and a stop-marker experiment; a full five-second floor trial needs more room. Optional activities: [additional sensor exercises](day-02-extra-exercises.md).
 
 ## Hardware preparation
 
@@ -72,20 +72,20 @@ The built-in programmable LED uses GPIO2. The always-on power indicator is a sep
 
 The examples are in [examples/day02](../examples/day02/README.md).
 
-1. Keep the existing `/robot.py` on the board.
-2. Upload `examples/day02/day02_settings.py` to the board root as `/day02_settings.py`.
-3. Run the selected exercise from your computer with F5 using MicroPython (ESP32). Do not name an exercise `robot.py`, `machine.py`, `time.py` or `main.py`.
-4. After editing settings, upload the settings file again and stop/restart the backend before the next exercise so an old imported module is not reused.
+1. Keep the existing `/robot.py` on the board. No additional library or settings file is needed for Day 2.
+2. Open an exercise from your computer and run it with F5 using MicroPython (ESP32).
+3. Each exercise declares its own GPIO pins and parameters at the top. Edit those constants in that exercise if the wiring or wheel balance differs.
+4. Sensor thresholds are adjusted using the module trimmers. The instructor confirmed white = 0 and black = 1. Each sensor-driven exercise declares its BLACK constants as 1. No software threshold calibration is needed.
 
 `print()` reaches Thonny's Shell through the USB serial connection. No separate serial-monitor application is needed. `01_read_sensors.py` prints two numeric columns, also suitable for View > Plotter. Plotter displays digital steps, not a continuous measurement of reflectance. Copy observations from Shell into the worksheet; file logging on the ESP32 is unnecessary for this lesson. An alternative serial terminal would use the same REPL port, normally at 115200 baud, and must not compete with Thonny for it.
 
 ## Exercise sequence and instructor notes
 
-### 1. Read and calibrate
+### 1. Read and adjust the sensor trimmers
 
-Keep motor power off. Run `01_read_sensors.py`: it prints left and right levels every 250 ms for 15 seconds. Test white/white, black/white, white/black, black/black at the normal sensing height. Cover only one sensor to check the side mapping. Swap `LEFT_GPIO`/`RIGHT_GPIO` in settings if the actual wiring differs.
+Keep motor power off. Run `01_read_sensors.py`: it prints left and right levels every 250 ms for 15 seconds. Test white/white, black/white, white/black, black/black at the normal sensing height. Cover only one sensor to check the side mapping. Swap the local `LEFT_GPIO`/`RIGHT_GPIO` constants if the actual wiring differs.
 
-Record each sensor's white and black level separately. A previous white/white reading was 0/0; this alone does not establish black levels or reliable calibration. Fill `LEFT_WHITE`, `LEFT_BLACK`, `RIGHT_WHITE`, `RIGHT_BLACK` in settings with measured 0/1 values. Do not assume both modules have the same polarity. If black and white produce the same level, adjust height, contrast or the module's threshold control if fitted, then repeat. Movement exercises reject missing or identical calibration levels.
+Use each sensor's trimmer to obtain a stable change between the white and black areas. There is no software threshold or calibration routine. A previous white/white reading was 0/0; check the black response too. The instructor confirmed white = 0 and black = 1; the examples use `LEFT_BLACK = 1` and `RIGHT_BLACK = 1`. If readings do not change, investigate height, the trimmer setting, contrast, supply and wiring.
 
 ### 2. Built-in LED
 
@@ -97,13 +97,13 @@ Switch all power off to wire the breadboard. Run `04_external_led.py` before add
 
 ### 4. Reactive movement
 
-Run `06_black_forward_white_backward.py` with wheels lifted and motor battery connected. Move paper beneath the right sensor. Black commands both wheels forward; white commands both backward. The test lasts five seconds by default. It demonstrates a conditional response, not line following. Default duty is 50%; increase only if needed to start the actual motors. Use the existing per-robot scale values in settings.
+Run `06_black_forward_white_backward.py` with wheels lifted and motor battery connected. Move paper beneath the right sensor. Black commands both wheels forward; white commands both backward. The test lasts five seconds by default. It demonstrates a conditional response, not line following. Default duty is 50%; increase only if needed to start the actual motors. Use the existing per-robot scale values at the top of the example.
 
 If readings flicker near an edge, first investigate height, threshold, lighting and wiring. As an optional exercise, require three consecutive matching samples before reversing. Do not hide unstable sensing by increasing motor power.
 
 ### 5. Stop at a transverse bar
 
-Use `09_stop_at_bar.py`: the robot drives straight until `left_black and right_black`, then stops and exits. Allocate approximately the final 10 minutes of the reactive-movement block. Use the printed broad bar and test with wheels lifted first. One black sensor alone does not stop this program; both-black at launch prevents a forward command. The local `MAX_RUN_MS = 1000` limits the trial to at most one second, and a shorter `settings.RUN_MS` is respected. No automatic restart or line steering is included. A single A4 sheet requires a short starting distance and an appropriate speed; a timeout is not a distance measurement.
+Use `09_stop_at_bar.py`: the robot drives straight until `left_black and right_black`, then stops and exits. Allocate approximately the final 10 minutes of the reactive-movement block. Use the printed broad bar and test with wheels lifted first. One black sensor alone does not stop this program; both-black at launch prevents a forward command. The local `MAX_RUN_MS = 1000` limits the trial to at most one second. No automatic restart or line steering is included. A single A4 sheet requires a short starting distance and an appropriate speed; a timeout is not a distance measurement.
 
 Ask students to predict what replacing `and` with `or` would change. Compare the marker rule with the remote stop-at-line task.
 
@@ -140,7 +140,7 @@ If time runs short, prioritize reliable sensor readings, one sensor-driven LED, 
 
 ## Checkpoint
 
-Students save the four calibration levels, their side mapping, LED wiring, and one working program. Ask: what is measured, how is it interpreted, and what command follows? Each student explains why two white readings do not prove that the line is still between the sensors.
+Students save their side mapping, LED wiring, local constants and one working program. Ask: what is measured, how is it interpreted, and what command follows? Each student explains why two white readings do not prove that the line is still between the sensors.
 
 ## Sources and verification
 
@@ -150,4 +150,4 @@ Students save the four calibration levels, their side mapping, LED wiring, and o
 - Thonny Plotter workflow checked against installed Thonny 5.0.0 help.
 - Remote activity scope comes from the instructor-supplied task list.
 
-Host checks exercise sensor decisions and cleanup with simulated hardware. They do not verify the module supply, D0 high voltage, calibration, LED polarity on a particular board revision, or physical line-following performance. Rehearse these with the actual kit before delivery.
+Host checks exercise sensor decisions and cleanup with simulated hardware. They do not verify the module supply, D0 high voltage, sensor checks, LED polarity on a particular board revision, or physical line-following performance. Rehearse these with the actual kit before delivery.

@@ -2,7 +2,7 @@
 
 Name: __________ Robot ID: __________ Date: __________
 
-## Sensor calibration
+## Sensor trimmer check
 
 Sensing height: __________ Supply voltage: __________ D0 high voltage: __________
 
@@ -20,6 +20,8 @@ Where did you see the readings: Shell, Plotter, LED? __________
 GPIO: __________ Series resistor: __________
 
 Mark the anode and cathode in your wiring sketch. Why is the resistor needed? __________
+
+Adjust the module trimmers for stable readings. The instructor confirmed white = 0 and black = 1; the examples use these levels directly. No software calibration or settings module is needed.
 
 ## Reactive movement
 

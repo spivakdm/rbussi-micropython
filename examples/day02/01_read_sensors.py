@@ -2,7 +2,9 @@
 from machine import Pin
 from time import sleep_ms
 from robot import RBussi
-from day02_settings import LEFT_GPIO, RIGHT_GPIO
+
+LEFT_GPIO = 34   # A3; verify by covering only the left sensor.
+RIGHT_GPIO = 35  # A2; verify by covering only the right sensor.
 
 robot = RBussi()
 try:

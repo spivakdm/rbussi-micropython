@@ -4,13 +4,13 @@ Complete programs for the instructor and students. Run one at a time in Thonny w
 
 ## Before running
 
-1. Keep `/robot.py` on the ESP32. Upload `day02_settings.py` to the device root as `/day02_settings.py`.
+1. Keep `/robot.py` on the ESP32. No additional library or settings file is needed.
 2. Keep motor power off for exercises 01–05 and 07. Check sensor supply and D0 voltage before connecting to ESP32.
-3. Open an exercise on your computer and press F5. The exercise itself need not be saved on the board.
-4. Calibrate with 01, fill the four WHITE/BLACK levels in settings, upload settings again, and stop/restart the backend before exercises using calibration.
-5. Run 06, 08 and 09 with wheels lifted first and the motor battery connected. Preserve per-robot wheel scales. The movement limit is five seconds for 06/08 and at most one second for 09; Ctrl+C requests software cleanup.
+3. Open an exercise on your computer and press F5. It declares its own pins and parameters at the top; the exercise need not be saved on the board.
+4. Use the sensor trimmers to set a reliable black/white response. Run 01 to check it. The instructor confirmed white = 0 and black = 1; the BLACK constants are defined as 1 directly in the examples. No software calibration is required.
+5. Run 06, 08 and 09 with wheels lifted first and the motor battery connected. Copy any wheel-scale correction into the local `LEFT_SCALE`/`RIGHT_SCALE` constants. The movement limit is five seconds for 06/08 and one second for 09; Ctrl+C requests software cleanup.
 
-The `None` calibration defaults are deliberate: sensor-driven examples reject them instead of silently guessing polarity. GPIO assignments initially follow the supplied drawing, left A3/GPIO34 and right A2/GPIO35. Verify the sides physically.
+GPIO assignments initially follow the drawing, left A3/GPIO34 and right A2/GPIO35. Verify the sides physically. An old settings file left on the board is ignored by these examples.
 
 | File | Exercise | Expected result |
 |---|---|---|
@@ -26,7 +26,7 @@ The `None` calibration defaults are deliberate: sensor-driven examples reject th
 
 ## Stop at the bar
 
-Calibrate both sensors in `day02_settings.py` first. Run `09_stop_at_bar.py` with wheels lifted; move the [printed stop bar](../../printables/README.md) beneath both sensors. Both-black stops and ends the run; a single black sensor does not stop it. If both are already black at launch, no forward command is issued. Without detection it stops after at most one second, or sooner if `RUN_MS` is shorter. The script does not restart automatically and does not steer. For a floor trial, point it towards the bar from a short distance and check the actual available space.
+Adjust both sensor trimmers and check black/white readings first. Run `09_stop_at_bar.py` with wheels lifted; move the [printed stop bar](../../printables/README.md) beneath both sensors. Both-black stops and ends the run; a single black sensor does not stop it. If both are already black at launch, no forward command is issued. Without detection it stops after the local `MAX_RUN_MS = 1000` limit. The script does not restart automatically and does not steer. For a floor trial, point it towards the bar from a short distance and check the actual available space.
 
 ## Wiring
 
@@ -40,4 +40,10 @@ The track is black on white. When centred, both sensor spots see white and the s
 
 Remote-lab exercises use the remote course's supplied code, not these GPIO assignments or `RBussi`.
 
-Status: host logic and cleanup checks only; actual sensor electrical compatibility, calibration and robot tracking require physical rehearsal.
+Status: host logic and cleanup checks only; actual sensor electrical compatibility, trimmer adjustment and robot tracking require physical rehearsal.
+
+## Run without the USB cable
+
+In Thonny, save the selected complete exercise to **MicroPython device** as `/main.py`. Keep `/robot.py` on the board too; Day 2 needs no extra settings module. Reset or power-cycle the ESP32 to start the program automatically. Use `main.py` for the application, not `boot.py`, which is for early startup configuration.
+
+The external supply must power the ESP32 as well as the motor driver. Disconnecting USB does not necessarily reset the board or start a new run. The movement examples end after their time limits and will run again after a reset. Keep the wheels lifted for the first startup test.

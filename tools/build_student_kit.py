@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.9'
+VERSION = '0.10'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -28,7 +28,6 @@ FILES = [
     'docs/day-02-plan.md',
     'docs/day-02-slides.md',
     'examples/day02/README.md',
-    'examples/day02/day02_settings.py',
     'examples/day02/01_read_sensors.py',
     'examples/day02/02_builtin_led.py',
     'examples/day02/03_sensor_builtin_led.py',
@@ -47,11 +46,13 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.9
+START = '''# RBussi Student Kit — v0.10
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
 In class: install Thonny during the 30-minute setup block, connect the ESP32, install or verify the supplied MicroPython firmware, and upload `robot.py` to the board.
+
+Day 2 needs no extra settings module: each exercise declares its own pins and parameters. Set the sensor thresholds using their trimmers and check black/white readings.
 
 Run `examples/00_check_setup.py` first; it requests no movement. Then use `examples/first_drive.py` with wheels lifted and the motor battery connected. Save personal programs under a new filename on your computer.
 
@@ -62,7 +63,7 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 - [Wiring reference and voltage check](docs/wiring-reference.md)
 - [Day 1 observation worksheet](worksheets/day01-observations.md)
 - [Day 2 plan and sensor exercises](docs/day-02-plan.md)
-- [Day 2 examples and settings upload](examples/day02/README.md)
+- [Day 2 standalone examples](examples/day02/README.md)
 - [A4 printable line templates](printables/README.md)
 - [Day 2 observation worksheet](worksheets/day02-observations.md)
 - [Firmware source and license information](firmware/SOURCE.md)
