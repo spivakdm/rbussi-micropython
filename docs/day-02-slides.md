@@ -100,32 +100,40 @@ Instructor note: use a photo of the actual assembled breadboard in the eventual 
 ## 9. A Sensor Changes Movement
 
 ```python
-if raw == RIGHT_BLACK:
-    robot.motors(left=50, right=50)
-else:
-    robot.motors(left=-50, right=-50)
+while True:
+    raw = sensor.value()
+    if raw == RIGHT_BLACK:
+        robot.motors(left=50, right=50)
+    else:
+        robot.motors(left=-50, right=-50)
+    sleep_ms(20)
 ```
 
 Black: forward. White: backward.
-Wheels lifted. Five-second trial.
+Wheels lifted. Ctrl+C stops the program.
 
 Exercise: `06_black_forward_white_backward.py`.
 
-Instructor note: full example handles timeout and cleanup. This is reactive movement, not a line follower. Use paper rather than hands near wheels.
+Instructor note: full example uses `while True` and `finally` cleanup. This is reactive movement, not a line follower. Use paper rather than hands near wheels.
 
 ## 10. Stop at the Black Bar
 
 ```python
-if left_black and right_black:
-    robot.stop()
-    break
+while True:
+    left_black = left.value() == LEFT_BLACK
+    right_black = right.value() == RIGHT_BLACK
+    if left_black and right_black:
+        robot.stop()
+        break
+    robot.motors(left=50, right=50)
+    sleep_ms(20)
 ```
 
 Both sensors black: stop and end the run.
 
 Exercise: `09_stop_at_bar.py`.
 
-Instructor note: use the full program, which reads both sensors before starting forward motion. It drives straight, does not steer, and stops after at most one second even if no bar is detected. First move the paper under the lifted robot. Ask students to predict the difference between `and` and `or`. For a floor test, start close to the broad printed bar.
+Instructor note: use the full program, which reads both sensors before starting forward motion. It drives straight, does not steer, and has no time limit: without bar detection it keeps driving until interrupted. First move the paper under the lifted robot. Ask students to predict the difference between `and` and `or`. For a floor test, start close to the broad printed bar.
 
 ## 11. Two Sensors See Four States
 
@@ -151,15 +159,16 @@ Instructor note: show the actual track and sensor spacing. This table is not for
 
 ## 13. Read, Decide, Act Again
 
-Read both sensors.
+Use `while True` to read both sensors.
 Choose one of the four actions.
 Update wheel commands and repeat.
+Stop on both-black or Ctrl+C.
 
 Exercise: `08_relay_line_follower.py`.
 
 Two white readings can also mean the line is missing.
 
-Instructor note: first test wheel responses with the robot lifted, then a five-second floor trial centred on the stripe. Compare `INNER_SPEED = 0` with a higher value. Mention that the loop has a time limit, but no reliable line-loss detector.
+Instructor note: first test wheel responses with the robot lifted, then a supervised floor trial centred on the stripe. Compare `INNER_SPEED = 0` with a higher value. Explain that there is no time limit or reliable line-loss detector. Both-black ends the run; Ctrl+C requests cleanup.
 
 ## 14. The Remote Laboratory
 

@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.11'
+VERSION = '0.12'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -46,13 +46,13 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.11
+START = '''# RBussi Student Kit — v0.12
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
 In class: install Thonny during the 30-minute setup block, connect the ESP32, install or verify the supplied MicroPython firmware, and upload `robot.py` to the board.
 
-Day 2 needs no extra settings module: each exercise declares its own pins and parameters. Set the sensor thresholds using their trimmers and check black/white readings.
+Day 2 needs no extra settings module: each exercise declares its own pins and parameters. Set the sensor thresholds using their trimmers and check black/white readings. Movement examples 06/08/09 use while True with no timer; stop with Ctrl+C or the motor-power switch. Examples 08/09 also stop on both-black.
 
 Run `examples/00_check_setup.py` first; it requests no movement. Then use `examples/first_drive.py` with wheels lifted and the motor battery connected. Save personal programs under a new filename on your computer.
 

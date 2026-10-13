@@ -32,7 +32,7 @@ Explain each new Python construct immediately before using it: `Pin.IN`, `value(
 
 ## Printable material
 
-Use the [A4 sensor and line template](../printables/README.md): one selected page per student, printed at 100%. Choose a stripe narrower than the clear gap between sensing spots. The sheet supports sensor checks, bench steering and a stop-marker experiment; a full five-second floor trial needs more room. Optional activities: [additional sensor exercises](day-02-extra-exercises.md).
+Use the [A4 sensor and line template](../printables/README.md): one selected page per student, printed at 100%. Choose a stripe narrower than the clear gap between sensing spots. The sheet supports sensor checks, bench steering and a stop-marker experiment; continuous floor tracking needs a longer course. Optional activities: [additional sensor exercises](day-02-extra-exercises.md).
 
 ## Hardware preparation
 
@@ -97,13 +97,13 @@ Switch all power off to wire the breadboard. Run `04_external_led.py` before add
 
 ### 4. Reactive movement
 
-Run `06_black_forward_white_backward.py` with wheels lifted and motor battery connected. Move paper beneath the right sensor. Black commands both wheels forward; white commands both backward. The test lasts five seconds by default. It demonstrates a conditional response, not line following. Default duty is 50%; increase only if needed to start the actual motors. Use the existing per-robot scale values at the top of the example.
+Run `06_black_forward_white_backward.py` with wheels lifted and motor battery connected. Move paper beneath the right sensor. Black commands both wheels forward; white commands both backward. The program uses `while True` and has no automatic time limit; interrupt it with Ctrl+C. It demonstrates a conditional response, not line following. Default duty is 50%; increase only if needed to start the actual motors. Use the existing per-robot scale values at the top of the example.
 
 If readings flicker near an edge, first investigate height, threshold, lighting and wiring. As an optional exercise, require three consecutive matching samples before reversing. Do not hide unstable sensing by increasing motor power.
 
 ### 5. Stop at a transverse bar
 
-Use `09_stop_at_bar.py`: the robot drives straight until `left_black and right_black`, then stops and exits. Allocate approximately the final 10 minutes of the reactive-movement block. Use the printed broad bar and test with wheels lifted first. One black sensor alone does not stop this program; both-black at launch prevents a forward command. The local `MAX_RUN_MS = 1000` limits the trial to at most one second. No automatic restart or line steering is included. A single A4 sheet requires a short starting distance and an appropriate speed; a timeout is not a distance measurement.
+Use `09_stop_at_bar.py`: the robot drives straight until `left_black and right_black`, then stops and exits. Allocate approximately the final 10 minutes of the reactive-movement block. Use the printed broad bar and test with wheels lifted first. One black sensor alone does not stop this program; both-black at launch prevents a forward command. There is no timer: without detection the robot continues until Ctrl+C or motor power is switched off. No automatic restart or line steering is included. A single A4 sheet requires a short starting distance and an appropriate speed; timed distance measurement is not used.
 
 Ask students to predict what replacing `and` with `or` would change. Compare the marker rule with the remote stop-at-line task.
 
@@ -118,11 +118,11 @@ Run `07_two_sensor_states.py` with motor power off. It prints the intended actio
 | White | Black | Correct right | `SPEED`, `INNER_SPEED` |
 | Black | Black | Stop and end this run | 0, 0 |
 
-Defaults: `SPEED = 50`, `INNER_SPEED = 0`, `SAMPLE_MS = 20`, `RUN_MS = 5000`. Braking the inner wheel gives a strong initial correction without reversing it. Once this works, increase `INNER_SPEED` to explore gentler steering and compare runs. Preserve experimentally chosen `LEFT_SCALE` and `RIGHT_SCALE`.
+Defaults: `SPEED = 50`, `INNER_SPEED = 0`, `SAMPLE_MS = 20`. Braking the inner wheel gives a strong initial correction without reversing it. Once this works, increase `INNER_SPEED` to explore gentler steering and compare runs. Preserve experimentally chosen `LEFT_SCALE` and `RIGHT_SCALE`.
 
-Start with the robot centred over the stripe: both sensor spots see white, with black between them. A short floor test needs clear space and USB cable slack. The example closes the controller after the time limit, both-black, an error, or Ctrl+C. This is software cleanup, not an independent hardware stop.
+Start with the robot centred over the stripe: both sensor spots see white, with black between them. A short floor test needs clear space and USB cable slack. The example closes the controller after both-black, an error, or Ctrl+C. This is software cleanup, not an independent hardware stop.
 
-**Ambiguity:** white/white also occurs when the robot has left the stripe completely. Two binary readings cannot distinguish those cases. Both-black could be a marker, crossing or unsuitable stripe width; this lesson deliberately stops. Do not claim reliable line-loss detection. A track/layout change, additional sensing or a more informative sensor signal is needed to resolve ambiguity. The five-second limit bounds the teaching trial but does not detect loss.
+**Ambiguity:** white/white also occurs when the robot has left the stripe completely. Two binary readings cannot distinguish those cases. Both-black could be a marker, crossing or unsuitable stripe width; this lesson deliberately stops. Do not claim reliable line-loss detection. A track/layout change, additional sensing or a more informative sensor signal is needed to resolve ambiguity. There is no time limit: after losing the line, white/white can keep commanding forward until the run is interrupted.
 
 ## Simulator and remote laboratory
 

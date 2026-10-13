@@ -33,7 +33,7 @@ Which line reads the sensor? __________ Which line makes the decision? _________
 
 Left black only: __________ Both black: __________
 
-Did the robot stop because of the bar or the timeout? __________
+Did the robot stop because of the bar or Ctrl+C? __________
 
 What would change if `and` became `or`? __________
 

@@ -22,7 +22,7 @@ For the existing relay algorithm, choose a stripe narrower than the clear gap be
 2. Check each sensor separately by moving the paper beneath it.
 3. With wheels lifted, slide the stripe sideways under the sensors and verify left/right steering commands.
 4. Slide the stop bar beneath both sensors and confirm that both-black stops the controller.
-5. For a brief floor test, put the sensing spots near the lower end, stripe between them, and point the robot towards the bar. Use the lowest reliable starting duty and a short duration appropriate to the available distance. Do not assume the default five-second follower trial fits on a single A4 sheet.
+5. For a brief floor test, put the sensing spots near the lower end, stripe between them, and point the robot towards the bar. Use the lowest reliable starting duty and check the available distance. The movement examples now have no time limit: stop-at-bar and relay following end on both-black, or use Ctrl+C / the motor-power switch. A single A4 sheet is for a short section, not continuous tracking.
 
 This is a bench exercise and short straight section. It is not a complete line-following course and does not solve the white/white line-loss ambiguity. The page is intentionally free of text around the lower track area. Secure it flat and avoid seams in the sensing path.
 

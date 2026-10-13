@@ -27,9 +27,12 @@ class Day02Tests(unittest.TestCase):
         events = []
         frames = frames or [(left_black, right_black)]
         frame_index = 0
+        continuous_motion = filename.startswith(('06_', '08_', '09_'))
 
         def sleep_ms(duration):
             nonlocal frame_index
+            if continuous_motion and frame_index == len(frames) - 1:
+                raise KeyboardInterrupt()
             frame_index = min(frame_index + 1, len(frames) - 1)
             left, right = frames[frame_index]
             levels[34] = left_black_level if left else 1 - left_black_level
@@ -63,13 +66,9 @@ class Day02Tests(unittest.TestCase):
             def close(self):
                 events.append(('close',))
 
-        clock = iter([0] + [i * 20 for i in range(len(frames))]
-                     + [5000])
         modules = {'machine': types.SimpleNamespace(Pin=Pin),
                    'robot': types.SimpleNamespace(RBussi=Robot),
-                   'time': types.SimpleNamespace(ticks_ms=lambda: next(clock),
-                                                 ticks_diff=lambda now, start: now - start,
-                                                 sleep_ms=sleep_ms)}
+                   'time': types.SimpleNamespace(sleep_ms=sleep_ms)}
         try:
             with patch.dict(sys.modules, modules), contextlib.redirect_stdout(io.StringIO()):
                 exec(compile(source, str(EXAMPLES / filename), 'exec'), {'__name__': '__main__'})
@@ -87,7 +86,10 @@ class Day02Tests(unittest.TestCase):
             ):
                 with self.subTest(inverted=inverted, left=left, right=right):
                     events, error = self.run_example('08_relay_line_follower.py', left, right, inverted)
-                    self.assertIsNone(error)
+                    if left and right:
+                        self.assertIsNone(error)
+                    else:
+                        self.assertIsInstance(error, KeyboardInterrupt)
                     self.assertIn(command, events)
                     self.assertEqual(events[-1], ('close',))
                     if left and right:
@@ -98,7 +100,7 @@ class Day02Tests(unittest.TestCase):
             for black, speed in ((False, -50), (True, 50)):
                 events, error = self.run_example('06_black_forward_white_backward.py',
                                                  right_black=black, inverted=inverted)
-                self.assertIsNone(error)
+                self.assertIsInstance(error, KeyboardInterrupt)
                 self.assertIn(('motors', speed, speed), events)
                 self.assertEqual(events[-1], ('close',))
 
@@ -114,8 +116,12 @@ class Day02Tests(unittest.TestCase):
         for inverted in (False, True):
             for left, right in ((False, False), (True, False), (False, True), (True, True)):
                 events, error = self.run_example('09_stop_at_bar.py', left, right, inverted)
-                self.assertIsNone(error)
-                self.assertEqual(events[-2:], [('stop',), ('close',)])
+                if left and right:
+                    self.assertIsNone(error)
+                    self.assertEqual(events[-2:], [('stop',), ('close',)])
+                else:
+                    self.assertIsInstance(error, KeyboardInterrupt)
+                    self.assertEqual(events[-1], ('close',))
                 self.assertEqual(('motors', 50, 50) in events, not (left and right))
 
     def test_stop_bar_ends_run_without_restarting(self):
@@ -125,6 +131,15 @@ class Day02Tests(unittest.TestCase):
         self.assertIsNone(error)
         self.assertEqual(events, [('created',), ('motors', 50, 50),
                                   ('motors', 50, 50), ('stop',), ('close',)])
+
+    def test_relay_stops_after_steering_without_restarting(self):
+        events, error = self.run_example('08_relay_line_follower.py',
+                                        frames=[(False, False), (True, False),
+                                                (False, True), (True, True), (False, False)])
+        self.assertIsNone(error)
+        self.assertEqual(events, [('created',), ('motors', 50, 50),
+                                  ('motors', 0, 50), ('motors', 50, 0),
+                                  ('stop',), ('close',)])
 
     def test_sensor_led_if_else_and_final_off(self):
         for name, gpio in (('03_sensor_builtin_led.py', 2), ('05_sensor_external_led.py', 26)):
