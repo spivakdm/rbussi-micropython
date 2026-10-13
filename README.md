@@ -129,4 +129,4 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 
 ## Proposed Day 3 networking lesson
 
-[Sound, Wi-Fi and MQTT lesson draft](docs/day-03-network-plan.md), based on the supplied class broker and per-robot topic namespaces. TCP/TLS reachability was checked from the instructor computer; account login currently returns Not authorized and activation must be resolved. Account passwords are not included in the repository or student bundle.
+[Sound, Wi-Fi and MQTT lesson draft](docs/day-03-network-plan.md), based on the supplied class broker and per-robot topic namespaces. After reported activation, the first account passed verified TLS login and a two-client telemetry round trip from the instructor computer. Actual ESP32 connectivity, classroom Wi-Fi access, other accounts and command-topic permissions remain to be checked. Account passwords are not included in the repository or student bundle.

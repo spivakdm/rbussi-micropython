@@ -14,7 +14,7 @@ Wednesday 14 October 2026, 13:00–17:00. This is a proposed networking lesson, 
 | Student accounts | 20 separate accounts |
 | Robot namespaces | `edu-2026-10/robot01` through `edu-2026-10/robot20` |
 | Client IDs | Separate ESP32 and computer client IDs in each account row |
-| Account activation in the supplied file | All rows marked `PENDING` |
+| Account activation | Instructor reports accounts activated; original CSV still says `PENDING` |
 
 Credentials are kept in the instructor's local `teacher-access.csv`, which is excluded from Git and from the explicit student-ZIP file list. Give each student only their own account row. The CSV is not part of the public teaching materials.
 
@@ -22,15 +22,18 @@ The provided `cmd/#` and `telemetry/#` strings are subscription/permission filte
 
 ## Connectivity check, 13 October 2026
 
-From the instructor computer's current Wi-Fi:
+Initial checks reached the broker over verified TLS, but login returned MQTT CONNACK code 5 while accounts were not yet activated.
 
-- DNS resolved the broker.
-- TCP connection to port 8883 succeeded.
+After the instructor reported activation, the first account (`robot01`) was checked again from the instructor computer:
+
 - TLS certificate verification succeeded with the computer's normal CA trust store.
-- MQTT 3.1.1 CONNECT for the first account, using its supplied computer client ID, returned CONNACK code 5: **Not authorized**.
-- A diagnostic client ID also received code 5. No messages or motor commands were published.
+- Login with the supplied computer client ID was accepted.
+- A second login with the supplied ESP32 client ID was accepted.
+- The computer client subscribed to `edu-2026-10/robot01/telemetry/connection-test`.
+- The ESP32-identity test client published a unique, non-retained QoS 0 test message to that topic; the computer client received the matching topic and payload.
+- Both clients disconnected cleanly. No messages were published to command or status topics.
 
-This verifies network reachability from the tested computer only. It does not verify the classroom Wi-Fi, the ESP32 connection, or student publish/subscribe permissions. The instructor confirmed that the accounts have not yet been activated; defer further authentication and message-exchange tests until activation. Account activation/authorization must be resolved before an end-to-end classroom rehearsal. The other 19 logins have not been tested.
+Both test clients actually ran on the instructor computer. This confirms the first account's two-client login and telemetry exchange from the tested Wi-Fi; it does not establish actual ESP32 connectivity, classroom Wi-Fi access, command-topic permissions or activation of the remaining 19 accounts. The original CSV activation column is now stale relative to the instructor's update.
 
 Keep TLS verification enabled. A successful desktop TLS check is not proof that the ESP32 has the required CA certificate, clock setup and MQTT client configuration; those need their own test.
 
@@ -68,10 +71,10 @@ This lesson does not require a new ESP32 firmware image: use the current MicroPy
 
 GPIO26/D2 was proposed for the external LED and can be used for a piezo in a separate exercise only if free. For simultaneous LED and piezo operation, use the built-in LED on GPIO2 and a verified free output for the piezo. Confirm the buzzer type and its electrical requirements before choosing its connection circuit.
 
-## Rehearsal after account activation
+## Remaining rehearsal
 
-1. Verify the assigned login using the issued computer client ID.
-2. Verify publish and subscribe on the assigned command and telemetry topics with two clients.
+1. Check the remaining student accounts with their assigned credentials; the first account has passed.
+2. Verify command-topic permissions and the other accounts' telemetry exchange; the first account's telemetry round trip has passed.
 3. Check status-topic permissions and delivery.
 4. Confirm a second student namespace stays independent and that the server has capacity for ESP32 and computer connections for the whole group.
 5. Connect the ESP32 on the actual classroom Wi-Fi and verify TLS, telemetry and LED commands.
