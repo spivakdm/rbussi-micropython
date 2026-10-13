@@ -24,3 +24,7 @@ For the robotics goal, choose **stop at the bar**, then **tune relay steering**.
 For faster students, combine **detect changes only** with **debouncing**. Require them to explain the trade-off: accepted readings become more stable, but a new state takes longer to affect the robot.
 
 A two-D0 system cannot determine how far the stripe is from the robot or distinguish centred white/white from some lost-line situations. Do not describe raw 0/1 values as a continuous position error. Use the remote Octoliner for later proportional-control comparisons.
+
+## More sensors: two optional assignments
+
+[Five-sensor P control using `for`, and three-sensor relay control](extra-line-control-tasks.md) includes task instructions, proposed wiring, prediction tables and complete reference programs. These need extra sensors for physical tests. With the original two-sensor kit, work through the arithmetic and logic without running the extra physical controllers.

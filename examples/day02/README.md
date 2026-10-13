@@ -47,3 +47,12 @@ Status: host logic and cleanup checks only; actual sensor electrical compatibili
 In Thonny, save the selected complete exercise to **MicroPython device** as `/main.py`. Keep `/robot.py` on the board too; Day 2 needs no extra settings module. Reset or power-cycle the ESP32 to start the program automatically. Use `main.py` for the application, not `boot.py`, which is for early startup configuration.
 
 The external supply must power the ESP32 as well as the motor driver. Disconnecting USB does not necessarily reset the board or start a new run. The movement examples have no automatic time limit. Examples 08/09 end on both-black; 06 continues until interrupted. Saving a movement example as main.py makes it run again after each reset. Keep the wheels lifted for the first startup test.
+
+## Optional extra controllers
+
+[Assignment, wiring proposal and prediction tables](../../docs/extra-line-control-tasks.md).
+
+- `10_proportional_five_sensors.py`: five digital sensors; position arithmetic through `for`, then proportional steering with Kp.
+- `11_relay_three_sensors.py`: three digital sensors; explicit `if/elif/else` with gentle and strong corrections.
+
+These require additional connected sensors; they cannot be run as physical controllers on the original two-sensor robot. Added GPIOs are a proposed arrangement to verify. The line must be beneath the centre sensor when centred, unlike the earlier two-sensor setup. Both examples have no timer and stop on their specified patterns or Ctrl+C. For students with only two sensors, use the assignment's calculation-only snippet and prediction tables.

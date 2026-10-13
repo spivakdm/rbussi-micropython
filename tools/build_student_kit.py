@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.12'
+VERSION = '0.13'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -37,6 +37,9 @@ FILES = [
     'examples/day02/07_two_sensor_states.py',
     'examples/day02/08_relay_line_follower.py',
     'examples/day02/09_stop_at_bar.py',
+    'examples/day02/10_proportional_five_sensors.py',
+    'examples/day02/11_relay_three_sensors.py',
+    'docs/extra-line-control-tasks.md',
     'printables/day02-line-templates.pdf',
     'printables/README.md',
     'docs/day-02-extra-exercises.md',
@@ -46,13 +49,13 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.12
+START = '''# RBussi Student Kit — v0.13
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
 In class: install Thonny during the 30-minute setup block, connect the ESP32, install or verify the supplied MicroPython firmware, and upload `robot.py` to the board.
 
-Day 2 needs no extra settings module: each exercise declares its own pins and parameters. Set the sensor thresholds using their trimmers and check black/white readings. Movement examples 06/08/09 use while True with no timer; stop with Ctrl+C or the motor-power switch. Examples 08/09 also stop on both-black.
+Day 2 needs no extra settings module: each exercise declares its own pins and parameters. Set the sensor thresholds using their trimmers and check black/white readings. Movement examples 06/08/09 use while True with no timer; stop with Ctrl+C or the motor-power switch. Examples 08/09 also stop on both-black. Optional examples 10/11 require five/three connected sensors respectively; proposed extra wiring is documented in the assignments.
 
 Run `examples/00_check_setup.py` first; it requests no movement. Then use `examples/first_drive.py` with wheels lifted and the motor battery connected. Save personal programs under a new filename on your computer.
 
@@ -64,6 +67,7 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 - [Day 1 observation worksheet](worksheets/day01-observations.md)
 - [Day 2 plan and sensor exercises](docs/day-02-plan.md)
 - [Day 2 standalone examples](examples/day02/README.md)
+- [Extra tasks: five-sensor P and three-sensor relay](docs/extra-line-control-tasks.md)
 - [A4 printable line templates](printables/README.md)
 - [Day 2 observation worksheet](worksheets/day02-observations.md)
 - [Firmware source and license information](firmware/SOURCE.md)
