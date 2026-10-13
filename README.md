@@ -126,3 +126,7 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 ## Optional controllers with more sensors
 
 [Two extra assignments](docs/extra-line-control-tasks.md): five-sensor proportional control with an explicit `for` loop, and three-sensor relay control with an eight-state table. Includes complete examples 10/11 and proposed additional wiring. Physical runs require the extra sensors; students with the original two-sensor kit can use the calculation-only snippet and prediction tables.
+
+## Proposed Day 3 networking lesson
+
+[Sound, Wi-Fi and MQTT lesson draft](docs/day-03-network-plan.md), based on the supplied class broker and per-robot topic namespaces. TCP/TLS reachability was checked from the instructor computer; account login currently returns Not authorized and activation must be resolved. Account passwords are not included in the repository or student bundle.

@@ -11,6 +11,7 @@ __pycache__/
 *.log
 .env
 .env.*
+teacher-access.csv
 
 # Instructor-only drafts and third-party teaching archives
 blocks_round_en.zip
