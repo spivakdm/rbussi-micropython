@@ -15,7 +15,7 @@ EXAMPLES = ROOT / 'examples/day03'
 
 class Day03Tests(unittest.TestCase):
     def run_example(self, filename, frames=None, messages=None, stop=700,
-                    wifi=True, ntp_fail=False, connect_fail=False,
+                    wifi=True, connect_fail=False,
                     interrupt_sound=False):
         events, clients = [], []
         clock = [0]
@@ -93,11 +93,6 @@ class Day03Tests(unittest.TestCase):
                     _, suffix, payload = queued.pop(0)
                     self.cb(('edu-test/robot01' + suffix).encode(), payload)
 
-        def settime():
-            if ntp_fail:
-                raise OSError('simulated NTP failure')
-            events.append(('ntp',))
-
         def module(name, **attrs):
             return types.SimpleNamespace(**attrs)
 
@@ -107,13 +102,12 @@ class Day03Tests(unittest.TestCase):
             'time': module('time', sleep_ms=sleep_ms, ticks_ms=lambda: clock[0],
                            ticks_diff=lambda a, b: a-b, ticks_add=lambda a, b: a+b,
                            gmtime=lambda: (2026, 10, 13)),
-            'ntptime': module('ntptime', settime=settime),
             'ssl': module('ssl', SSLContext=SSLContext,
                           PROTOCOL_TLS_CLIENT='client', CERT_REQUIRED='required'),
             'umqtt': module('umqtt'), 'umqtt.simple': module('simple', MQTTClient=MQTT),
             'network_secrets': module(
                 'settings', WIFI_SSID='test', WIFI_PASSWORD='not-real',
-                MQTT_HOST='broker.invalid', MQTT_PORT=8883, MQTT_USER='test',
+                MQTT_HOST='broker.invalid', MQTT_PORT=1883, MQTT_USER='test',
                 MQTT_PASSWORD='not-real', ESP32_CLIENT_ID='test-esp32',
                 TOPIC_PREFIX='edu-test/robot01', SYNC_NTP=True,
                 NTP_HOST='ntp.invalid', CA_FILE='certs/isrg-root-x1.pem'),
@@ -157,10 +151,12 @@ class Day03Tests(unittest.TestCase):
         self.assertIn('timeout', str(error))
         self.assertIn(('wifi_disconnect',), events)
 
-    def test_hello_verified_tls_no_retention_and_cleanup(self):
+    def test_hello_plain_tcp_no_retention_and_cleanup(self):
         events, clients, error = self.run_example('05_mqtt_hello.py')
         self.assertIsNone(error)
-        self.assertIn(('tls', 'client', 'required', 'certs/isrg-root-x1.pem'), events)
+        self.assertFalse(any(e[0] == 'tls' for e in events))
+        self.assertNotIn('ssl', clients[0].kwargs)
+        self.assertEqual(clients[0].kwargs['port'], 1883)
         publish = [e for e in events if e[0] == 'publish']
         self.assertEqual(publish[0][1:4], (b'edu-test/robot01/telemetry/hello', b'hello', False))
         self.assertEqual(clients[0].kwargs['keepalive'], 60)
@@ -170,11 +166,6 @@ class Day03Tests(unittest.TestCase):
         events, _, error = self.run_example('05_mqtt_hello.py', connect_fail=True)
         self.assertIsInstance(error, OSError)
         self.assertIn(('socket_close',), events)
-
-    def test_ntp_failure_prevents_mqtt_connection(self):
-        _, clients, error = self.run_example('05_mqtt_hello.py', ntp_fail=True)
-        self.assertIsInstance(error, OSError)
-        self.assertEqual(clients, [])
 
     def test_periodic_sensor_payloads_follow_inputs(self):
         events, _, _ = self.run_example('06_sensor_telemetry.py',

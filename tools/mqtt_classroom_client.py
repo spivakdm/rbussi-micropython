@@ -7,7 +7,6 @@ import argparse
 import json
 from pathlib import Path
 import runpy
-import ssl
 import threading
 
 
@@ -42,11 +41,6 @@ def main():
                          client_id=settings['PC_CLIENT_ID'],
                          protocol=mqtt.MQTTv311)
     client.username_pw_set(settings['MQTT_USER'], settings['MQTT_PASSWORD'])
-    # Use the supplied CA, relative to the config's directory.
-    context = ssl.create_default_context(
-        cafile=str(args.config.resolve().parent / settings['CA_FILE']))
-    client.tls_set_context(context)
-
     def on_connect(client, userdata, flags, reason_code, properties):
         accepted[0] = not reason_code.is_failure
         if accepted[0]:

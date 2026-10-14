@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.17'
+VERSION = '0.18'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -25,9 +25,7 @@ FILES = [
     'examples/day03/MicroPython-lib-LICENSE.txt',
     'examples/day03/README.md',
     'examples/day03/SOURCES.md',
-    'examples/day03/certs/isrg-root-x1.pem',
     'examples/day03/network_secrets.example.py',
-    'examples/day03/ntptime.py',
     'examples/day03/umqtt/__init__.py',
     'examples/day03/umqtt/simple.py',
     'docs/day-03-network-plan.md',
@@ -73,7 +71,7 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.17
+START = '''# RBussi Student Kit — v0.18
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
@@ -99,7 +97,7 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 
 Baseline: Thonny 5.0.0, MicroPython 1.29.0, classic ESP32 Wemos D1 R32, class `RBussi`.
 
-Day 3 includes MQTT/time dependencies and a public CA certificate. Copy the private settings template and fill in only your own credentials; passwords are not included. The computer terminal client requires a separate paho-mqtt installation. ESP32 network and piezo rehearsal is still required.
+Day 3 uses MQTT TCP port 1883 with TLS disabled, as confirmed by the backend. Only the MQTT package and private configuration are needed on the board; no CA certificate or NTP. Credentials and messages are unencrypted on this connection. Copy the private settings template and fill in only your own credentials; passwords are not included. The computer terminal client requires a separate paho-mqtt installation. Exercise 05 passed on the physical ESP32; the remaining exercises and classroom network still need rehearsal.
 
 The ZIP includes firmware and course files, not Thonny installers, USB drivers, simulator software, or Moodle credentials. Get the actual course and simulator links from the instructor. Windows/macOS and student Linux installation routes still require instructor rehearsal.
 

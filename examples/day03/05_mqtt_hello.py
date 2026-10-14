@@ -1,8 +1,6 @@
 """Publish one hello message. Start the computer subscriber first."""
 
 import network
-import ssl
-import ntptime
 import network_secrets as settings
 from time import sleep_ms, ticks_ms, ticks_diff
 from umqtt.simple import MQTTClient
@@ -20,20 +18,10 @@ while not wlan.isconnected():
     sleep_ms(250)
 print("Wi-Fi connected; IP:", wlan.ifconfig()[0])
 
-# TLS needs the current UTC time and the uploaded root CA.
-if settings.SYNC_NTP:
-    ntptime.host = settings.NTP_HOST
-    ntptime.timeout = 3
-    ntptime.settime()
-
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-context.verify_mode = ssl.CERT_REQUIRED
-context.load_verify_locations(cafile=settings.CA_FILE)
-
 client = MQTTClient(
     settings.ESP32_CLIENT_ID.encode(), settings.MQTT_HOST,
     port=settings.MQTT_PORT, user=settings.MQTT_USER.encode(),
-    password=settings.MQTT_PASSWORD.encode(), keepalive=60, ssl=context,
+    password=settings.MQTT_PASSWORD.encode(), keepalive=60,
 )
 
 

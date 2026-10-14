@@ -1,6 +1,6 @@
 # Day 3 — Sound, Wi-Fi and MQTT
 
-Use the existing MicroPython 1.29.0 firmware on the Wemos D1 R32. No new firmware and no extra robot wrapper library are required. Pins are declared in each program; Each network example starts with the same supplied Wi-Fi/TLS setup, followed by the exercise itself.
+Use the existing MicroPython 1.29.0 firmware on the Wemos D1 R32. No new firmware and no extra robot wrapper library are required. Pins are declared in each program. Each network example starts with the same supplied Wi-Fi setup, followed by the exercise itself.
 
 Keep motor power off throughout these exercises. These programs do not call the motor library. Stop a continuous program with Ctrl+C in Thonny; LED and PWM examples release their outputs in `finally`. Run one example at a time with F5; do not save it as `boot.py` or `main.py` during the lesson.
 
@@ -12,7 +12,7 @@ Keep motor power off throughout these exercises. These programs do not call the 
 | [02_frequency_and_duty.py](02_frequency_and_duty.py) | Compare frequencies, then 10/25/50% fill | Describe pitch and sound changes |
 | [03_beep_function.py](03_beep_function.py) | Local `beep()` function and `for` melody | Three notes |
 | [04_connect_wifi.py](04_connect_wifi.py) | Join Wi-Fi, with a 15-second connection timeout | IP address in Thonny Shell |
-| [05_mqtt_hello.py](05_mqtt_hello.py) | Publish `hello` over verified TLS | Computer receives `/telemetry/hello` |
+| [05_mqtt_hello.py](05_mqtt_hello.py) | Publish `hello` over TCP port 1883 | Computer receives `/telemetry/hello` |
 | [06_sensor_telemetry.py](06_sensor_telemetry.py) | JSON readings every 500 ms | Computer sees paper changes |
 | [07_publish_on_change.py](07_publish_on_change.py) | Remember and compare previous readings | No repeated sensor messages while unchanged |
 | [08_mqtt_led.py](08_mqtt_led.py) | Subscribe; explicit `if/elif/else` for ON/OFF | Built-in LED responds |
@@ -22,7 +22,7 @@ Keep motor power off throughout these exercises. These programs do not call the 
 | [12_twinkle_twinkle.py](12_twinkle_twinkle.py) | Opening of Twinkle, Twinkle, Little Star | Compare repeated notes and long notes |
 | [13_robot_sound_signals.py](13_robot_sound_signals.py) | Startup, success and alert sequences | Reuse one function with different lists and rests |
 
-Core networking target: complete 05, 06 and 08. Read programs from top to bottom: imports, connection setup, then the task. Functions are used for reusable sounds and MQTT callbacks; callbacks are introduced in 08. The Wi-Fi/TLS setup is supplied by the instructor. Students focus first on `publish()`, sensor readings and the LED `if/elif/else`. Exercise 10 adds elapsed-time scheduling and is an advanced extension. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
+Core networking target: complete 05, 06 and 08. Read programs from top to bottom: imports, connection setup, then the task. Functions are used for reusable sounds and MQTT callbacks; callbacks are introduced in 08. The Wi-Fi setup is supplied by the instructor. Students focus first on `publish()`, sensor readings and the LED `if/elif/else`. Exercise 10 adds elapsed-time scheduling and is an advanced extension. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
 
 ## Optional melody exercises
 
@@ -47,28 +47,25 @@ Extract the student kit first. In **View → Files**, use the computer pane and 
 ```text
 /
   network_secrets.py       # Your own private settings
-  ntptime.py              # Supplied upstream time client
   umqtt/
     __init__.py
     simple.py             # Supplied upstream MQTT client
-  certs/
-    isrg-root-x1.pem       # Public root CA certificate
 ```
 
-Upload the `umqtt` and `certs` folders with their contents and `ntptime.py` from this directory. If folder upload is unavailable, create those directories in the device pane and upload their files individually. Keep these names and directory structure. `robot.py` may remain on the board; these stationary examples do not need it.
+Upload the `umqtt` folder with its contents from this directory. If folder upload is unavailable, create those directories in the device pane and upload their files individually. Keep these names and directory structure. `robot.py` may remain on the board; these stationary examples do not need it.
 
 1. Copy [network_secrets.example.py](network_secrets.example.py) to **network_secrets.py** on your computer, in this directory.
 2. Fill in the Wi-Fi SSID/password and your assigned MQTT username, password, topic prefix and **both distinct client IDs** from your account card. The robot01 values are examples; replace them if assigned another robot.
 3. Upload your filled-in `network_secrets.py` to the board root. Keep the computer copy for the PC client.
 4. Run 04, then 05. Start the PC subscriber before 05 because hello is not retained.
 
-Do not share a filled-in configuration or commit it. The public template has placeholders; the kit contains no student passwords. The `umqtt` and `ntptime` modules are pinned upstream dependencies, not a new course robot library; see [sources, hashes and license](SOURCES.md).
+Do not share a filled-in configuration or commit it. The public template has placeholders; the kit contains no student passwords. The `umqtt` module is a pinned upstream dependency; see [sources, hashes and license](SOURCES.md).
 
 ## Computer-side receiver and commands
 
-You can use a desktop MQTT client that supports **TLS/TCP**, or the supplied [Python terminal client](../../tools/mqtt_classroom_client.py). Port 8883 is not a browser WebSocket endpoint.
+You can use a desktop MQTT client that supports **MQTT/TCP**, or the supplied [Python terminal client](../../tools/mqtt_classroom_client.py). Port 1883 is not a browser WebSocket endpoint.
 
-For a desktop client: host `mqtt.ondroid.org`, port `8883`, TLS certificate/hostname verification enabled, your assigned username/password and **PC** client ID. Use the supplied CA if a trust file is required. Subscribe to your `<prefix>/telemetry/#` and optionally `<prefix>/status`. Do not run two PC clients with the same client ID at once.
+For a desktop client: host `mqtt.ondroid.org`, port `1883`, TLS/SSL disabled, your assigned username/password and **PC** client ID. Subscribe to your `<prefix>/telemetry/#` and optionally `<prefix>/status`. Do not run two PC clients with the same client ID at once.
 
 For the Python terminal, use a regular computer terminal with Python 3.9+ (CPython), not the MicroPython Shell. Run from the extracted student-kit root. The commands below use a separate local environment and do not change Thonny's ESP32 interpreter.
 
@@ -111,36 +108,24 @@ Equivalent manual messages for robot01:
 
 Use your own prefix. Publish to concrete topics; `#` is only for subscriptions. Do not retain commands. Clear any previously retained command on the broker before rehearsal; these simple programs do not inspect the MQTT retained-message flag. The examples do not publish device status yet.
 
-## Do we need a certificate?
+## Connection mode
 
-**Yes: our examples need the public root CA certificate to verify the MQTT server over TLS on port 8883.** Upload the supplied `certs/isrg-root-x1.pem` to the ESP32, keeping the `certs` directory. This same public file is used by all students. It contains no passwords or private keys and is already included in the student kit; students do not generate or request their own certificate.
+The backend confirmed **MQTT TCP, port 1883, TLS/SSL disabled** on 14 October 2026. The current examples use this mode. No CA certificate, `ssl`, `ntptime` or clock synchronization is needed. Credentials and messages travel without encryption on this connection.
 
-The broker sends its server certificate and intermediate chain during the TLS handshake. Our root CA lets the ESP32 check that chain; the client also checks the hostname `mqtt.ondroid.org`. The account then authenticates with its assigned username and password. This setup does not load a client certificate or client private key.
+Username, password, topic prefix and client IDs stay the same. If your older account card or configuration says 8883, change the port to **1883** and disable TLS in the computer client. Existing TLS clients on 8883 can continue working simultaneously; the two ports use the same broker and topics.
 
-The connection code inside examples 05–10 does this:
+`ntptime.py` and `certs/isrg-root-x1.pem` remain in the repository as optional material for the earlier verified-TLS setup. They are not required uploads for this lesson. The earlier version is preserved in Git history.
 
-```python
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-context.verify_mode = ssl.CERT_REQUIRED
-context.load_verify_locations(cafile=settings.CA_FILE)
-```
-
-`CA_FILE` is `"certs/isrg-root-x1.pem"` in the private settings template. The `MQTTClient(..., ssl=context)` call supplies this context to the MQTT library, which supplies the hostname to TLS. The board also needs the actual current UTC date/time to check the certificate validity period; that is why the template uses NTP before MQTT. A root CA is different from the broker's short-lived leaf certificate: do not replace the bundled root with a random exported server certificate.
-
-## Clock, TLS and troubleshooting
-
-The template synchronizes the ESP32 clock using NTP before connecting over TLS. It loads the supplied root CA and uses `CERT_REQUIRED`; the supplied MQTT module passes the server hostname for verification. Do not replace these with unchecked TLS. See [MicroPython SSL requirements](https://docs.micropython.org/en/v1.29.0/library/ssl.html).
+## Troubleshooting
 
 - **Wi-Fi timeout:** verify 2.4 GHz, SSID/password and access policy. This simple template supports ordinary SSID/password networks, not an enterprise login or captive portal. IP assignment does not prove broker access.
-- **NTP failed:** the network may block UDP/123. Use an approved local NTP host, or set the board RTC to current **UTC** from the instructor computer, then set `SYNC_NTP = False` in the private configuration and upload it again. For example, with mpremote installed on the computer: `mpremote connect auto rtc --set` (close Thonny first). Do not hard-code the lesson date: TLS needs the actual current date/time after a power cycle.
-- **TLS error:** check the actual UTC clock, CA path, uploaded files, host, firmware and the current broker certificate chain. The included ISRG Root X1 verified the broker from the computer on 13 October 2026; ESP32 support for the actual chain still requires rehearsal. Never use `CERT_NONE` as a workaround.
-- **Import error:** check the root directory and `umqtt/simple.py` folder layout. Use the supplied MQTT copy; older copies may not support `ssl=SSLContext`.
+- **Import error:** check the board root and `umqtt/simple.py` folder layout. Use the supplied MQTT copy.
 - **Login refused:** check activation and your exact credentials. Do not print the password to diagnose it.
 - **Repeated disconnects:** check duplicate client IDs and Wi-Fi. Stop the old example before starting another.
 - **No message:** start the subscriber first; check prefix, topic direction and broker permissions. QoS 0 is a simple demonstration and does not guarantee delivery.
 
-The examples make one NTP request and stop on network errors rather than retrying or reconnecting automatically. Fix the cause and press F5 again. Sound helpers rely on the program's outer `try/finally` for interruption cleanup; keep their calls inside that block. `check_msg()` polls for messages, but the small synchronous MQTT client may block while reading a partial packet; this is not a hard real-time controller. Exercise 09 also blocks intentionally for each short tone. Exercise 10 removes that application delay with `ticks_ms()`/`ticks_diff()`; it does not make the transport asynchronous.
+The examples stop on network errors rather than retrying or reconnecting automatically. Fix the cause and press F5 again. Sound helpers rely on the program's outer `try/finally` for interruption cleanup; keep their calls inside that block. `check_msg()` polls for messages, but the small synchronous MQTT client may block while reading a partial packet; this is not a hard real-time controller. Exercise 09 also blocks intentionally for each short tone. Exercise 10 removes that application delay with `ticks_ms()`/`ticks_diff()`; it does not make the transport asynchronous.
 
 ## Verification status
 
-Host tests cover decisions, malformed commands, timing and interruption cleanup using simulated hardware/network modules. The supplied computer terminal client also received a real telemetry test message on the first account with the included CA; the desktop test publisher used TLS 1.2. No command/status messages were sent during that check. These new examples have **not yet been run on an ESP32**; the board was not visible as a USB serial device during preparation. Rehearse Wi-Fi, NTP, verified ESP32 TLS, command permissions and the piezo circuit on the actual teaching network before class.
+Host tests cover decisions, malformed commands, timing and interruption cleanup using simulated hardware/network modules. On 14 October, the first account passed authenticated two-client telemetry exchange on TCP/1883 from the instructor computer, without TLS. No command/status messages were published in that check. The physical ESP32 then ran the unmodified `05_mqtt_hello.py` with MicroPython 1.29.0 on the instructor computer's current Wi-Fi. It authenticated and published `hello`; the separate PC client received it. No TLS, CA upload or NTP was used. Other accounts, sensor/sound exercises and command permissions still need rehearsal. See the [recorded test](../../docs/day-03-network-plan.md).

@@ -9,8 +9,8 @@ Wednesday 14 October 2026, 13:00–17:00. Working teaching sequence based on the
 | Item | Provided value |
 |---|---|
 | Broker | `mqtt.ondroid.org` |
-| Port | `8883` |
-| Transport | MQTT over TLS, not a WebSocket endpoint |
+| Port | `1883` for the lesson; `8883` remains available for TLS |
+| Transport | MQTT TCP, TLS/SSL disabled; not WebSocket |
 | Student accounts | 20 separate accounts |
 | Robot namespaces | `edu-2026-10/robot01` through `edu-2026-10/robot20` |
 | Client IDs | Separate ESP32 and computer client IDs in each account row |
@@ -37,7 +37,19 @@ The new computer terminal client also passed a telemetry receive check with the 
 
 Both test clients actually ran on the instructor computer. This confirms the first account's two-client login and telemetry exchange from the tested Wi-Fi; it does not establish actual ESP32 connectivity, classroom Wi-Fi access, command-topic permissions or activation of the remaining 19 accounts. The original CSV activation column is now stale relative to the instructor's update.
 
-Keep TLS verification enabled. A successful desktop TLS check is not proof that the ESP32 has the required CA certificate, clock setup and MQTT client configuration; those need their own test.
+### Updated connection mode, 14 October 2026
+
+The backend confirmed TCP port 1883 with TLS/SSL disabled. The username, password, namespaces and client IDs remain unchanged; clients on TLS port 8883 may continue operating alongside plain-TCP clients. Credentials and payloads are unencrypted on port 1883.
+
+The first account passed a desktop two-client telemetry round trip on 1883. Both assigned identities authenticated successfully. No command/status messages were published. Current examples use this mode and require neither a CA certificate nor NTP. The TLS checks above describe the previous configuration, not the current classroom setup.
+
+### Physical ESP32 test, 14 October 2026
+
+The connected board initially ran an old ESP-AT image rather than MicroPython. After the instructor confirmed the target board and disabled motor power, its full 4 MB flash was backed up locally and the supplied, hash-checked MicroPython 1.29.0 ESP32_GENERIC image was installed. Firmware writing completed with hash verification.
+
+The board received `robot.py`, the supplied `umqtt` package, private Wi-Fi/MQTT settings for robot01 and `mqtt_hello.py`. It ran the unmodified course example `05_mqtt_hello.py`, joined the instructor computer's current Wi-Fi, authenticated on `mqtt.ondroid.org:1883` and published `hello` to `edu-2026-10/robot01/telemetry/hello`. A separate computer client with the assigned PC client ID received that exact topic and payload. No TLS, certificate file or NTP was used, and no motor commands were sent. The example disconnected after publishing; it was not installed as an autorun program.
+
+This establishes physical ESP32 Wi-Fi/login/publication on the tested network for the first account. It does not validate the other accounts, every classroom access point, sound hardware, sensor wiring or command-topic permissions.
 
 ## Proposed application topics
 
@@ -79,10 +91,10 @@ The end-of-day demonstration is: a student sees their own robot's sensor reading
 
 ### Before students arrive
 
-- Rehearse the entire sequence on an actual ESP32 on the classroom Wi-Fi, including TLS and command-topic permissions. Desktop broker tests alone are insufficient.
+- Rehearse the entire sequence on an actual ESP32 on the classroom Wi-Fi, including broker access and command-topic permissions. Desktop broker tests alone are insufficient.
 - Check the remaining accounts and distribute only each student's own credentials, topic prefix and two client IDs.
-- Prepare one MQTT client on the computer side that supports TLS/TCP port 8883. Provide OS-specific setup instructions or preconfigured lab access; a browser-only client needs an additional WebSocket endpoint/backend.
-- Prepare the MicroPython MQTT package, CA trust material and any clock setup required for certificate verification. Give students a tested connection template; building TLS/MQTT plumbing is not the learning objective.
+- Prepare one MQTT client on the computer side that supports MQTT/TCP port 1883 with TLS disabled. Provide OS-specific setup instructions or preconfigured lab access; a browser-only client needs an additional WebSocket endpoint/backend.
+- Prepare the MicroPython MQTT package and private settings template. Give students a tested Wi-Fi connection template; network setup is not the learning objective.
 - Verify the passive piezo model and its connection circuit. Reserve a free output; use GPIO2 for the built-in LED and, if electrically suitable and free, GPIO26 for the piezo.
 - Keep passwords out of public code, screenshots, slides and class-wide files. Student credentials belong in local private configuration; pins remain directly in the exercises.
 
@@ -142,7 +154,7 @@ Result: the computer client is connected and subscribed to the student's telemet
 
 ### 14:45–15:00 — Exercise 5: send hello
 
-Start the supplied ESP32 MQTT/TLS template. Publish `hello` to a concrete topic such as `edu-2026-10/robot01/telemetry/hello`. Students receive it on the computer.
+Start the supplied ESP32 MQTT template. Publish `hello` to a concrete topic such as `edu-2026-10/robot01/telemetry/hello`. Students receive it on the computer.
 
 Use a small payload before introducing sensor readings or JSON. Follow the first message through the complete path and distinguish Wi-Fi connected, MQTT authenticated and message delivered.
 
@@ -203,7 +215,7 @@ Minimum completion: one telemetry message and one LED command on the actual ESP3
 
 ## Contingencies and scope
 
-If piezos are unavailable, preserve the programming sequence using built-in/external LED output, with PWM dimming as a short demonstration; frequency-to-pitch exercises wait for passive piezos. If networking fails, use the local sensor-driven LED and sound programs, then revisit the prepared remote-lab sensor/line tasks. Do not disable TLS verification to make a failed connection appear successful.
+If piezos are unavailable, preserve the programming sequence using built-in/external LED output, with PWM dimming as a short demonstration; frequency-to-pitch exercises wait for passive piezos. If networking fails, use the local sensor-driven LED and sound programs, then revisit the prepared remote-lab sensor/line tasks. Use the confirmed TCP/1883 settings consistently in both clients.
 
 This day does not contain a dedicated remote-laboratory block and replaces its former Day 3 slot. Keep any required remaining remote assignments visible in the overall schedule; do not silently turn them into homework.
 
@@ -215,10 +227,10 @@ ROS 2 can reuse the same telemetry/command concepts on Days 4–5. A bridge, sim
 2. Verify command-topic permissions and the other accounts' telemetry exchange; the first account's telemetry round trip has passed.
 3. Check status-topic permissions and delivery.
 4. Confirm a second student namespace stays independent and that the server has capacity for ESP32 and computer connections for the whole group.
-5. Connect the ESP32 on the actual classroom Wi-Fi and verify TLS, telemetry and LED commands.
+5. Physical ESP32 login and hello publication passed on the tested Wi-Fi. Rehearse sensor telemetry and LED commands on the actual classroom network.
 6. Repeat a disconnect/reconnect test before distributing the final examples.
 
-The connection check should be performed on the actual teaching network; a successful connection from another Wi-Fi does not establish classroom access. Confirm the ESP32-compatible 2.4 GHz network and its authentication method. A browser-only MQTT client requires a separate WebSocket endpoint or a backend; the supplied TLS/TCP port is not sufficient for direct browser connections.
+The connection check should be performed on the actual teaching network; a successful connection from another Wi-Fi does not establish classroom access. Confirm the ESP32-compatible 2.4 GHz network and its authentication method. A browser-only MQTT client requires a separate WebSocket endpoint or a backend; the supplied TCP port is not sufficient for direct browser connections.
 
 ## Connection to Days 4–5
 
