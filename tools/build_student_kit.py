@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.18'
+VERSION = '0.19'
 NAME = 'RBussi-student-kit-v' + VERSION
 FILES = [
     'robot.py',
@@ -22,6 +22,8 @@ FILES = [
     'examples/day03/11_ode_to_joy.py',
     'examples/day03/12_twinkle_twinkle.py',
     'examples/day03/13_robot_sound_signals.py',
+    'examples/day03/14_mqtt_forward.py',
+    'docs/day-03-slides.md',
     'examples/day03/MicroPython-lib-LICENSE.txt',
     'examples/day03/README.md',
     'examples/day03/SOURCES.md',
@@ -71,7 +73,7 @@ FILES = [
     'firmware/MicroPython-LICENSE.txt',
     'firmware/SOURCE.md',
 ]
-START = '''# RBussi Student Kit — v0.18
+START = '''# RBussi Student Kit — v0.19
 
 Extract this ZIP before opening its files. Start with [the setup guide](docs/student-setup.md).
 
@@ -97,7 +99,7 @@ Run `examples/00_check_setup.py` first; it requests no movement. Then use `examp
 
 Baseline: Thonny 5.0.0, MicroPython 1.29.0, classic ESP32 Wemos D1 R32, class `RBussi`.
 
-Day 3 uses MQTT TCP port 1883 with TLS disabled, as confirmed by the backend. Only the MQTT package and private configuration are needed on the board; no CA certificate or NTP. Credentials and messages are unencrypted on this connection. Copy the private settings template and fill in only your own credentials; passwords are not included. The computer terminal client requires a separate paho-mqtt installation. Exercise 05 passed on the physical ESP32; the remaining exercises and classroom network still need rehearsal.
+Day 3 uses MQTT TCP port 1883 with TLS disabled, as confirmed by the backend. Only the MQTT package and private configuration are needed on the board; no CA certificate or NTP. Credentials and messages are unencrypted on this connection. Copy the private settings template and fill in only your own credentials; passwords are not included. The computer terminal client requires a separate paho-mqtt installation. Hello publication and a sound command from MQTT Explorer passed on the physical ESP32. Example 14 adds one-second forward movement and requires robot.py and motor power; test with wheels lifted first, Retain off, one command at a time. MQTT movement and the classroom network still need physical rehearsal.
 
 The ZIP includes firmware and course files, not Thonny installers, USB drivers, simulator software, or Moodle credentials. Get the actual course and simulator links from the instructor. Windows/macOS and student Linux installation routes still require instructor rehearsal.
 

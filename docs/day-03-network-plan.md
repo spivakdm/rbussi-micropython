@@ -87,7 +87,7 @@ GPIO26/D2 was proposed for the external LED and can be used for a piezo in a sep
 
 ## Learning sequence
 
-The end-of-day demonstration is: a student sees their own robot's sensor readings on the computer, sends an LED command, and requests a short sound. Keep the network exercises stationary with motor power off; movement over MQTT is outside this day's core scope.
+The end-of-day demonstration is: a student sees their own robot's sensor readings on the computer, sends an LED command, and requests a short sound. Keep motor power off for the core network exercises. Example 14 is an optional movement extension, first tested with wheels lifted.
 
 ### Before students arrive
 
@@ -202,6 +202,12 @@ Each student demonstrates: change a surface, receive a sensor message, send LED 
 
 Result: a small connected-robot application with input, communication and output.
 
+### Optional alternative: MQTT movement (example 14)
+
+Use this instead of the combined-system extension if students are ready to move their robots. Run `examples/day03/14_mqtt_forward.py` with wheels lifted first. In MQTT Explorer, publish raw `forward` to your own `<prefix>/cmd/move`, QoS 0, Retain off. One message produces one second of forward motion at 40% PWM, then an automatic stop. Upload `robot.py` first. Wait for stopping before publishing again.
+
+Explain the blocking callback: it cannot process a remote stop during the timed move, and repeated commands may queue. Use the motor-power switch when an immediate stop is needed. This exercise has host tests; physical movement over MQTT still needs rehearsal.
+
 ### 16:50–17:00 — Checkpoint
 
 Save code locally and preserve private credentials separately. Each student answers:
@@ -220,6 +226,10 @@ If piezos are unavailable, preserve the programming sequence using built-in/exte
 This day does not contain a dedicated remote-laboratory block and replaces its former Day 3 slot. Keep any required remaining remote assignments visible in the overall schedule; do not silently turn them into homework.
 
 ROS 2 can reuse the same telemetry/command concepts on Days 4–5. A bridge, simulator and student ROS environment still have to be prepared; this lesson alone does not provide them.
+
+## Additional instructor check: sound commands
+
+The instructor confirmed the passive piezo on GPIO26. MQTT Explorer then published a JSON command to robot01's `/cmd/beep`; the physical ESP32 received it, enabled PWM, and disabled the output after the requested half-second tone. The instructor heard the sound. This verifies that account's beep-command path; it does not verify all student accounts or MQTT movement.
 
 ## Remaining rehearsal
 

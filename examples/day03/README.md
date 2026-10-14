@@ -2,7 +2,7 @@
 
 Use the existing MicroPython 1.29.0 firmware on the Wemos D1 R32. No new firmware and no extra robot wrapper library are required. Pins are declared in each program. Each network example starts with the same supplied Wi-Fi setup, followed by the exercise itself.
 
-Keep motor power off throughout these exercises. These programs do not call the motor library. Stop a continuous program with Ctrl+C in Thonny; LED and PWM examples release their outputs in `finally`. Run one example at a time with F5; do not save it as `boot.py` or `main.py` during the lesson.
+Keep motor power off for examples 01–13. Example 14 intentionally moves the robot and requires `robot.py`; first test it with the wheels lifted and motor power on. Stop a continuous program with Ctrl+C in Thonny; LED and PWM examples release their outputs in `finally`. Run one example at a time with F5; do not save it as `boot.py` or `main.py` during the lesson.
 
 ## Exercises
 
@@ -21,6 +21,8 @@ Keep motor power off throughout these exercises. These programs do not call the 
 | [11_ode_to_joy.py](11_ode_to_joy.py) | Beethoven melody: named notes and durations | Recognizable tune |
 | [12_twinkle_twinkle.py](12_twinkle_twinkle.py) | Opening of Twinkle, Twinkle, Little Star | Compare repeated notes and long notes |
 | [13_robot_sound_signals.py](13_robot_sound_signals.py) | Startup, success and alert sequences | Reuse one function with different lists and rests |
+
+| [14_mqtt_forward.py](14_mqtt_forward.py) | Receive `forward`; drive at 40% PWM for one second | Motors stop automatically after each command |
 
 Core networking target: complete 05, 06 and 08. Read programs from top to bottom: imports, connection setup, then the task. Functions are used for reusable sounds and MQTT callbacks; callbacks are introduced in 08. The Wi-Fi setup is supplied by the instructor. Students focus first on `publish()`, sensor readings and the LED `if/elif/else`. Exercise 10 adds elapsed-time scheduling and is an advanced extension. The combined program and sound commands are extensions. See the [timed teaching sequence](../../docs/day-03-network-plan.md).
 
@@ -52,7 +54,7 @@ Extract the student kit first. In **View → Files**, use the computer pane and 
     simple.py             # Supplied upstream MQTT client
 ```
 
-Upload the `umqtt` folder with its contents from this directory. If folder upload is unavailable, create those directories in the device pane and upload their files individually. Keep these names and directory structure. `robot.py` may remain on the board; these stationary examples do not need it.
+Upload the `umqtt` folder with its contents from this directory. If folder upload is unavailable, create those directories in the device pane and upload their files individually. Keep these names and directory structure. Upload `robot.py` to the board root for example 14. Examples 01–13 do not need it.
 
 1. Copy [network_secrets.example.py](network_secrets.example.py) to **network_secrets.py** on your computer, in this directory.
 2. Fill in the Wi-Fi SSID/password and your assigned MQTT username, password, topic prefix and **both distinct client IDs** from your account card. The robot01 values are examples; replace them if assigned another robot.
@@ -65,7 +67,13 @@ Do not share a filled-in configuration or commit it. The public template has pla
 
 You can use a desktop MQTT client that supports **MQTT/TCP**, or the supplied [Python terminal client](../../tools/mqtt_classroom_client.py). Port 1883 is not a browser WebSocket endpoint.
 
-For a desktop client: host `mqtt.ondroid.org`, port `1883`, TLS/SSL disabled, your assigned username/password and **PC** client ID. Subscribe to your `<prefix>/telemetry/#` and optionally `<prefix>/status`. Do not run two PC clients with the same client ID at once.
+### MQTT Explorer (Windows, macOS, Linux)
+
+Download from [mqtt-explorer.com](https://mqtt-explorer.com/). Windows: installer or portable version. macOS: ARM for Apple Silicon, Intel for Intel Macs. Linux: `.deb` or AppImage; make the AppImage executable before opening it. The instructor rehearsed Linux; other OS routes still need rehearsal.
+
+Create a connection using the settings below. In **Advanced**, enter your PC client ID and replace the default subscriptions with your own `<prefix>/#` (for example `edu-2026-10/robot01/#`). Save and connect. This shows both commands and telemetry; subscribing only to `/telemetry/#` hides commands. Select a topic to inspect its received-message history. MQTT does not replay arbitrary earlier messages; subscribe before publishing. Retained values are an exception, but leave Retain off for commands.
+
+For a desktop client: host `mqtt.ondroid.org`, port `1883`, TLS/SSL disabled, your assigned username/password and **PC** client ID. Subscribe to your `<prefix>/#` to see both telemetry and commands for your robot. Do not run two PC clients with the same client ID at once.
 
 For the Python terminal, use a regular computer terminal with Python 3.9+ (CPython), not the MicroPython Shell. Run from the extracted student-kit root. The commands below use a separate local environment and do not change Thonny's ESP32 interpreter.
 
@@ -108,6 +116,27 @@ Equivalent manual messages for robot01:
 
 Use your own prefix. Publish to concrete topics; `#` is only for subscriptions. Do not retain commands. Clear any previously retained command on the broker before rehearsal; these simple programs do not inspect the MQTT retained-message flag. The examples do not publish device status yet.
 
+## Optional exercise: drive forward from MQTT Explorer
+
+1. Upload `robot.py`, `network_secrets.py` and the supplied `umqtt` folder to the board.
+2. Lift the wheels, connect motor power, and run [14_mqtt_forward.py](14_mqtt_forward.py) with F5 in Thonny.
+3. In MQTT Explorer, publish to `edu-2026-10/robot01/cmd/move` (use your own robot number).
+4. Choose **raw** text, enter `forward` without quotes, **QoS 0**, **Retain off**, and click **Publish once**.
+5. The robot drives forward at `speed=40` for one second, then stops. Wait for it to stop before sending another command.
+
+The callback's movement instruction is:
+
+```python
+if message == b"forward":
+    robot.forward(speed=40, seconds=1)
+```
+
+`forward()` includes the timed wait and stopping. The program stays in `while True` waiting for more messages; Ctrl+C closes the robot and releases its motor PWM. Unknown messages are ignored. Speed is PWM power, not measured wheel speed or a guaranteed distance.
+
+This beginner callback blocks for one second, so another MQTT command cannot interrupt that movement. Repeated publishes can queue more one-second movements: do not repeatedly click Publish. Use the motor-power switch for an immediate physical stop. Network loss alone is not an emergency-stop mechanism; a started move completes its local one-second timer. Do not retain movement commands, including from previous experiments.
+
+**Extension:** add `elif message == b"backward":` and use `robot.backward(speed=40, seconds=1)`. Discuss why an immediate remote stop needs a nonblocking loop instead of a timed callback.
+
 ## Connection mode
 
 The backend confirmed **MQTT TCP, port 1883, TLS/SSL disabled** on 14 October 2026. The current examples use this mode. No CA certificate, `ssl`, `ntptime` or clock synchronization is needed. Credentials and messages travel without encryption on this connection.
@@ -128,4 +157,4 @@ The examples stop on network errors rather than retrying or reconnecting automat
 
 ## Verification status
 
-Host tests cover decisions, malformed commands, timing and interruption cleanup using simulated hardware/network modules. On 14 October, the first account passed authenticated two-client telemetry exchange on TCP/1883 from the instructor computer, without TLS. No command/status messages were published in that check. The physical ESP32 then ran the unmodified `05_mqtt_hello.py` with MicroPython 1.29.0 on the instructor computer's current Wi-Fi. It authenticated and published `hello`; the separate PC client received it. No TLS, CA upload or NTP was used. Other accounts, sensor/sound exercises and command permissions still need rehearsal. See the [recorded test](../../docs/day-03-network-plan.md).
+Host tests cover decisions, malformed commands, timing and interruption cleanup using simulated hardware/network modules. On 14 October, the first account passed authenticated two-client telemetry exchange on TCP/1883 from the instructor computer, without TLS. No command/status messages were published in that check. The physical ESP32 then ran the unmodified `05_mqtt_hello.py` with MicroPython 1.29.0 on the instructor computer's current Wi-Fi. It authenticated and published `hello`; the separate PC client received it. No TLS, CA upload or NTP was used. The instructor also confirmed sound on GPIO26 and an MQTT Explorer → ESP32 beep command. Other accounts and the new movement exercise still need physical rehearsal. See the [recorded test](../../docs/day-03-network-plan.md).

@@ -21,7 +21,7 @@ class Day03Tests(unittest.TestCase):
         clock = [0]
         queued = list(messages or [])
         frames = frames or [(0, 0, 0)]
-        continuous = filename.startswith(('06_', '07_', '08_', '09_', '10_'))
+        continuous = filename.startswith(('06_', '07_', '08_', '09_', '10_', '14_'))
 
         def sleep_ms(duration):
             clock[0] += duration
@@ -34,6 +34,9 @@ class Day03Tests(unittest.TestCase):
             IN, OUT = 0, 1
             def __init__(self, gpio, mode, value=0):
                 self.gpio, self.mode, self.level = gpio, mode, value
+            def init(self, mode, value=0):
+                self.mode = mode
+                self.value(value)
             def value(self, value=None):
                 if value is not None:
                     self.level = value
@@ -114,6 +117,8 @@ class Day03Tests(unittest.TestCase):
         }
         caught = None
         with patch.dict(sys.modules, modules), contextlib.redirect_stdout(io.StringIO()):
+            if filename.startswith('14_'):
+                sys.modules['robot'] = types.SimpleNamespace(**runpy.run_path(str(ROOT / 'robot.py')))
             try:
                 runpy.run_path(str(EXAMPLES / filename))
             except (KeyboardInterrupt, OSError) as error:
@@ -213,6 +218,30 @@ class Day03Tests(unittest.TestCase):
         self.assertIn(('duty', 0, 1010), events)
         self.assert_sound_closed(events)
         self.assertIn(('socket_close',), events)
+
+    def test_mqtt_forward_stops_after_one_second(self):
+        events, _, error = self.run_example('14_mqtt_forward.py', stop=1100,
+            messages=[(0, '/cmd/move', b'forward')])
+        self.assertIsInstance(error, KeyboardInterrupt)
+        self.assertEqual([e for e in events if e[:2] == ('duty', 26214)],
+                         [('duty', 26214, 0), ('duty', 26214, 0)])
+        self.assertIn(('duty', 0, 1000), events)
+        self.assertEqual(len([e for e in events if e[0] == 'deinit']), 2)
+        self.assertIn(('socket_close',), events)
+
+    def test_mqtt_forward_ignores_other_commands(self):
+        events, _, _ = self.run_example('14_mqtt_forward.py', messages=[
+            (0, '/cmd/move', b'bad'), (10, '/cmd/led', b'forward')])
+        self.assertFalse(any(e[0] == 'duty' and e[1] > 0 for e in events))
+
+    def test_mqtt_forward_interruption_and_connection_failure_stop_motors(self):
+        for options in [{'connect_fail': True}, {'interrupt_sound': True}]:
+            events, _, error = self.run_example('14_mqtt_forward.py',
+                messages=[(0, '/cmd/move', b'forward')], **options)
+            self.assertIsNotNone(error)
+            self.assertEqual([e[1] for e in events if e[0] == 'duty'][-2:], [0, 0])
+            self.assertEqual(len([e for e in events if e[0] == 'deinit']), 2)
+            self.assertIn(('socket_close',), events)
 
     def test_computer_command_validation(self):
         namespace = runpy.run_path(str(ROOT / 'tools/mqtt_classroom_client.py'))
