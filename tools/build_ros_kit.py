@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NAME = 'RBussi-ROS-kit-v0.1.0'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
+    'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
     'compose.yaml':'ros2/compose.yaml', 'Dockerfile':'ros2/Dockerfile',
     '.dockerignore':'ros2/.dockerignore', 'bridge.py':'ros2/bridge.py',
     'settings.env.example':'ros2/settings.env.example',

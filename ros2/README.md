@@ -6,6 +6,8 @@ ROS 2 runs on your computer in a container. The ESP32 keeps MicroPython and exch
 ROS nodes ↔ Python MQTT bridge ↔ mqtt.ondroid.org ↔ ESP32 MicroPython
 ```
 
+Instructor: see the [beginner-friendly four-hour lesson plan](LESSON_PLAN.md).
+
 ## 1. Download
 
 Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.1.0). Download:
