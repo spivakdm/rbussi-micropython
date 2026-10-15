@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.0'
+NAME = 'RBussi-ROS-kit-v0.2.1'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',

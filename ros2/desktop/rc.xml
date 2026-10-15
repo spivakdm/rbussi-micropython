@@ -6,6 +6,14 @@
  <keyboard>
   <keybind key="C-A-t"><action name="Execute"><command>xterm -fa 'DejaVu Sans Mono' -fs 11 -bg white -fg '#142c3b' -e /course/desktop/start-terminal.sh</command></action></keybind>
  </keyboard>
- <mouse><context name="Titlebar"><mousebind button="Left" action="Drag"><action name="Move"/></mousebind></context></mouse>
+ <mouse>
+  <context name="Client">
+   <mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+  </context>
+  <context name="Titlebar">
+   <mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind>
+   <mousebind button="Left" action="Drag"><action name="Move"/></mousebind>
+  </context>
+ </mouse>
  <applications><application title="TurtleSim"><position force="yes"><x>20</x><y>45</y></position></application></applications>
 </openbox_config>

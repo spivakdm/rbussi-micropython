@@ -4,7 +4,7 @@ Start with simulation. No robot, Wi-Fi credentials or MQTT account is needed. Th
 
 ## Open the classroom desktop
 
-After loading the 0.2.0 image and running `docker compose up -d`, open:
+After loading the 0.2.1 image and running `docker compose up -d`, open:
 
 **http://localhost:6080/vnc.html?autoconnect=true&resize=scale**
 
@@ -84,3 +84,7 @@ The original 45 × 45 image canvas is preserved to keep the stock coordinate sca
 - If the browser view is too small, maximize the browser and hide the noVNC side panel. No XQuartz or host X11 setup is needed.
 
 Sources: [ROS Turtlesim implementation](https://github.com/ros/ros_tutorials/tree/jazzy/turtlesim), [noVNC browser client](https://github.com/novnc/noVNC).
+
+### Keyboard focus
+
+Click inside the terminal before typing. Clicking the simulator moves keyboard focus away from the terminal. If keyboard control is running, press Ctrl+C before entering another shell command.
