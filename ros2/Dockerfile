@@ -1,6 +1,6 @@
 FROM ros:jazzy-ros-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3-venv ros-jazzy-rmw-cyclonedds-cpp ros-jazzy-turtlesim \
+    python3-venv ros-jazzy-rmw-cyclonedds-cpp ros-jazzy-turtlesim ros-jazzy-rqt-graph \
     xvfb x11-utils x11vnc openbox xterm novnc websockify supervisor \
     fonts-dejavu-core librsvg2-bin \
     && rm -rf /var/lib/apt/lists/*
@@ -10,6 +10,8 @@ ENV PATH="/opt/venv/bin:$PATH" \
     RMW_IMPLEMENTATION=rmw_cyclonedds_cpp \
     ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST \
     PYTHONUNBUFFERED=1 DISPLAY=:0 QT_X11_NO_MITSHM=1
+# Keep classroom controls in English regardless of browser language.
+RUN sed -i 's/l10n.setup(LINGUAS);/l10n.setup([]);/' /usr/share/novnc/app/ui.js
 WORKDIR /course
 COPY bridge.py /course/bridge.py
 COPY examples /course/examples
@@ -20,6 +22,8 @@ RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/
     && ln -s /course/desktop/ros-terminal /usr/local/bin/ros-terminal \
     && mkdir -p /root/.config/openbox \
     && cp /course/desktop/rc.xml /root/.config/openbox/rc.xml \
+    && cp /course/desktop/menu.xml /root/.config/openbox/menu.xml \
+    && cp /course/desktop/Xdefaults /root/.Xdefaults \
     && echo 'source /opt/ros/jazzy/setup.bash' >> /root/.bashrc \
     && rsvg-convert -w 45 -h 45 /course/assets/rbussi-top.svg -o /course/assets/rbussi-top.png \
     && for image in /opt/ros/jazzy/share/turtlesim/images/*.png; do cp /course/assets/rbussi-top.png "$image"; done

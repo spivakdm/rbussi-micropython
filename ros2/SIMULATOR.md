@@ -4,7 +4,7 @@ Start with simulation. No robot, Wi-Fi credentials or MQTT account is needed. Th
 
 ## Open the classroom desktop
 
-After loading the 0.2.1 image and running `docker compose up -d`, open:
+After loading the 0.2.3 image and running `docker compose up -d`, open:
 
 **http://localhost:6080/vnc.html?autoconnect=true&resize=scale**
 
@@ -88,3 +88,25 @@ Sources: [ROS Turtlesim implementation](https://github.com/ros/ros_tutorials/tre
 ### Keyboard focus
 
 Click inside the terminal before typing. Clicking the simulator moves keyboard focus away from the terminal. If keyboard control is running, press Ctrl+C before entering another shell command.
+
+
+## Clipboard and windows (image 0.2.3)
+
+The noVNC interface uses English regardless of the browser language.
+Copy a command, open the noVNC side panel and paste into Clipboard (Ctrl+V on Windows/Linux, Command+V on macOS). Click the ROS terminal, press Ctrl+Shift+V, then Enter. Shift+Insert also pastes the remote clipboard. This uses the VNC Clipboard panel, not direct browser clipboard access.
+
+Press F8 inside VNC to open a new terminal (Fn+F8 on some laptops). Alternatively, right-click an empty desktop area and choose New terminal. Ctrl+Alt+T also works if the host system does not intercept it. Use the same menu's Windows submenu to restore minimized windows.
+
+Title-bar buttons close, minimize and maximize windows. Double-click the title bar to toggle maximization. Turtlesim and the initial terminal restart automatically if closed; extra terminals and rqt_graph close normally.
+
+## View the ROS graph
+
+Run in a ROS terminal:
+
+```sh
+ros2 run rqt_graph rqt_graph
+```
+
+Select Nodes/Topics (all) and refresh after launching other nodes. For a simple graph, start keyboard control in another terminal. The connection is /teleop_turtle publishing on /turtle1/cmd_vel to /turtlesim.
+
+Nodes are ovals and topics are rectangles. Hide filters can omit unconnected topics; clear Dead sinks and Leaf topics if needed. The graph shows ROS nodes and topics, including an active MQTT bridge, but not the MQTT broker or ESP32 behind it.

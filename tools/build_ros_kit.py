@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.2'
+NAME = 'RBussi-ROS-kit-v0.2.3'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
@@ -22,6 +22,8 @@ FILES = {
     'desktop/ros-terminal':'ros2/desktop/ros-terminal',
     'desktop/supervisord.conf':'ros2/desktop/supervisord.conf',
     'desktop/rc.xml':'ros2/desktop/rc.xml',
+    'desktop/menu.xml':'ros2/desktop/menu.xml',
+    'desktop/Xdefaults':'ros2/desktop/Xdefaults',
     'robot/main.py':'ros2/robot/main.py',
     'robot/robot.py':'robot.py',
     'robot/robot_mqtt.py':'ros2/robot/robot_mqtt.py',
@@ -41,6 +43,15 @@ def main():
     for name, content in data.items():
         if name.endswith('.py'):
             ast.parse(content, filename=name)
+    template = ast.parse(data['robot/network_secrets.example.py'])
+    values = {node.targets[0].id: ast.literal_eval(node.value)
+              for node in template.body if isinstance(node, ast.Assign)}
+    for key, expected in {'WIFI_SSID':'YOUR_2_4_GHZ_WIFI',
+                          'WIFI_PASSWORD':'YOUR_WIFI_PASSWORD',
+                          'MQTT_USER':'YOUR_ASSIGNED_USERNAME',
+                          'MQTT_PASSWORD':'YOUR_ASSIGNED_PASSWORD'}.items():
+        if values.get(key) != expected:
+            raise ValueError('Use placeholder credentials in the public template: ' + key)
     data['SHA256SUMS.txt'] = ''.join(hashlib.sha256(content).hexdigest()+'  '+name+'\n'
                                   for name,content in sorted(data.items())).encode()
     dest=ROOT/'dist'/(NAME+'.zip')
