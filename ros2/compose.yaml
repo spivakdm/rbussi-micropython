@@ -1,0 +1,12 @@
+name: rbussi-ros
+services:
+  ros:
+    image: rbussi-ros:0.1.0
+    pull_policy: never
+    build: .
+    env_file: settings.env
+    init: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./examples:/course/examples

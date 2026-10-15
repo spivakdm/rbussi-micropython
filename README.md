@@ -132,3 +132,7 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 [Sound, Wi-Fi and MQTT lesson draft](docs/day-03-network-plan.md), based on the supplied class broker and per-robot topic namespaces. The first account passed a two-client telemetry round trip over TCP/1883 from the instructor computer. The backend confirmed this mode with TLS disabled on 14 October; the updated examples need no certificate or NTP. A physical ESP32 with MicroPython 1.29.0 also ran exercise 05 successfully: its hello message reached the computer through port 1883 on the tested Wi-Fi. Other accounts, classroom-network coverage and command-topic permissions remain to be checked. Account passwords are not included in the repository or student bundle.
 
 [Ten progressive examples, three optional sound programs and upload instructions](examples/day03/README.md): passive piezo PWM, Wi-Fi, MQTT hello, sensor JSON, change-only publishing, LED/sound commands and a combined application. Includes a private settings template, a pinned upstream MQTT module and an optional computer terminal client. Examples have passed host checks and exercise 05 passed on the physical ESP32. Remaining sensor, LED, piezo and classroom-network rehearsal is still required.
+
+## ROS 2 introduction
+
+[ROS + MQTT setup and exercises](ros2/README.md): prepared MicroPython robot application, ROS 2 container, and a bridge to the existing broker. [Download the ROS classroom kit and container images](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.1.0).

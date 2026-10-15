@@ -39,3 +39,7 @@ tmp/pdfs/
 # Each student keeps Wi-Fi and MQTT credentials private
 network_secrets.py
 .mqtt-venv/
+
+# Private ROS bridge credentials
+ros2/settings.env
+!dist/RBussi-ROS-kit-v0.1.0.zip
