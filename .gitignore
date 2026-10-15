@@ -43,3 +43,5 @@ network_secrets.py
 # Private ROS bridge credentials
 ros2/settings.env
 !dist/RBussi-ROS-kit-v0.2.3.zip
+
+!dist/RBussi-ROS-kit-v0.2.4.zip
