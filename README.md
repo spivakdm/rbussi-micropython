@@ -136,3 +136,7 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 ## ROS 2 introduction
 
 [ROS + MQTT setup and exercises](ros2/README.md): browser-based Turtlesim with RBussi artwork, prepared MicroPython robot application, ROS 2 container, and a bridge to the existing broker. [Download the ROS classroom kit and container images](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.3).
+
+### Riihimäki map rights
+
+The Riihimäki map is the property of **Robotx Oy**. It may not be used, copied, modified or redistributed without prior permission from the company. Inclusion in this repository or container does not grant a license to the map. See [the full notice](ros2/assets/RIIHIMAKI-MAP-NOTICE.txt).

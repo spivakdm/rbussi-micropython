@@ -7,3 +7,5 @@
 !assets/*
 !desktop/
 !desktop/*
+!turtlesim-map/
+!turtlesim-map/**

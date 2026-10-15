@@ -1,3 +1,11 @@
+FROM ros:jazzy-ros-base AS simulator-builder
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake qtbase5-dev ros-jazzy-turtlesim \
+    && rm -rf /var/lib/apt/lists/*
+COPY turtlesim-map /src/turtlesim-map
+RUN . /opt/ros/jazzy/setup.sh && cmake -S /src/turtlesim-map -B /build -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build /build --parallel 2
+
 FROM ros:jazzy-ros-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv ros-jazzy-rmw-cyclonedds-cpp ros-jazzy-turtlesim ros-jazzy-rqt-graph \
@@ -27,5 +35,7 @@ RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/
     && echo 'source /opt/ros/jazzy/setup.bash' >> /root/.bashrc \
     && rsvg-convert -w 45 -h 45 /course/assets/rbussi-top.svg -o /course/assets/rbussi-top.png \
     && for image in /opt/ros/jazzy/share/turtlesim/images/*.png; do cp /course/assets/rbussi-top.png "$image"; done
+COPY --from=simulator-builder /build/turtlesim_node /opt/ros/jazzy/lib/turtlesim/turtlesim_node
+COPY turtlesim-map/LICENSE /course/licenses/turtlesim-map-LICENSE.txt
 EXPOSE 6080
 CMD ["/usr/bin/supervisord", "-c", "/course/desktop/supervisord.conf"]

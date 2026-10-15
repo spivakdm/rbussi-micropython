@@ -71,9 +71,9 @@ Replace robot01 with your number. These are separate controls: typing an arrow i
 
 ## What the picture changes
 
-The sprite changes appearance only. This is standard Turtlesim, not a physical RBussi model: no wheel slip, real dimensions, line-sensor simulation or obstacle collision model has been added. The drawn trail is a visual aid, not a line-following track. The stock `color_sensor` samples the simulator canvas; it is not our pair of D0 sensors.
+The sprite changes appearance only. This is Turtlesim with a custom visual background, not a physical RBussi model: no wheel slip, real dimensions, line-sensor simulation or obstacle collision model has been added. The drawn trail is a visual aid, not a line-following track. The stock `color_sensor` samples the trail layer, not the map; it is not our pair of D0 sensors.
 
-The original 45 × 45 image canvas is preserved to keep the stock coordinate scale. Body proportions are based on `top.dxf` (200 × 90 mm); roof details and visible wheels are illustrative. See [artwork notes](assets/README.md).
+The original 45 × 45 image canvas is preserved to keep the stock coordinate scale. Body proportions are based on `top.dxf` (200 × 90 mm); the plywood colour and visible wheels are illustrative. See [artwork notes](assets/README.md).
 
 ## Browser troubleshooting
 
@@ -110,3 +110,9 @@ ros2 run rqt_graph rqt_graph
 Select Nodes/Topics (all) and refresh after launching other nodes. For a simple graph, start keyboard control in another terminal. The connection is /teleop_turtle publishing on /turtle1/cmd_vel to /turtlesim.
 
 Nodes are ovals and topics are rectangles. Hide filters can omit unconnected topics; clear Dead sinks and Leaf topics if needed. The graph shows ROS nodes and topics, including an active MQTT bridge, but not the MQTT broker or ESP32 behind it.
+
+## Riihimäki background
+
+The map uses a 640 × 480 window (4:3). The coordinate scale stays 45 pixels per unit; the field is approximately 14.2 × 10.64 units and the starting position is (7.1, 5.32). `/clear` removes trails and `/reset` restores the robot while keeping the map. All normal ROS topics and services remain available. Roads are a visual reference only.
+
+The map belongs to Robotx Oy and requires the company's permission for use. See [map rights](assets/RIIHIMAKI-MAP-NOTICE.txt).

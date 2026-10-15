@@ -1,0 +1,11 @@
+Riihimäki map — Copyright Robotx Oy. All rights reserved.
+
+The Riihimäki map artwork, including riihimaki-map.png and the source
+riihimaki-map-rgb.pdf, is the property of Robotx Oy.
+
+Use, copying, modification, redistribution or publication of this map requires
+prior permission from Robotx Oy. Availability in this repository, a classroom
+kit or a container image does not grant permission to use the map.
+
+Any licenses covering software or other third-party components in this
+repository do not apply to this map artwork.

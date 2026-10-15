@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.3'
+NAME = 'RBussi-ROS-kit-v0.2.4'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
@@ -37,6 +37,12 @@ FILES = {
     'examples/02_read_line.py':'ros2/examples/02_read_line.py',
     'examples/03_drive.py':'ros2/examples/03_drive.py',
 }
+
+for source in sorted((ROOT / 'ros2/turtlesim-map').rglob('*')):
+    if source.is_file():
+        FILES[str(source.relative_to(ROOT / 'ros2'))] = str(source.relative_to(ROOT))
+FILES['assets/riihimaki-map.png'] = 'ros2/assets/riihimaki-map.png'
+FILES['assets/RIIHIMAKI-MAP-NOTICE.txt'] = 'ros2/assets/RIIHIMAKI-MAP-NOTICE.txt'
 
 def main():
     data = {name:(ROOT/source).read_bytes() for name,source in FILES.items()}

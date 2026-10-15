@@ -1,5 +1,8 @@
 # ROS 2 + RBussi: student setup
 
+> Working-tree preview: 0.2.4 adds the Riihimäki map in a 640 × 480 window. Build locally with `docker compose build`, then run `docker compose up -d`. Download instructions below still describe the published 0.2.3 release. The map is owned by Robotx Oy and requires permission for use; see [map notice](assets/RIIHIMAKI-MAP-NOTICE.txt).
+
+
 ROS 2 runs on your computer in a container. The ESP32 keeps MicroPython and exchanges commands and sensor readings through the existing MQTT broker. No ROS installation on your host OS and no ESP32 reflashing are needed if MicroPython is already installed.
 
 ```text
