@@ -1,12 +1,17 @@
 name: rbussi-ros
 services:
   ros:
-    image: rbussi-ros:0.1.0
+    image: rbussi-ros:0.2.0
     pull_policy: never
     build: .
-    env_file: settings.env
+    env_file:
+      - path: settings.env
+        required: false
+    ports:
+      - "127.0.0.1:6080:6080"
     init: true
     stdin_open: true
     tty: true
+    shm_size: 256mb
     volumes:
       - ./examples:/course/examples

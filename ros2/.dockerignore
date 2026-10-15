@@ -3,3 +3,7 @@
 !bridge.py
 !examples/
 !examples/*.py
+!assets/
+!assets/*
+!desktop/
+!desktop/*

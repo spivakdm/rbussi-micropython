@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>RBussi — top view, front upwards</title>
+  <desc>Stylized teaching sprite. Body proportions 90 by 200 from top.dxf. Colours inspired by the supplied bus-rgb.pdf. Roof details are illustrative.</desc>
+  <!-- Two visible drive wheels; not a dimensioned mechanical assembly. -->
+  <g fill="#26333d">
+    <rect x="65" y="130" width="13" height="43" rx="4"/>
+    <rect x="162" y="130" width="13" height="43" rx="4"/>
+  </g>
+  <!-- 90 x 200 body with chamfered corners, matching the roof outline. -->
+  <path d="M80 20 H160 L165 25 V215 L160 220 H80 L75 215 V25 Z" fill="#ff5147" stroke="#743f58" stroke-width="2"/>
+  <path d="M81 48 H159 V193 L152 207 H88 L81 193 Z" fill="#ffb1da"/>
+  <!-- Windshield and rear window distinguish the front from the back. -->
+  <path d="M82 31 Q120 25 158 31 L153 57 Q120 62 87 57 Z" fill="#69619c"/>
+  <path d="M91 35 Q120 32 149 35 L146 48 Q120 52 94 48 Z" fill="#9ce5d6"/>
+  <path d="M87 192 H153 L149 207 H91 Z" fill="#69619c"/>
+  <rect x="84" y="68" width="72" height="112" rx="12" fill="#ff7775" stroke="#fa5451" stroke-width="2"/>
+  <path d="M87 78 H153 M87 169 H153" stroke="#ffb1da" stroke-width="3"/>
+  <text x="120" y="111" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="17" font-weight="bold" fill="#ffffff">504</text>
+  <text x="120" y="135" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="12" font-weight="bold" fill="#ffffff">R-BUSSI</text>
+  <path d="M113 153 L120 145 L127 153 M120 146 V161" fill="none" stroke="#9ce5d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#fff5c7"><rect x="80" y="22" width="12" height="4" rx="2"/><rect x="148" y="22" width="12" height="4" rx="2"/></g>
+  <g fill="#9c3259"><rect x="80" y="213" width="12" height="4" rx="2"/><rect x="148" y="213" width="12" height="4" rx="2"/></g>
+</svg>

@@ -1,5 +1,7 @@
 # First ROS 2 exercises with RBussi
 
+Complete [the Turtlesim introduction](SIMULATOR.md) first. For the exercises below, configure the physical robot, run `robot-connect` in one terminal, and keep it running.
+
 Run ROS commands inside `docker compose exec ros bash`. Replace `robot01` with your assigned number. Work with wheels lifted before trying any floor movement.
 
 ## 1. Find the nodes and topics — 10 minutes

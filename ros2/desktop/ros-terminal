@@ -1,0 +1,2 @@
+#!/bin/bash
+xterm -title 'ROS terminal' -geometry 74x26+550+90 -fa 'DejaVu Sans Mono' -fs 11 -bg white -fg '#142c3b' -e /course/desktop/start-terminal.sh >/tmp/extra-terminal.log 2>&1 &

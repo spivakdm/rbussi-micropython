@@ -135,4 +135,4 @@ See [firmware source and version](firmware/SOURCE.md) and the [upstream MicroPyt
 
 ## ROS 2 introduction
 
-[ROS + MQTT setup and exercises](ros2/README.md): prepared MicroPython robot application, ROS 2 container, and a bridge to the existing broker. [Download the ROS classroom kit and container images](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.1.0).
+[ROS + MQTT setup and exercises](ros2/README.md): browser-based Turtlesim with RBussi artwork, prepared MicroPython robot application, ROS 2 container, and a bridge to the existing broker. [Download the ROS classroom kit and container images](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.0).

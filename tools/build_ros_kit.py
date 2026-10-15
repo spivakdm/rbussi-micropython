@@ -5,13 +5,23 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.1.0'
+NAME = 'RBussi-ROS-kit-v0.2.0'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
     'compose.yaml':'ros2/compose.yaml', 'Dockerfile':'ros2/Dockerfile',
     '.dockerignore':'ros2/.dockerignore', 'bridge.py':'ros2/bridge.py',
     'settings.env.example':'ros2/settings.env.example',
+    'SIMULATOR.md':'ros2/SIMULATOR.md',
+    'assets/rbussi-top.svg':'ros2/assets/rbussi-top.svg',
+    'assets/README.md':'ros2/assets/README.md',
+    'desktop/wait-display.sh':'ros2/desktop/wait-display.sh',
+    'desktop/start-terminal.sh':'ros2/desktop/start-terminal.sh',
+    'desktop/start-sim.sh':'ros2/desktop/start-sim.sh',
+    'desktop/robot-connect':'ros2/desktop/robot-connect',
+    'desktop/ros-terminal':'ros2/desktop/ros-terminal',
+    'desktop/supervisord.conf':'ros2/desktop/supervisord.conf',
+    'desktop/rc.xml':'ros2/desktop/rc.xml',
     'robot/main.py':'ros2/robot/main.py',
     'robot/robot.py':'robot.py',
     'robot/robot_mqtt.py':'ros2/robot/robot_mqtt.py',
