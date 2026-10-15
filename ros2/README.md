@@ -10,12 +10,18 @@ Instructor: see the [beginner-friendly four-hour lesson plan](LESSON_PLAN.md).
 
 ## 1. Download
 
-Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.1). Download:
+Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.2). Download:
 
-- `RBussi-ROS-kit-v0.2.1.zip`: robot files, configuration templates and exercises. Extract it before continuing.
-- ONE ready-built Docker image: `rbussi-ros-0.2.1-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.1-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
+- `RBussi-ROS-kit-v0.2.2.zip`: robot files, configuration templates and exercises. Extract it before continuing.
+- ONE ready-built Docker image from [container release 0.2.1](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.1): `rbussi-ros-0.2.1-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.1-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
 
 Keep the image archive compressed: `docker load` reads it directly. The two archives contain the same image name, built for different processors. The release uses downloadable images rather than a container registry: use `docker load`, **not `docker compose pull`**.
+
+### Updating an existing installation
+
+Kit 0.2.2 fixes MQTT subscription timeouts on the ESP32. Upload the new `robot/main.py` as `/main.py` and reset the board. Keep your private settings. Confirm that `robot.py`, `drive_command.py`, `robot_mqtt.py` and the `umqtt` folder are also present.
+
+The Docker image remains 0.2.1; no container download or rebuild is needed.
 
 ## 2. Install Docker
 

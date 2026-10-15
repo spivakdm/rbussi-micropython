@@ -33,13 +33,17 @@ class AppTests(unittest.TestCase):
             def freq(self,v):pass
             def deinit(self):pass
         class Socket:
-            def settimeout(self,v):pass
+            def settimeout(self,v):self.timeout=v
             def close(self):events.append(('socket_close',))
         class MQTT:
             def __init__(self,*a,**kw):self.sock=Socket()
             def set_callback(self,cb):self.cb=cb
-            def connect(self,timeout):pass
-            def subscribe(self,*a,**kw):pass
+            def connect(self,timeout):self.sock.settimeout(timeout)
+            def subscribe(self,*a,**kw):
+                # A delayed SUBACK exceeds the previous packet-read timeout.
+                if self.sock.timeout < 0.5:raise OSError('SUBACK timeout')
+                events.append(('subscribed',a[0]))
+                self.sock.settimeout(0.2)
             def publish(self,*a,**kw):pass
             def check_msg(self):
                 if fail and clock[0]>=100:raise OSError('network failed')
@@ -57,6 +61,10 @@ class AppTests(unittest.TestCase):
             try:runpy.run_path(str(ROOT/'robot/main.py'))
             except (KeyboardInterrupt,OSError):pass
         return events
+    def test_delayed_subscription_acknowledgements(self):
+        events=self.run_app([])
+        self.assertEqual(sum(e[0]=='subscribed' for e in events),4)
+        self.assertIn(('close',1200),events)
     def test_no_commands_no_motion(self):
         events=self.run_app([])
         self.assertFalse(any(e[0]=='motors' for e in events))

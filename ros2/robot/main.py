@@ -87,6 +87,7 @@ def run():
         client.set_callback(on_message)
         client.connect(timeout=3)
         for suffix in ('move', 'wheels', 'led', 'beep'):
+            client.sock.settimeout(3)
             client.subscribe((prefix + '/cmd/' + suffix).encode(), qos=0)
         client.sock.settimeout(0.2)
         ready = True
