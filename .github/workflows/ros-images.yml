@@ -34,6 +34,10 @@ jobs:
           docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/resize_check.py'
           docker cp ros2/tests/line_follow_check.py rbussi-sim:/tmp/line_follow_check.py
           docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/line_follow_check.py'
+          docker cp ros2/tests/paired_check.py rbussi-sim:/tmp/paired_check.py
+          docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/paired_check.py'
+          docker cp ros2/tests/color_check.py rbussi-sim:/tmp/color_check.py
+          docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/color_check.py'
           docker rm -f rbussi-sim
       - name: Export ready-to-load image
         run: |

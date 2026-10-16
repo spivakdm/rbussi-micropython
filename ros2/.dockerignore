@@ -15,3 +15,6 @@
 !examples/student/
 !examples/student/*.py
 !examples/student/README.md
+
+!paired_drive.py
+!paired_teleop.py

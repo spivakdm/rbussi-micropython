@@ -81,6 +81,13 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr & node_handle, QWidget * parent
       overlay_age_.start();
       update();
     });
+  real_sensor_sub_ = nh_->create_subscription<std_msgs::msg::String>(
+    "/sim/real_sensors", 1, [this](std_msgs::msg::String::ConstSharedPtr msg) {
+      if (msg->data.size() > 512) {return;}
+      real_sensors_ = QJsonDocument::fromJson(QByteArray::fromStdString(msg->data)).object();
+      real_sensor_age_.start();
+      update();
+    });
   // Robotx classroom extension: an optional visual background, independent of trails.
   rcl_interfaces::msg::ParameterDescriptor image_descriptor;
   image_descriptor.description = "Background image path (startup only); empty uses a plain background";
@@ -362,10 +369,45 @@ void TurtleFrame::paintEvent(QPaintEvent * event)
       painter.drawEllipse(QPointF(sensor[0].toDouble(), sensor[1].toDouble()), 3.0, 3.0);
     }
   }
+  if (!real_sensors_.isEmpty()) {
+    const bool fresh = real_sensor_age_.isValid() && real_sensor_age_.elapsed() < 1000 &&
+      real_sensors_["fresh"].toBool();
+    const QString label = fresh ? QString("Real %1 sensors: L=%2  R=%3")
+      .arg(real_sensors_["robot"].toString()).arg(real_sensors_["left"].toInt())
+      .arg(real_sensors_["right"].toInt()) : QString("Real sensors: no fresh data");
+    painter.fillRect(QRectF(8, 450, 360, 24), Qt::white);
+    painter.setPen(Qt::black);
+    painter.drawText(QPointF(14, 467), label);
+  }
+
 }
 
 void TurtleFrame::updateTurtles()
 {
+  // Cache the map at the logical scene size. Window resizing does not alter readings.
+  int r, g, b;
+  nh_->get_parameter("background_r", r);
+  nh_->get_parameter("background_g", g);
+  nh_->get_parameter("background_b", b);
+  const QRgb background = qRgb(r, g, b);
+  if (color_image_.isNull() || color_background_ != background) {
+    color_background_ = background;
+    color_image_ = QImage(path_image_.size(), QImage::Format_RGB32);
+    color_image_.fill(background);
+    if (!background_image_.isNull()) {
+      QPainter map_painter(&color_image_);
+      map_painter.setRenderHint(QPainter::SmoothPixmapTransform);
+      const QSizeF size = QSizeF(background_image_.size()).scaled(
+        QSizeF(color_image_.size()), Qt::KeepAspectRatio);
+      const QPointF origin((color_image_.width() - size.width()) / 2.0,
+        (color_image_.height() - size.height()) / 2.0);
+      map_painter.drawImage(QRectF(origin, size), background_image_);
+    }
+  }
+  if (real_sensor_age_.isValid() && real_sensor_age_.elapsed() >= 1000) {
+    real_sensor_age_.invalidate();
+    update();
+  }
   if (overlay_age_.isValid() && overlay_age_.elapsed() >= 1000) {
     overlay_age_.invalidate();
     line_overlay_ = QJsonObject();
@@ -381,7 +423,7 @@ void TurtleFrame::updateTurtles()
   M_Turtle::iterator end = turtles_.end();
   for (; it != end; ++it) {
     modified |= it->second->update(
-      0.001 * update_timer_->interval(), path_painter_, path_image_, width_in_meters_,
+      0.001 * update_timer_->interval(), path_painter_, color_image_, width_in_meters_,
       height_in_meters_);
   }
   if (modified) {

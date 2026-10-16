@@ -101,6 +101,11 @@ private:
 
   QTimer * update_timer_;
   QImage background_image_;
+  QImage color_image_;
+  QRgb color_background_ = 0;
+  QJsonObject real_sensors_;
+  QElapsedTimer real_sensor_age_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr real_sensor_sub_;
   QJsonObject line_overlay_;
   QElapsedTimer overlay_age_;
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr overlay_sub_;

@@ -7,6 +7,12 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 NAME = 'RBussi-ROS-kit-v0.2.7'
 FILES = {
+    'PAIRED_DRIVE.md':'ros2/PAIRED_DRIVE.md',
+    'compose.paired.yaml':'ros2/compose.paired.yaml',
+    'paired_drive.py':'ros2/paired_drive.py',
+    'paired_teleop.py':'ros2/paired_teleop.py',
+    'desktop/paired-drive':'ros2/desktop/paired-drive',
+    'desktop/paired-teleop':'ros2/desktop/paired-teleop',
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
     'compose.yaml':'ros2/compose.yaml', 'Dockerfile':'ros2/Dockerfile',

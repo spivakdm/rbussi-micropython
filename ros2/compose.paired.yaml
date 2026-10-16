@@ -1,0 +1,4 @@
+# Development build with map RGB and opt-in paired driving.
+services:
+  ros:
+    image: rbussi-ros:paired-test

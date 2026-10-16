@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+source /opt/ros/jazzy/setup.bash
+exec flock -n -E 75 /tmp/rbussi-paired-drive.lock python /course/paired_drive.py

@@ -201,3 +201,7 @@ Sources: [official ROS Docker image](https://hub.docker.com/_/ros), [Paho MQTT c
 ## Virtual line sensors
 
 Run `sim-line-demo` in the VNC terminal to follow a closed route with two digital sensors. Read the [step-by-step exercises](LINE_FOLLOWING.md) to run sensors and controller separately. The real robot is not connected by this command.
+
+## Paired driving (new development build)
+
+[Move the physical robot and simulator together](PAIRED_DRIVE.md), read actual line sensors, and inspect map RGB. Requires the new build described there; the published 0.2.7 image is unchanged.

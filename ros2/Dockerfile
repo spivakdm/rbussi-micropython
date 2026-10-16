@@ -9,7 +9,7 @@ RUN . /opt/ros/jazzy/setup.sh && cmake -S /src/turtlesim-map -B /build -DCMAKE_B
 FROM ros:jazzy-ros-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv ros-jazzy-rmw-cyclonedds-cpp ros-jazzy-turtlesim ros-jazzy-rqt-graph \
-    xvfb x11-utils x11vnc openbox xterm novnc websockify supervisor \
+    xvfb x11-utils x11vnc openbox xterm nano novnc websockify supervisor \
     fonts-dejavu-core librsvg2-bin \
     && rm -rf /var/lib/apt/lists/*
 RUN python3 -m venv --system-site-packages /opt/venv \
@@ -21,18 +21,20 @@ ENV PATH="/opt/venv/bin:$PATH" \
 # Keep classroom controls in English regardless of browser language.
 RUN sed -i 's/l10n.setup(LINGUAS);/l10n.setup([]);/' /usr/share/novnc/app/ui.js
 WORKDIR /course
-COPY bridge.py /course/bridge.py
+COPY bridge.py paired_drive.py paired_teleop.py /course/
 COPY examples /course/examples
 COPY simulation /course/simulation
 COPY assets /course/assets
 COPY desktop /course/desktop
 COPY desktop/browser-paste.js /usr/share/novnc/browser-paste.js
 RUN sed -i 's#</body>#<script type="module" src="browser-paste.js"></script></body>#' /usr/share/novnc/vnc.html
-RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/ros-terminal /course/desktop/sim-line-track /course/desktop/sim-line-demo \
+RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/ros-terminal /course/desktop/sim-line-track /course/desktop/sim-line-demo /course/desktop/paired-drive /course/desktop/paired-teleop \
     && ln -s /course/desktop/robot-connect /usr/local/bin/robot-connect \
     && ln -s /course/desktop/ros-terminal /usr/local/bin/ros-terminal \
     && ln -s /course/desktop/sim-line-track /usr/local/bin/sim-line-track \
     && ln -s /course/desktop/sim-line-demo /usr/local/bin/sim-line-demo \
+    && ln -s /course/desktop/paired-drive /usr/local/bin/paired-drive \
+    && ln -s /course/desktop/paired-teleop /usr/local/bin/paired-teleop \
     && mkdir -p /root/.config/openbox \
     && cp /course/desktop/rc.xml /root/.config/openbox/rc.xml \
     && cp /course/desktop/menu.xml /root/.config/openbox/menu.xml \

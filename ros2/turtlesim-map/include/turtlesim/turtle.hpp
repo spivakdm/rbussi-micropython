@@ -68,7 +68,7 @@ public:
     const QPointF & pos, float orient);
 
   bool update(
-    double dt, QPainter & path_painter, const QImage & path_image, qreal canvas_width,
+    double dt, QPainter & path_painter, const QImage & color_image, qreal canvas_width,
     qreal canvas_height);
   void paint(QPainter & painter);
 

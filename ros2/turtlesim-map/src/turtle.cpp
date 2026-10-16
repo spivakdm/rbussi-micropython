@@ -194,7 +194,7 @@ void Turtle::rotateImage()
 }
 
 bool Turtle::update(
-  double dt, QPainter & path_painter, const QImage & path_image,
+  double dt, QPainter & path_painter, const QImage & color_image,
   qreal canvas_width, qreal canvas_height)
 {
   bool modified = false;
@@ -311,7 +311,10 @@ bool Turtle::update(
   // Figure out (and publish) the color underneath the turtle
   {
     auto color = std::make_unique<turtlesim::msg::Color>();
-    QRgb pixel = path_image.pixel((pos_ * meter_).toPoint());
+    // Read only the map/background, never trails, overlays or robot sprites.
+    const QPoint point = (pos_ * meter_).toPoint();
+    QRgb pixel = color_image.pixel(qBound(0, point.x(), color_image.width() - 1),
+      qBound(0, point.y(), color_image.height() - 1));
     color->r = qRed(pixel);
     color->g = qGreen(pixel);
     color->b = qBlue(pixel);
