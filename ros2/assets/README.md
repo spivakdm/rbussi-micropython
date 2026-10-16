@@ -8,6 +8,6 @@ Upstream sources: https://github.com/ros/ros_tutorials/tree/jazzy/turtlesim . Ex
 
 ## Riihimäki map
 
-`riihimaki-map.png` is rendered from the supplied vector PDF, cropped to its print trim box. The 640 × 480 simulator window matches the map's approximately 4:3 proportions. The artwork is displayed without stretching. Clear/reset preserve the background. This is a visual map: roads have no collision rules and the stock color sensor does not read the map layer.
+`riihimaki-map.png` is rendered from the supplied vector PDF, cropped to its print trim box. The initial 640 × 480 simulator view matches the map's approximately 4:3 proportions. The resizable view scales the map, robot and trails together without stretching or changing ROS coordinates. Clear/reset preserve the background. This is a visual map: roads have no collision rules and the stock color sensor does not read the map layer.
 
 **Copyright Robotx Oy. All rights reserved. Use of this map requires prior permission from Robotx Oy.** See [the map notice](RIIHIMAKI-MAP-NOTICE.txt). Software licenses do not grant rights to this artwork.

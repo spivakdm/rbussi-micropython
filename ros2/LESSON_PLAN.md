@@ -2,7 +2,7 @@
 
 **Audience:** robotics beginners, including students with no programming experience.
 **Session:** 13:00–17:00.
-**Materials:** [setup](README.md), [Turtlesim exercises](SIMULATOR.md), [physical-robot exercises](EXERCISES.md), [kit 0.2.5](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.5).
+**Materials:** [setup](README.md), [Turtlesim exercises](SIMULATOR.md), [physical-robot exercises](EXERCISES.md), [kit 0.2.6](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.6).
 
 ## The teaching approach
 

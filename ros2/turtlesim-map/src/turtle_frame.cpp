@@ -58,7 +58,8 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr & node_handle, QWidget * parent
   , frame_count_(0)
   , id_counter_(0)
 {
-  setFixedSize(640, 480);
+  resize(640, 480);
+  setMinimumSize(320, 240);
   setWindowTitle("TurtleSim");
 
   srand(time(NULL));
@@ -81,8 +82,7 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr & node_handle, QWidget * parent
     if (image.isNull()) {
       RCLCPP_WARN(nh_->get_logger(), "Cannot load background image: %s", image_path.c_str());
     } else {
-      background_image_ = image.scaled(
-        size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      background_image_ = image;
       RCLCPP_INFO(nh_->get_logger(), "Loaded background image: %s", image_path.c_str());
     }
   }
@@ -163,8 +163,8 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr & node_handle, QWidget * parent
   RCLCPP_INFO(
     nh_->get_logger(), "Starting turtlesim with node name %s", nh_->get_fully_qualified_name());
 
-  width_in_meters_ = (width() - 1) / meter_;
-  height_in_meters_ = (height() - 1) / meter_;
+  width_in_meters_ = (path_image_.width() - 1) / meter_;
+  height_in_meters_ = (path_image_.height() - 1) / meter_;
   spawnTurtle("", width_in_meters_ / 2.0, height_in_meters_ / 2.0, 0);
 
   // spawn all available turtle types
@@ -301,11 +301,21 @@ void TurtleFrame::paintEvent(QPaintEvent * event)
   QRgb background_color = qRgb(r, g, b);
   painter.fillRect(0, 0, width(), height(), background_color);
 
+  // Resize only the view; physics, trails and ROS coordinates stay unchanged.
+  const QSizeF scene_size(path_image_.size());
+  const qreal scale = qMin(width() / scene_size.width(), height() / scene_size.height());
+  painter.translate((width() - scene_size.width() * scale) / 2.0,
+    (height() - scene_size.height() * scale) / 2.0);
+  painter.scale(scale, scale);
+  painter.setClipRect(QRectF(QPointF(0, 0), scene_size));
+  painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
   if (!background_image_.isNull()) {
-    const QPoint origin(
-      (width() - background_image_.width()) / 2,
-      (height() - background_image_.height()) / 2);
-    painter.drawImage(origin, background_image_);
+    const QSizeF map_size = QSizeF(background_image_.size()).scaled(
+      scene_size, Qt::KeepAspectRatio);
+    const QPointF origin((scene_size.width() - map_size.width()) / 2.0,
+      (scene_size.height() - map_size.height()) / 2.0);
+    painter.drawImage(QRectF(origin, map_size), background_image_);
   }
   painter.drawImage(QPoint(0, 0), path_image_);
 

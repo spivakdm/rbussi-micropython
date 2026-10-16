@@ -11,16 +11,16 @@ Instructor: see the [beginner-friendly four-hour lesson plan](LESSON_PLAN.md).
 
 ## 1. Download
 
-Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.5). Download:
+Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.6). Download:
 
-- `RBussi-ROS-kit-v0.2.5.zip`: robot files, configuration templates and exercises. Extract it before continuing.
-- ONE ready-built Docker image: `rbussi-ros-0.2.5-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.5-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
+- `RBussi-ROS-kit-v0.2.6.zip`: robot files, configuration templates and exercises. Extract it before continuing.
+- ONE ready-built Docker image: `rbussi-ros-0.2.6-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.6-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
 
 Keep the image archive compressed: `docker load` reads it directly. The two archives contain the same image name, built for different processors. The release uses downloadable images rather than a container registry: use `docker load`, **not `docker compose pull`**.
 
 ### Updating an existing installation
 
-Download the new ZIP and matching 0.2.5 image. Extract into a new folder, copy your private settings.env and any edited examples from your previous kit, then follow step 6. Starting the new container replaces the previous desktop and clears the simulator drawing. Run robot-connect again when you need hardware access.
+Download the new ZIP and matching 0.2.6 image. Extract into a new folder, copy your private settings.env and any edited examples from your previous kit, then follow step 6. Starting the new container replaces the previous desktop and clears the simulator drawing. Run robot-connect again when you need hardware access.
 
 ESP32 files are unchanged from kit 0.2.2. If upgrading from an earlier kit, upload robot/main.py as /main.py and reset the board. Keep your private network_secrets.py and confirm that robot.py, drive_command.py, robot_mqtt.py and the umqtt folder are present.
 
@@ -99,13 +99,13 @@ Open a terminal **in the extracted kit folder** (the folder containing `compose.
 Intel/AMD:
 
 ```sh
-docker load -i rbussi-ros-0.2.5-amd64.tar.gz
+docker load -i rbussi-ros-0.2.6-amd64.tar.gz
 ```
 
 Apple Silicon / ARM64:
 
 ```sh
-docker load -i rbussi-ros-0.2.5-arm64.tar.gz
+docker load -i rbussi-ros-0.2.6-arm64.tar.gz
 ```
 
 Then, on all operating systems:

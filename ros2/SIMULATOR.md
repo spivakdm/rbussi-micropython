@@ -4,7 +4,7 @@ Start with simulation. No robot, Wi-Fi credentials or MQTT account is needed. Th
 
 ## Open the classroom desktop
 
-After loading the 0.2.5 image and running `docker compose up -d`, open:
+After loading the 0.2.6 image and running `docker compose up -d`, open:
 
 **http://localhost:6080/vnc.html?autoconnect=true&resize=scale**
 
@@ -90,7 +90,7 @@ Sources: [ROS Turtlesim implementation](https://github.com/ros/ros_tutorials/tre
 Click inside the terminal before typing. Clicking the simulator moves keyboard focus away from the terminal. If keyboard control is running, press Ctrl+C before entering another shell command.
 
 
-## Clipboard and windows (image 0.2.5)
+## Clipboard and windows (image 0.2.6)
 
 The noVNC interface uses English regardless of the browser language. After upgrading, hard-refresh the VNC tab (Ctrl+Shift+R; Command+Shift+R on macOS) so the browser loads the updated interface.
 Copy a command, click inside the ROS terminal, and press Ctrl+V (Windows/Linux) or Command+V (macOS). Ctrl+Shift+V also works in the tested Chromium browser. Wait for the text to appear, then press Enter. Paste is triggered only by your explicit paste action; the page does not continuously read the local clipboard. Native macOS behaviour has not yet been tested.
@@ -117,6 +117,6 @@ Nodes are ovals and topics are rectangles. Hide filters can omit unconnected top
 
 ## Riihimäki background
 
-The map uses a 640 × 480 window (4:3). The coordinate scale stays 45 pixels per unit; the field is approximately 14.2 × 10.64 units and the starting position is (7.1, 5.32). `/clear` removes trails and `/reset` restores the robot while keeping the map. All normal ROS topics and services remain available. Roads are a visual reference only.
+The map starts in a 640 × 480 window (4:3). Drag a window edge/corner or use the maximize button (double-clicking the title bar also works). The map, robot and trails scale together without distortion; unused space becomes margins. The ROS field size, position, speed and sensor/trail coordinates remain unchanged when resizing. To restore a minimized map, right-click the desktop, open Windows, and select TurtleSim. The coordinate scale stays 45 pixels per unit; the field is approximately 14.2 × 10.64 units and the starting position is (7.1, 5.32). `/clear` removes trails and `/reset` restores the robot while keeping the map. All normal ROS topics and services remain available. Roads are a visual reference only.
 
 The map belongs to Robotx Oy and requires the company's permission for use. See [map rights](assets/RIIHIMAKI-MAP-NOTICE.txt).
