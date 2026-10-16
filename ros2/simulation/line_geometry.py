@@ -5,10 +5,19 @@ PIXELS_PER_UNIT = 45.0
 LINE_WIDTH = 6.0
 SENSOR_FORWARD = 0.46
 SENSOR_HALF_SPACING = 0.15
-# A single smooth loop drawn over the city map, in its logical 640 x 480 frame.
-WAYPOINTS = [(343, 128), (391, 100), (470, 130), (492, 206),
-             (506, 267), (471, 333), (449, 408), (353, 441),
-             (260, 420), (210, 371), (253, 303), (270, 240), (310, 170)]
+# Road centres in the supplied 1575 x 1181 map raster, including west of Hyria.
+MAP_WAYPOINTS = [
+    (800, 165), (1010, 225), (1170, 300), (1235, 410), (1250, 565),
+    (1235, 665), (1160, 755), (1145, 850), (1120, 930), (1030, 1005),
+    (940, 1050), (790, 1095), (630, 1090), (500, 1040), (420, 945),
+    (330, 845), (200, 750), (105, 665), (90, 500), (95, 365),
+    (170, 300), (400, 255), (600, 210),
+]
+# Match the renderer's aspect-preserving fit into the logical 640 x 480 scene.
+MAP_SCALE = 640 / 1575
+MAP_TOP = (480 - 1181 * MAP_SCALE) / 2
+WAYPOINTS = [(x * MAP_SCALE, y * MAP_SCALE + MAP_TOP) for x, y in MAP_WAYPOINTS]
+
 
 
 def make_track():

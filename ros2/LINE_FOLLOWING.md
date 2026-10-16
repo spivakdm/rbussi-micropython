@@ -10,7 +10,7 @@ In the VNC terminal:
 sim-line-demo
 ```
 
-The robot starts on a closed black route and follows it. Ctrl+C stops the demonstration. To see the map more clearly, maximize its window; switch back to the terminal with Alt+Tab or the desktop Windows menu. The normal simulator does not start driving automatically.
+The robot starts on a closed black route along the road centres, including the large loop west of Hyria, and follows it. Ctrl+C stops the demonstration. To see the map more clearly, maximize its window; switch back to the terminal with Alt+Tab or the desktop Windows menu. The normal simulator does not start driving automatically.
 
 ## Exercise 1: read two sensors
 

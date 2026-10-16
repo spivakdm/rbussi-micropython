@@ -38,7 +38,7 @@ try:
     previous = None
     progress = 0
     max_error = 0
-    deadline = time.monotonic() + 100
+    deadline = time.monotonic() + 150
     while progress < len(TRACK)*2:
         assert time.monotonic() < deadline, 'Robot did not complete two laps'
         assert follower.poll() is None and world.poll() is None, 'Demo process exited'
