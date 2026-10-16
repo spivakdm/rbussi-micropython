@@ -16,28 +16,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ros-kit-v0.2.6
+          ref: ros-kit-v0.2.7
       - name: Validate command and MQTT transport tests
         run: python3 -m unittest discover -s ros2/tests
       - name: Build the classroom image
-        run: docker build -t rbussi-ros:0.2.6 ros2
+        run: docker build -t rbussi-ros:0.2.7 ros2
       - name: Check ROS and MQTT imports
-        run: docker run --rm rbussi-ros:0.2.6 python -c 'import rclpy; import paho.mqtt.client; from std_msgs.msg import String'
+        run: docker run --rm rbussi-ros:0.2.7 python -c 'import rclpy; import paho.mqtt.client; from std_msgs.msg import String'
       - name: Check simulator and browser desktop without credentials
         run: |
-          docker run -d --name rbussi-sim rbussi-ros:0.2.6
+          docker run -d --name rbussi-sim rbussi-ros:0.2.7
           docker cp ros2/tests/simulator_check.py rbussi-sim:/tmp/simulator_check.py
           docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/simulator_check.py'
           docker cp ros2/tests/desktop_check.py rbussi-sim:/tmp/desktop_check.py
           docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/desktop_check.py'
           docker cp ros2/tests/resize_check.py rbussi-sim:/tmp/resize_check.py
           docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/resize_check.py'
+          docker cp ros2/tests/line_follow_check.py rbussi-sim:/tmp/line_follow_check.py
+          docker exec rbussi-sim bash -lc 'source /opt/ros/jazzy/setup.bash; python /tmp/line_follow_check.py'
           docker rm -f rbussi-sim
       - name: Export ready-to-load image
         run: |
-          docker save rbussi-ros:0.2.6 | gzip -1 > rbussi-ros-0.2.6-${{ matrix.arch }}.tar.gz
-          sha256sum rbussi-ros-0.2.6-${{ matrix.arch }}.tar.gz > rbussi-ros-0.2.6-${{ matrix.arch }}.tar.gz.sha256
+          docker save rbussi-ros:0.2.7 | gzip -1 > rbussi-ros-0.2.7-${{ matrix.arch }}.tar.gz
+          sha256sum rbussi-ros-0.2.7-${{ matrix.arch }}.tar.gz > rbussi-ros-0.2.7-${{ matrix.arch }}.tar.gz.sha256
       - name: Attach images to the classroom release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload ros-kit-v0.2.6 rbussi-ros-0.2.6-${{ matrix.arch }}.tar.gz rbussi-ros-0.2.6-${{ matrix.arch }}.tar.gz.sha256 --clobber
+        run: gh release upload ros-kit-v0.2.7 rbussi-ros-0.2.7-${{ matrix.arch }}.tar.gz rbussi-ros-0.2.7-${{ matrix.arch }}.tar.gz.sha256 --clobber

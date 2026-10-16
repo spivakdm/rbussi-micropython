@@ -29,6 +29,9 @@
 #include "turtlesim/turtle_frame.hpp"
 
 #include <QPointF>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QPainterPath>
 
 #include <cstdlib>
 #include <ctime>
@@ -71,6 +74,13 @@ TurtleFrame::TurtleFrame(rclcpp::Node::SharedPtr & node_handle, QWidget * parent
   connect(update_timer_, SIGNAL(timeout()), this, SLOT(onUpdate()));
 
   nh_ = node_handle;
+  overlay_sub_ = nh_->create_subscription<std_msgs::msg::String>(
+    "/sim/overlay", 1, [this](std_msgs::msg::String::ConstSharedPtr msg) {
+      if (msg->data.size() > 65536) {return;}
+      line_overlay_ = QJsonDocument::fromJson(QByteArray::fromStdString(msg->data)).object();
+      overlay_age_.start();
+      update();
+    });
   // Robotx classroom extension: an optional visual background, independent of trails.
   rcl_interfaces::msg::ParameterDescriptor image_descriptor;
   image_descriptor.description = "Background image path (startup only); empty uses a plain background";
@@ -317,6 +327,24 @@ void TurtleFrame::paintEvent(QPaintEvent * event)
       (scene_size.height() - map_size.height()) / 2.0);
     painter.drawImage(QRectF(origin, map_size), background_image_);
   }
+  const bool show_line = overlay_age_.isValid() && overlay_age_.elapsed() < 1000;
+  if (show_line) {
+    const auto points = line_overlay_["track"].toArray();
+    QPainterPath route;
+    for (int i = 0; i < points.size(); ++i) {
+      const auto point = points[i].toArray();
+      if (point.size() != 2) {continue;}
+      const QPointF p(point[0].toDouble(), point[1].toDouble());
+      if (i == 0) {route.moveTo(p);} else {route.lineTo(p);}
+    }
+    route.closeSubpath();
+    const double width = qBound(1.0, line_overlay_["width"].toDouble(6), 20.0);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QPen(Qt::white, width + 8, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawPath(route);
+    painter.setPen(QPen(Qt::black, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawPath(route);
+  }
   painter.drawImage(QPoint(0, 0), path_image_);
 
   M_Turtle::iterator it = turtles_.begin();
@@ -324,10 +352,25 @@ void TurtleFrame::paintEvent(QPaintEvent * event)
   for (; it != end; ++it) {
     it->second->paint(painter);
   }
+  if (show_line) {
+    const auto sensors = line_overlay_["sensors"].toArray();
+    for (const auto & value : sensors) {
+      const auto sensor = value.toArray();
+      if (sensor.size() != 3) {continue;}
+      painter.setPen(QPen(Qt::black, 1));
+      painter.setBrush(sensor[2].toInt() ? QColor("#ff533f") : QColor("#00d8ee"));
+      painter.drawEllipse(QPointF(sensor[0].toDouble(), sensor[1].toDouble()), 3.0, 3.0);
+    }
+  }
 }
 
 void TurtleFrame::updateTurtles()
 {
+  if (overlay_age_.isValid() && overlay_age_.elapsed() >= 1000) {
+    overlay_age_.invalidate();
+    line_overlay_ = QJsonObject();
+    update();
+  }
   if (last_turtle_update_.nanoseconds() == 0) {
     last_turtle_update_ = nh_->now();
     return;

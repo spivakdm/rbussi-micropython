@@ -23,13 +23,16 @@ RUN sed -i 's/l10n.setup(LINGUAS);/l10n.setup([]);/' /usr/share/novnc/app/ui.js
 WORKDIR /course
 COPY bridge.py /course/bridge.py
 COPY examples /course/examples
+COPY simulation /course/simulation
 COPY assets /course/assets
 COPY desktop /course/desktop
 COPY desktop/browser-paste.js /usr/share/novnc/browser-paste.js
 RUN sed -i 's#</body>#<script type="module" src="browser-paste.js"></script></body>#' /usr/share/novnc/vnc.html
-RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/ros-terminal \
+RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/ros-terminal /course/desktop/sim-line-track /course/desktop/sim-line-demo \
     && ln -s /course/desktop/robot-connect /usr/local/bin/robot-connect \
     && ln -s /course/desktop/ros-terminal /usr/local/bin/ros-terminal \
+    && ln -s /course/desktop/sim-line-track /usr/local/bin/sim-line-track \
+    && ln -s /course/desktop/sim-line-demo /usr/local/bin/sim-line-demo \
     && mkdir -p /root/.config/openbox \
     && cp /course/desktop/rc.xml /root/.config/openbox/rc.xml \
     && cp /course/desktop/menu.xml /root/.config/openbox/menu.xml \

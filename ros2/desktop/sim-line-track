@@ -1,0 +1,3 @@
+#!/bin/bash
+source /opt/ros/jazzy/setup.bash
+exec flock -n -F /tmp/rbussi-line-track.lock python /course/simulation/line_world.py

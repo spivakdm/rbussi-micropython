@@ -1,0 +1,14 @@
+#!/bin/bash
+# Keep both child processes tied to this terminal and stop them on Ctrl+C.
+source /opt/ros/jazzy/setup.bash
+sim-line-track &
+track_pid=$!
+python /course/examples/05_sim_line_follower.py &
+follower_pid=$!
+cleanup() {
+    kill -INT "$follower_pid" "$track_pid" 2>/dev/null || true
+    wait "$follower_pid" "$track_pid" 2>/dev/null || true
+}
+trap cleanup EXIT
+trap 'exit 0' INT TERM
+wait -n "$track_pid" "$follower_pid"

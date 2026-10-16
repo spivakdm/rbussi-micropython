@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.6'
+NAME = 'RBussi-ROS-kit-v0.2.7'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
@@ -13,6 +13,7 @@ FILES = {
     '.dockerignore':'ros2/.dockerignore', 'bridge.py':'ros2/bridge.py',
     'settings.env.example':'ros2/settings.env.example',
     'SIMULATOR.md':'ros2/SIMULATOR.md',
+    'LINE_FOLLOWING.md':'ros2/LINE_FOLLOWING.md',
     'assets/rbussi-top.svg':'ros2/assets/rbussi-top.svg',
     'assets/README.md':'ros2/assets/README.md',
     'desktop/wait-display.sh':'ros2/desktop/wait-display.sh',
@@ -44,6 +45,18 @@ for source in sorted((ROOT / 'ros2/turtlesim-map').rglob('*')):
         FILES[str(source.relative_to(ROOT / 'ros2'))] = str(source.relative_to(ROOT))
 FILES['assets/riihimaki-map.png'] = 'ros2/assets/riihimaki-map.png'
 FILES['assets/RIIHIMAKI-MAP-NOTICE.txt'] = 'ros2/assets/RIIHIMAKI-MAP-NOTICE.txt'
+
+FILES['simulation/line_world.py'] = 'ros2/simulation/line_world.py'
+
+FILES['simulation/line_geometry.py'] = 'ros2/simulation/line_geometry.py'
+
+FILES['examples/04_sim_line_reader.py'] = 'ros2/examples/04_sim_line_reader.py'
+
+FILES['examples/05_sim_line_follower.py'] = 'ros2/examples/05_sim_line_follower.py'
+
+FILES['desktop/sim-line-track'] = 'ros2/desktop/sim-line-track'
+
+FILES['desktop/sim-line-demo'] = 'ros2/desktop/sim-line-demo'
 
 def main():
     data = {name:(ROOT/source).read_bytes() for name,source in FILES.items()}

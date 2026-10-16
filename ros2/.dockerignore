@@ -9,3 +9,5 @@
 !desktop/*
 !turtlesim-map/
 !turtlesim-map/**
+!simulation/
+!simulation/*.py

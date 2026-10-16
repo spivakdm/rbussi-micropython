@@ -34,6 +34,9 @@
 #endif
 
 #include <QFrame>
+#include <QElapsedTimer>
+#include <QJsonObject>
+#include "std_msgs/msg/string.hpp"
 #include <QImage>
 #include <QPainter>
 #include <QPaintEvent>
@@ -98,6 +101,9 @@ private:
 
   QTimer * update_timer_;
   QImage background_image_;
+  QJsonObject line_overlay_;
+  QElapsedTimer overlay_age_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr overlay_sub_;
   QImage path_image_;
   QPainter path_painter_;
 
