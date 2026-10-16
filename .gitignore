@@ -50,3 +50,5 @@ ros2/settings.env
 !dist/RBussi-ROS-kit-v0.2.7.zip
 
 !dist/RBussi-ROS-student-templates.zip
+
+!dist/RBussi-ROS-kit-v0.2.8.zip

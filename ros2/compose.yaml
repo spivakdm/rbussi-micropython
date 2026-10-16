@@ -1,7 +1,7 @@
 name: rbussi-ros
 services:
   ros:
-    image: rbussi-ros:0.2.7
+    image: rbussi-ros:0.2.8
     pull_policy: never
     build: .
     env_file:

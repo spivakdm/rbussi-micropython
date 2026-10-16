@@ -1,10 +1,10 @@
 # Write your first ROS nodes
 
-Use the prepared ROS image 0.2.7 or newer. This exercise controls the simulator only. No MQTT account or ESP32 connection is needed.
+Use the prepared ROS image 0.2.8 or newer. This exercise controls the simulator only. No MQTT account or ESP32 connection is needed.
 
 ## Files and terminals
 
-Download `RBussi-ROS-student-templates.zip` from the [0.2.7 release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.7) and extract it into your existing kit folder, beside `compose.yaml`. You should then have `examples/student/01_sensor_subscriber.py`, and the other templates, inside that kit. If you use a fresh Git checkout, the files are already there.
+Download `RBussi-ROS-student-templates.zip` from the [0.2.8 release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.8) and extract it into your existing kit folder, beside `compose.yaml`. You should then have `examples/student/01_sensor_subscriber.py`, and the other templates, inside that kit. If you use a fresh Git checkout, the files are already there.
 
 Edit the files on your own computer in a text editor or in Thonny's local editor. Save them, then run them in the VNC terminal using the commands below. The kit shares its `examples` folder with `/course/examples` inside the container. You do not need to rebuild or restart the container. Run ROS code in the container, not on the MicroPython board.
 

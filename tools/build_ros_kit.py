@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.7'
+NAME = 'RBussi-ROS-kit-v0.2.8'
 FILES = {
     'PAIRED_DRIVE.md':'ros2/PAIRED_DRIVE.md',
     'compose.paired.yaml':'ros2/compose.paired.yaml',
@@ -15,6 +15,7 @@ FILES = {
     'desktop/paired-teleop':'ros2/desktop/paired-teleop',
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
+    'teacher/STUDENT_SOLUTIONS.md':'ros2/teacher/STUDENT_SOLUTIONS.md',
     'compose.yaml':'ros2/compose.yaml', 'Dockerfile':'ros2/Dockerfile',
     '.dockerignore':'ros2/.dockerignore', 'bridge.py':'ros2/bridge.py',
     'settings.env.example':'ros2/settings.env.example',

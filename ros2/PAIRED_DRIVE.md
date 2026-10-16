@@ -4,16 +4,20 @@ This is **command mirroring**, not position tracking. The simulator illustrates
 requested motion; it does not measure the real robot. PWM and simulator velocity
 have different units. Wheel slip, battery level and motor differences cause drift.
 
-This feature requires the new paired-drive build; the published 0.2.7 image does
-not include it. From this `ros2` directory, build and launch it with:
+Use classroom image **0.2.8**. Download and load the matching AMD64 or ARM64
+archive as described in [README.md](README.md), then run:
 
 ```sh
-docker build -t rbussi-ros:paired-test .
-docker compose -f compose.yaml -f compose.paired.yaml up -d
+docker compose up -d
 ```
 
-Save open editor files first: replacing the container closes its terminals.
-The shared `examples` folder and your private `settings.env` stay on your computer.
+The normal compose file includes the feature; no extra override or local build is
+needed. `compose.paired.yaml` remains a compatible optional alias for the same
+image. Starting the desktop never starts paired driving automatically.
+
+When upgrading, save open editor files first: replacing the container closes its
+terminals. Copy your private `settings.env` and any student work into the new kit.
+No board firmware update is needed when the prepared ROS/MQTT files are installed.
 
 ## Before moving
 

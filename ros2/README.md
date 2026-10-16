@@ -11,29 +11,31 @@ Instructor: see the [beginner-friendly four-hour lesson plan](LESSON_PLAN.md).
 
 ## 1. Download
 
-Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.7). Download:
+Open the [ROS classroom release](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.8). Download:
 
-- `RBussi-ROS-kit-v0.2.7.zip`: robot files, configuration templates and exercises. Extract it before continuing.
-- ONE ready-built Docker image: `rbussi-ros-0.2.7-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.7-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
+- `RBussi-ROS-kit-v0.2.8.zip`: robot files, configuration templates and exercises. Extract it before continuing.
+- ONE ready-built Docker image: `rbussi-ros-0.2.8-amd64.tar.gz` for Intel/AMD computers, including Intel Macs; `rbussi-ros-0.2.8-arm64.tar.gz` for Apple Silicon Macs or ARM64 Linux.
 
 Keep the image archive compressed: `docker load` reads it directly. The two archives contain the same image name, built for different processors. The release uses downloadable images rather than a container registry: use `docker load`, **not `docker compose pull`**.
 
 ### Updating an existing installation
 
-Download the new ZIP and matching 0.2.7 image. Extract into a new folder, copy your private settings.env and any edited examples from your previous kit, then follow step 6. Starting the new container replaces the previous desktop and clears the simulator drawing. Run robot-connect again when you need hardware access.
+Download the new ZIP and matching 0.2.8 image. Extract into a new folder, copy your private settings.env and any edited examples from your previous kit, then follow step 6. Starting the new container replaces the previous desktop and clears the simulator drawing. Run robot-connect again when you need hardware access.
 
 ESP32 files are unchanged from kit 0.2.2. If upgrading from an earlier kit, upload robot/main.py as /main.py and reset the board. Keep your private network_secrets.py and confirm that robot.py, drive_command.py, robot_mqtt.py and the umqtt folder are present.
 
 ### Student Python exercises (before physical hardware)
 
-Download `RBussi-ROS-student-templates.zip` from the same release and extract it
-**inside your kit folder**, beside `compose.yaml`. It adds `examples/student/`.
-Follow the [student worksheet](examples/student/README.md): subscriber → publisher
-→ relay controller → ROS graph. Edit files on your computer and run them in the
-browser ROS terminal. Image 0.2.7 already supports these exercises; no rebuild
-or ESP32 upload is needed.
+The 0.2.8 kit already includes `examples/student/`. Follow the
+[student worksheet](examples/student/README.md): subscriber → publisher → relay
+controller → ROS graph. Edit files on your computer or use `nano -ET 4` in the
+browser ROS terminal. Run ROS programs in the container, not on the ESP32.
 
-Classroom slides: [PowerPoint](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pptx) · [PDF](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pdf). The student programming block is on slides 21–28, before physical-robot setup.
+For an older kit, the separate `RBussi-ROS-student-templates.zip` adds the same
+folder when extracted beside `compose.yaml`. The simulator-only exercises also
+work with image 0.2.7; paired driving and map colour sensing require 0.2.8.
+
+Classroom slides: [PowerPoint](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pptx) · [PDF](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pdf). Slides 21–28 cover student programming. These slides show the older 0.2.7 download names; use the 0.2.8 commands in this README for setup and [PAIRED_DRIVE.md](PAIRED_DRIVE.md) for the new paired exercise.
 
 ## 2. Install Docker
 
@@ -110,13 +112,13 @@ Open a terminal **in the extracted kit folder** (the folder containing `compose.
 Intel/AMD:
 
 ```sh
-docker load -i rbussi-ros-0.2.7-amd64.tar.gz
+docker load -i rbussi-ros-0.2.8-amd64.tar.gz
 ```
 
 Apple Silicon / ARM64:
 
 ```sh
-docker load -i rbussi-ros-0.2.7-arm64.tar.gz
+docker load -i rbussi-ros-0.2.8-arm64.tar.gz
 ```
 
 Then, on all operating systems:
@@ -202,6 +204,6 @@ Sources: [official ROS Docker image](https://hub.docker.com/_/ros), [Paho MQTT c
 
 Run `sim-line-demo` in the VNC terminal to follow a closed route with two digital sensors. Read the [step-by-step exercises](LINE_FOLLOWING.md) to run sensors and controller separately. The real robot is not connected by this command.
 
-## Paired driving (new development build)
+## Paired driving (image 0.2.8)
 
-[Move the physical robot and simulator together](PAIRED_DRIVE.md), read actual line sensors, and inspect map RGB. Requires the new build described there; the published 0.2.7 image is unchanged.
+[Move the physical robot and simulator together](PAIRED_DRIVE.md), read actual line sensors, and inspect map RGB. Included in image 0.2.8. Start `robot-connect`, `paired-drive`, then `paired-teleop` in separate browser terminals. Paired motion remains opt-in.

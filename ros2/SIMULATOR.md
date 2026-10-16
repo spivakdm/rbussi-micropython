@@ -4,7 +4,7 @@ Start with simulation. No robot, Wi-Fi credentials or MQTT account is needed. Th
 
 ## Open the classroom desktop
 
-After loading the 0.2.7 image and running `docker compose up -d`, open:
+After loading the 0.2.8 image and running `docker compose up -d`, open:
 
 **http://localhost:6080/vnc.html?autoconnect=true&resize=scale**
 
@@ -90,7 +90,7 @@ Sources: [ROS Turtlesim implementation](https://github.com/ros/ros_tutorials/tre
 Click inside the terminal before typing. Clicking the simulator moves keyboard focus away from the terminal. If keyboard control is running, press Ctrl+C before entering another shell command.
 
 
-## Clipboard and windows (image 0.2.7)
+## Clipboard and windows (image 0.2.8)
 
 The noVNC interface uses English regardless of the browser language. After upgrading, hard-refresh the VNC tab (Ctrl+Shift+R; Command+Shift+R on macOS) so the browser loads the updated interface.
 Copy a command, click inside the ROS terminal, and press Ctrl+V (Windows/Linux) or Command+V (macOS). Ctrl+Shift+V also works in the tested Chromium browser. Wait for the text to appear, then press Enter. Paste is triggered only by your explicit paste action; the page does not continuously read the local clipboard. Native macOS behaviour has not yet been tested.

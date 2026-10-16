@@ -1,4 +1,4 @@
-# Development build with map RGB and opt-in paired driving.
+# Optional compatibility override; paired mode is included in the standard image.
 services:
   ros:
-    image: rbussi-ros:paired-test
+    image: rbussi-ros:0.2.8
