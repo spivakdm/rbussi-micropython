@@ -4,7 +4,7 @@ Start with simulation. No robot, Wi-Fi credentials or MQTT account is needed. Th
 
 ## Open the classroom desktop
 
-After loading the 0.2.4 image and running `docker compose up -d`, open:
+After loading the 0.2.5 image and running `docker compose up -d`, open:
 
 **http://localhost:6080/vnc.html?autoconnect=true&resize=scale**
 
@@ -90,10 +90,14 @@ Sources: [ROS Turtlesim implementation](https://github.com/ros/ros_tutorials/tre
 Click inside the terminal before typing. Clicking the simulator moves keyboard focus away from the terminal. If keyboard control is running, press Ctrl+C before entering another shell command.
 
 
-## Clipboard and windows (image 0.2.4)
+## Clipboard and windows (image 0.2.5)
 
-The noVNC interface uses English regardless of the browser language.
-Copy a command, open the noVNC side panel and paste into Clipboard (Ctrl+V on Windows/Linux, Command+V on macOS). Click the ROS terminal, press Ctrl+Shift+V, then Enter. Shift+Insert also pastes the remote clipboard. This uses the VNC Clipboard panel, not direct browser clipboard access.
+The noVNC interface uses English regardless of the browser language. After upgrading, hard-refresh the VNC tab (Ctrl+Shift+R; Command+Shift+R on macOS) so the browser loads the updated interface.
+Copy a command, click inside the ROS terminal, and press Ctrl+V (Windows/Linux) or Command+V (macOS). Ctrl+Shift+V also works in the tested Chromium browser. Wait for the text to appear, then press Enter. Paste is triggered only by your explicit paste action; the page does not continuously read the local clipboard. Native macOS behaviour has not yet been tested.
+
+If your browser intercepts the shortcut, use the fallback: open the noVNC side panel, paste into Clipboard, click the terminal and press Shift+Insert. Shift+Insert pastes the existing remote clipboard, not the local computer's clipboard.
+
+Key auto-repeat is enabled in the updated image: holding Space, Backspace or an arrow repeats it until release. Click the terminal before using keyboard teleoperation.
 
 Press F8 inside VNC to open a new terminal (Fn+F8 on some laptops). Alternatively, right-click an empty desktop area and choose New terminal. Ctrl+Alt+T also works if the host system does not intercept it. Use the same menu's Windows submenu to restore minimized windows.
 

@@ -25,6 +25,8 @@ COPY bridge.py /course/bridge.py
 COPY examples /course/examples
 COPY assets /course/assets
 COPY desktop /course/desktop
+COPY desktop/browser-paste.js /usr/share/novnc/browser-paste.js
+RUN sed -i 's#</body>#<script type="module" src="browser-paste.js"></script></body>#' /usr/share/novnc/vnc.html
 RUN chmod +x /course/desktop/*.sh /course/desktop/robot-connect /course/desktop/ros-terminal \
     && ln -s /course/desktop/robot-connect /usr/local/bin/robot-connect \
     && ln -s /course/desktop/ros-terminal /usr/local/bin/ros-terminal \

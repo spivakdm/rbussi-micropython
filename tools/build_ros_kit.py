@@ -5,7 +5,7 @@ import hashlib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'RBussi-ROS-kit-v0.2.4'
+NAME = 'RBussi-ROS-kit-v0.2.5'
 FILES = {
     'README.md':'ros2/README.md', 'EXERCISES.md':'ros2/EXERCISES.md',
     'LESSON_PLAN.md':'ros2/LESSON_PLAN.md',
@@ -24,6 +24,7 @@ FILES = {
     'desktop/rc.xml':'ros2/desktop/rc.xml',
     'desktop/menu.xml':'ros2/desktop/menu.xml',
     'desktop/Xdefaults':'ros2/desktop/Xdefaults',
+    'desktop/browser-paste.js':'ros2/desktop/browser-paste.js',
     'robot/main.py':'ros2/robot/main.py',
     'robot/robot.py':'robot.py',
     'robot/robot_mqtt.py':'ros2/robot/robot_mqtt.py',
