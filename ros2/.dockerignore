@@ -11,3 +11,7 @@
 !turtlesim-map/**
 !simulation/
 !simulation/*.py
+
+!examples/student/
+!examples/student/*.py
+!examples/student/README.md

@@ -24,6 +24,17 @@ Download the new ZIP and matching 0.2.7 image. Extract into a new folder, copy y
 
 ESP32 files are unchanged from kit 0.2.2. If upgrading from an earlier kit, upload robot/main.py as /main.py and reset the board. Keep your private network_secrets.py and confirm that robot.py, drive_command.py, robot_mqtt.py and the umqtt folder are present.
 
+### Student Python exercises (before physical hardware)
+
+Download `RBussi-ROS-student-templates.zip` from the same release and extract it
+**inside your kit folder**, beside `compose.yaml`. It adds `examples/student/`.
+Follow the [student worksheet](examples/student/README.md): subscriber → publisher
+→ relay controller → ROS graph. Edit files on your computer and run them in the
+browser ROS terminal. Image 0.2.7 already supports these exercises; no rebuild
+or ESP32 upload is needed.
+
+Classroom slides: [PowerPoint](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pptx) · [PDF](https://github.com/spivakdm/rbussi-micropython/releases/download/ros-kit-v0.2.7/RBussi-ROS2-Workshop-v4.pdf). The student programming block is on slides 21–28, before physical-robot setup.
+
 ## 2. Install Docker
 
 | Computer | Install |

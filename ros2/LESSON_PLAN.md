@@ -8,9 +8,9 @@
 
 Start with a visible result. Use **show → predict → try → explain**. Students copy complete commands and change one meaningful value. Do not require them to write a Python program from scratch or understand the container internals.
 
-Success means each student moves the virtual bus, observes a ROS message, sends one LED command to the real robot and explains who sends and who receives. If time allows, add a short physical movement. Students may work in pairs but must swap roles.
+Success means each student completes a sensor subscriber, a velocity publisher and a relay controller from templates, then sends one LED command to the real robot and explains who sends and who receives. If time allows, add a short physical movement. Students may work in pairs but must swap roles.
 
-Turtlesim is standard ROS Turtlesim with a new picture, not a physical model of RBussi. It does not simulate our line sensors, slip or motor calibration. The two systems use different command types; say this explicitly instead of implying that the exact same commands already control both.
+Turtlesim is standard ROS Turtlesim with a new picture, not a physical model of RBussi. The optional line world supplies two ideal digital line sensors. It does not simulate wheel slip or motor calibration. The two systems use different command types; say this explicitly instead of implying that the exact same commands already control both.
 
 ## Preparation
 
@@ -25,19 +25,22 @@ Turtlesim is standard ROS Turtlesim with a new picture, not a physical model of 
 
 | Time | Students do | Instructor explains | Check |
 |---|---|---|---|
-| 13:00–13:10 | Watch the virtual bus and a real-robot LED demo | Today: send commands and receive information | Identify virtual versus real robot |
-| 13:10–13:45 | Load the container and open its browser desktop | A prepared workspace; no ROS installation on the host | Everyone sees bus + terminal, individually or in pairs |
-| 13:45–14:05 | Move the virtual bus using arrow keys | Keyboard program sends movement messages | Each student drives and turns |
-| 14:05–14:25 | List topics and view `/turtle1/pose` | Topic = named channel; message = content | Identify x, y and direction |
-| 14:25–14:40 | Break | — | — |
-| 14:40–15:00 | Send a velocity message from the terminal | `linear.x` is forward/backward; `angular.z` is turning | Straight motion, turn, then optional arc |
-| 15:00–15:15 | Trace keyboard → topic → simulator | Node, publisher, subscriber | Explain the path in ordinary words |
-| 15:15–15:40 | Upload ready-made board files and connect the MQTT bridge | Same message idea, now connected to real hardware | ESP32 READY and bridge MQTT connected |
-| 15:40–15:50 | Break | — | — |
-| 15:50–16:10 | Switch real LED ON/OFF and read line sensors | Commands go out; sensor data comes back | One real output and one real input |
-| 16:10–16:25 | Request short physical movement, wheels lifted | Timed commands, motor power, local stopping | Forward and stopping |
-| 16:25–16:45 | Paired mini-challenge or one small Python edit | Predict, change, observe | Both partners participate |
-| 16:45–17:00 | Explain, save and shut down | Review the two paths | Individual explanation; motor power off |
+| 13:00–13:10 | Watch the virtual bus and real LED | Virtual versus real hardware | Identify the two systems |
+| 13:10–13:35 | Load the image and open the desktop | Prepared ROS workspace | Bus and terminal visible |
+| 13:35–14:10 | Keyboard, topics, one velocity command | Node, topic, publisher, subscriber | Explain a message path |
+| 14:10–14:20 | Break | — | — |
+| 14:20–14:35 | Complete sensor subscriber | Callback receives a message | Print left and right |
+| 14:35–14:50 | Complete velocity publisher | Create and publish a Twist | Move briefly, then stop |
+| 14:50–15:15 | Complete relay controller | Sensor → decision → velocity | One complete lap |
+| 15:15–15:25 | Inspect graph and stop sensor source | Feedback and missing-data stop | Explain input and output |
+| 15:25–15:35 | Break | — | — |
+| 15:35–16:00 | Connect physical robot and MQTT bridge | ROS ↔ MQTT ↔ MicroPython | READY and MQTT connected |
+| 16:00–16:20 | LED and physical sensors | Compare simulator and robot topics | One real input and output |
+| 16:20–16:35 | Short physical movement, wheels lifted | Timed commands and stopping | Motion then stop |
+| 16:35–16:45 | Paired checkpoint | Explain both message paths | Each partner explains |
+| 16:45–17:00 | Save and shut down | Review | Motor power off |
+
+Setup assumes images are downloaded. If it overruns, work in pairs on working computers and shorten the optional hardware movement block.
 
 ## 13:00–13:10 — Show the result
 
@@ -49,7 +52,7 @@ Say:
 
 Ask which actions affected a picture and which affected hardware. Explain that the RBussi graphic uses their robot's shape and colours, but does not reproduce all its physical behaviour.
 
-## 13:10–13:45 — Start the prepared workspace
+## 13:10–13:35 — Start the prepared workspace
 
 Use README steps 1, 2 and 6 for simulation. No board or account configuration is needed yet. Load the correct AMD64/ARM64 archive, run `docker compose up -d`, then open:
 
@@ -65,9 +68,9 @@ Always label commands by location:
 - **BROWSER ROS TERMINAL:** commands inside the prepared workspace.
 - **THONNY / ROBOT:** uploading board files later.
 
-This distinction matters more than teaching Linux terminology. If one computer remains blocked after about 15 minutes of individual troubleshooting, pair its student with a working station. Continue the lesson and return to installation later. The 35-minute setup slot is a budget, not a promise that every Docker installation can be repaired in that time.
+This distinction matters more than teaching Linux terminology. If one computer remains blocked after about 15 minutes of individual troubleshooting, pair its student with a working station. Continue the lesson and return to installation later. The 25-minute setup slot is a budget, not a promise that every Docker installation can be repaired in that time.
 
-## 13:45–14:05 — Move with the keyboard
+## 13:35–14:10 — Move with the keyboard
 
 In the browser terminal:
 
@@ -85,7 +88,7 @@ Say:
 
 Do not explain every word in the launch command yet.
 
-## 14:05–14:25 — Look at the messages
+## Within 13:35–14:10 — Look at the messages
 
 After Ctrl+C, run:
 
@@ -104,7 +107,7 @@ Say:
 
 The names `turtle1` and `turtlesim` are kept deliberately so standard ROS tutorials still work.
 
-## 14:40–15:00 — Send a command directly
+## Within 13:35–14:10 — Send a command directly
 
 Copy into the browser ROS terminal:
 
@@ -118,7 +121,7 @@ Ask students to predict negative `linear.x`. Then use zero linear motion and non
 
 Clarify that this is a velocity request, not a destination. The simulator stops after its command timeout. A supplied reset command is available in SIMULATOR.md; services are not a required new concept today.
 
-## 15:00–15:15 — Name the parts
+## Within 13:35–14:10 — Name the parts
 
 Show `ros2 node list` and draw:
 
@@ -136,7 +139,20 @@ simulator → /turtle1/pose → message viewer
 
 A program can send on one channel and receive on another. Let students explain the picture before introducing the physical-robot bridge.
 
-## 15:15–15:40 — Connect the real robot
+## 14:20–15:25 — Write a line-following ROS node
+
+Use the [student worksheet](examples/student/README.md) and [teacher answers](teacher/STUDENT_SOLUTIONS.md). Download and extract the separate student ZIP into the existing kit folder before class. No new image or firmware is required.
+
+1. **15 minutes — subscriber:** start `sim-line-track`, inspect `/sim/line`, complete one subscription and print both values. Explain that a callback runs when a message arrives.
+2. **15 minutes — publisher:** create a Twist publisher, set a slow speed and publish it. The supplied timer switches to zero after three seconds. Stop this program before continuing.
+3. **25 minutes — relay controller:** supply only `choose_motion(left, right)` using `if/elif/else`. Restart the track to reset the pose. Complete one lap, then adjust one value.
+4. **10 minutes — explain:** inspect `ros2 node info /student_line_follower` and `rqt_graph`. Stop the sensor source and observe the supplied missing-data stop.
+
+Keep only one movement publisher running. `sim-line-demo` already includes a controller, so use `sim-line-track` for these exercises. Explain the ambiguity of two white readings: line between sensors or line lost. This is an ideal beginner simulation, not robust recovery logic.
+
+Keep the boilerplate ready-made: students need to understand subscription, callback, message fields and the four decisions, not class design or ROS package builds. Offer the completed solution to students who need it and ask them to explain a rule.
+
+## 15:35–16:00 — Connect the real robot
 
 Now draw:
 
@@ -162,7 +178,7 @@ Say:
 
 Launching the simulator alone never starts this bridge. The arrows controlling Turtlesim do not move the physical robot.
 
-## 15:50–16:10 — LED first, then sensors
+## 16:00–16:20 — LED first, then sensors
 
 Use the student's robot number:
 
@@ -178,7 +194,7 @@ Move white paper and black patches below the sensors. Read only the values under
 
 Ask: “Who sends the sensor reading? Who receives it?” Distinguish the ESP32's MQTT publication from the bridge's ROS publication.
 
-## 16:10–16:25 — Physical movement
+## 16:20–16:35 — Physical movement
 
 Lift wheels, enable motor power and keep the switch accessible. Send once:
 
@@ -196,7 +212,7 @@ Explicit comparison:
 - Real robot: String commands on `/robot01/move`; no wheel encoders or measured pose.
 - There is no automatic `cmd_vel` → motor conversion in this kit.
 
-## 16:25–16:45 — Small challenge, no compulsory coding
+## 16:35–16:45 — Paired checkpoint
 
 Each pair demonstrates one simulated movement, one real sensor change and one real LED command. Each student explains one message path.
 

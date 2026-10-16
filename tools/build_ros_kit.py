@@ -58,6 +58,10 @@ FILES['desktop/sim-line-track'] = 'ros2/desktop/sim-line-track'
 
 FILES['desktop/sim-line-demo'] = 'ros2/desktop/sim-line-demo'
 
+for name in ('README.md', '01_sensor_subscriber.py', '02_velocity_publisher.py',
+             '03_line_follower.py'):
+    FILES['examples/student/' + name] = 'ros2/examples/student/' + name
+
 def main():
     data = {name:(ROOT/source).read_bytes() for name,source in FILES.items()}
     for name, content in data.items():

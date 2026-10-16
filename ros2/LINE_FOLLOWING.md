@@ -1,5 +1,15 @@
 # Two-sensor line following on the Riihimäki map
 
+## Write your own ROS node
+
+Before connecting the physical robot, use the [student templates](examples/student/README.md):
+read the sensors, publish velocity, then complete a four-rule relay controller.
+Download the separate `RBussi-ROS-student-templates.zip` from
+[release 0.2.7](https://github.com/spivakdm/rbussi-micropython/releases/tag/ros-kit-v0.2.7)
+and extract it beside your existing `compose.yaml`. No new image is needed.
+Instructor answers: [solution sheet](teacher/STUDENT_SOLUTIONS.md).
+
+
 This exercise controls the simulated RBussi only. It does not connect to MQTT or move a physical robot. Stop keyboard teleoperation before starting the follower: only one program should publish movement commands at a time.
 
 ## Quick demonstration
